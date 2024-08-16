@@ -51,10 +51,11 @@ public abstract class CharacterBase : MonoBehaviour
         }
         return damage;
     }
-    public enum Buff
-    {
-        DamageBuff,
-        DamageDebuff,
-        All
-    }
+   
+}
+public enum Buff
+{
+    DamageBuff,
+    DamageDebuff,
+    All
 }
