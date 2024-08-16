@@ -35,10 +35,12 @@ public class BattleManager : MonoBehaviour
         }
         else if (_trun == Trun.Attack && _turnChange)
         {
+            Attack();
             NextTrun(Trun.EnemyAttack);
         }
         else if (_trun == Trun.EnemyAttack && _turnChange)
         {
+            EnemyAttack();
             NextTrun(Trun.ChoiceCard);
         }
     }
@@ -47,10 +49,9 @@ public class BattleManager : MonoBehaviour
         _turnChange = true;
         _trun = trun;
     }
-    void SetData()
+    public void SetData()
     {
         CharacterBase[] character = GameObject.FindObjectsOfType<CharacterBase>();
-        List<CardBase> playerCards=new List<CardBase>();//playerのカードリスト（仮想）
         foreach(var chara in character)
         {
             if (chara.gameObject.tag == "Player")
@@ -62,18 +63,7 @@ public class BattleManager : MonoBehaviour
                 _enemyList.Add(chara);
             }
         }
-        foreach (var Card in _player._cards)
-        {
-            playerCards.Add(Card);
-        }
-        for(int i = 0; i < _player._cards.Count; i++)
-        {
-            var j = Random.Range(0, _player._cards.Count);
-            var temp = playerCards[i];
-            playerCards[i] = playerCards[j];
-            playerCards[j] = temp;
-            _playerDeck.Enqueue(playerCards[i]);
-        }
+        DeckShuffle();
     }
     void DrawCard()
     {
@@ -90,7 +80,14 @@ public class BattleManager : MonoBehaviour
             playCard.CardUse();
         }
     }
+    void Attack()
+    {
 
+    }
+    void EnemyAttack()
+    {
+
+    }
     void Defeat()
     {
 
@@ -98,6 +95,23 @@ public class BattleManager : MonoBehaviour
     void Victory()
     {
 
+    }
+    void DeckShuffle()
+    {
+
+        List<CardBase> playerCards = new List<CardBase>();//playerのカードリスト（仮想）
+        foreach (var Card in _player._cards)
+        {
+            playerCards.Add(Card);
+        }
+        for (int i = 0; i < _player._cards.Count; i++)
+        {
+            var j = Random.Range(0, _player._cards.Count);
+            var temp = playerCards[i];
+            playerCards[i] = playerCards[j];
+            playerCards[j] = temp;
+            _playerDeck.Enqueue(playerCards[i]);
+        }
     }
 }
 public enum Trun
