@@ -6,25 +6,21 @@ using UnityEngine.EventSystems;
 
 public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPointerUpHandler, IPointerDownHandler
 {
-    // Start is called before the first frame update
-    RectTransform _desk;
-    RectTransform _nulldesk = null;
-    RectTransform _rectTransform;
+    GameObject _desk;
+    GameObject _nulldesk;
     void Start()
     {
-
-        _desk = GameObject.FindWithTag("Desk").GetComponent<RectTransform>();
-        _nulldesk = GameObject.FindWithTag("DeskOut").GetComponent<RectTransform>();
-       _rectTransform = GetComponent<RectTransform>();
-        _rectTransform.SetParent(_desk);
+        _desk = GameObject.FindWithTag("Desk");
+        _nulldesk = GameObject.FindWithTag("DeskOut");
+        transform.SetParent(_desk.transform);
     }
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
-        _rectTransform.SetParent(_nulldesk);
+        transform.SetParent(_nulldesk.transform);
     }
     void IDragHandler.OnDrag(PointerEventData eventData)
     {
-        _rectTransform.position = eventData.position;
+        transform.position = eventData.position;
     }
 
     GameObject GetCurrentDeck(PointerEventData eventData)
@@ -50,7 +46,7 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
         GameObject desk = GetCurrentDeck(eventData);
         if (desk)
         {
-            _rectTransform.SetParent(desk.transform);
+            transform.SetParent(desk.transform);
         }
         else 
         {
