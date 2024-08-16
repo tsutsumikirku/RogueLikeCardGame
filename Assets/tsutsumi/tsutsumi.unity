@@ -397,7 +397,7 @@ GameObject:
   - component: {fileID: 1314896645}
   - component: {fileID: 1314896648}
   - component: {fileID: 1314896647}
-  - component: {fileID: 1314896646}
+  - component: {fileID: 1314896649}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -424,18 +424,6 @@ RectTransform:
   m_AnchoredPosition: {x: 45.860535, y: -76.88379}
   m_SizeDelta: {x: 191.7211, y: 253.7676}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1314896646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1314896644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4446bc19eac83514aad4c68c93cef2ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1314896647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,6 +462,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1314896644}
   m_CullTransparentMesh: 1
+--- !u!114 &1314896649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314896644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4446bc19eac83514aad4c68c93cef2ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _desk: {fileID: 0}
+  _nulldesk: {fileID: 0}
+  _buff: 0
+  _buffcount: 0
+  _damage: 0
+  _attackPaturn: 0
+  _attackCount: 1
 --- !u!1 &1726594529
 GameObject:
   m_ObjectHideFlags: 0

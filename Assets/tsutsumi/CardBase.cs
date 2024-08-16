@@ -4,10 +4,15 @@ using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPointerUpHandler, IPointerDownHandler
+public abstract class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPointerUpHandler, IPointerDownHandler
 {
     GameObject _desk;
     GameObject _nulldesk;
+    [SerializeField] Buff _buff;
+    [SerializeField] float _buffcount;
+    [SerializeField] float _damage;
+    [SerializeField] AttackPaturn _attackPaturn;
+    [SerializeField] int _attackCount = 1;
     void Start()
     {
         _desk = GameObject.FindWithTag("Desk");
@@ -56,10 +61,16 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
     }
     public virtual void CardUse()
     {
-        Debug.Log("CardUse");
+
     }
     public virtual void CardUseEvent()
     {
         Destroy(gameObject);
     }
+}
+public enum AttackPaturn
+{
+    Single,
+    All,
+    Mine
 }
