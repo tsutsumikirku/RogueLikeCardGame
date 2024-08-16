@@ -10,7 +10,7 @@ public class EnemyData : ScriptableObject
 [System.Serializable]
 public class Data
 {
-    public CharacterBase character;
+    public string _name;
+    public int _maxHp;
     public List<CardBase> _cardData = new List<CardBase>();
-    public SpriteRenderer spriteRenderer;
 }
