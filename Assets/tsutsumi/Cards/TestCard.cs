@@ -4,13 +4,5 @@ using UnityEngine;
 
 public class TestCard : CardBase
 {
-    [SerializeField] Buff _buff;
-   public override void CardUse()
-    {
-     
-    }
-    public void BuffDamage()
-    {
-
-    }
+  
 }
