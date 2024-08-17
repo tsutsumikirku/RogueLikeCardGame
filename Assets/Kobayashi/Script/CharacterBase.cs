@@ -7,7 +7,7 @@ public abstract class CharacterBase : MonoBehaviour
     [SerializeField,Tooltip("今回バフでの数値の上昇値")] float _oneTimeBuffUp = 0.1f;
     [SerializeField, Tooltip("デバフの数値の上昇値")] float _debuffUp = 0.1f;
     public AttackPattern _attackPattern = AttackPattern.Single;
-    public AttackCount _attackCount = AttackCount.One;
+    public int _attackCount = 1;
     public string _name;
     public float _hp;
     public float _attackpower;
@@ -22,15 +22,6 @@ public abstract class CharacterBase : MonoBehaviour
         _name = enemydata._name;
         _hp = enemydata._maxHp;
         _deck = enemydata._cardData;
-    }
-    public void SetBuff(Buff buff, int count)
-    {
-        _buff.Add(buff);
-        Debug.Log($"{buff}が追加された");
-        if (count > 1)
-        {
-            SetBuff(buff, count - 1);
-        }
     }
     public void Attack(CharacterBase enemy)
     {
@@ -57,7 +48,7 @@ public abstract class CharacterBase : MonoBehaviour
                     }
                 }
                 debuff += _debuffUp * _debuff.Count;
-                enemy._hp -= ((_attackpower + buff) * onetimebuff) - debuff;
+                enemy._hp -= ((_attackpower + buff) * onetimebuff + 1) - debuff;
                 break;
             }
         }
@@ -76,12 +67,6 @@ public enum AttackPattern
 {
     Single,
     All
-}
-public enum AttackCount
-{
-    One,
-    Two,
-    Three
 }
 public enum Buff
 {
