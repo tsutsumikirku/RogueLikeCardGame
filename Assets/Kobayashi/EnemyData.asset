@@ -12,7 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 639f94a7d8c50d54d9a778ef2934badf, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: 
-  _enemyList:
+  _FirstStep:
+  - _name: 
+    _maxHp: 0
+    _cardData: []
+  _SecondStep:
+  - _name: 
+    _maxHp: 0
+    _cardData: []
+  _TherdStep:
+  - _name: 
+    _maxHp: 0
+    _cardData: []
+  _TresureBox:
   - _name: 
     _maxHp: 0
     _cardData: []

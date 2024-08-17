@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPointerUpHandler, IPointerDownHandler
+public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPointerUpHandler, IPointerDownHandler,IPointerEnterHandler, IPointerExitHandler
 {
     GameObject _desk;
     GameObject _nulldesk;
@@ -17,6 +17,8 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
     [SerializeField] int _attackCount = 1;
     [SerializeField] bool _isPlayer = true;
     [SerializeField] bool _test = true;
+    [SerializeField] string _dictionary = "ê‡ñæÇ»Çµ";
+    [SerializeField] int _price = 1;
     void Start()
     {
         _desk = GameObject.FindWithTag("Desk");
@@ -61,6 +63,15 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
                 }
             }
             return result.gameObject;   
+    }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -126,6 +137,8 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
     {
         Destroy(gameObject);
     }
+
+    
 }
 public enum BuffDebuff
 {
