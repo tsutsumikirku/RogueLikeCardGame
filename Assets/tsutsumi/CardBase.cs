@@ -13,9 +13,8 @@ public abstract class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandle
     GameObject _nulldesk;
     GameObject _selectdesk;
     CharacterBase _player;
-    CharacterBase[]_enemy;
+    [SerializeField] BuffDebuff _isBuff;
     [SerializeField] Buff _buff;
-    [SerializeField] float _buffcount;
     [SerializeField] AttackPaturn _attackPaturn;
     [SerializeField] float _damage;
     [SerializeField] int _attackCount = 1;
@@ -28,16 +27,15 @@ public abstract class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandle
         _selectdesk = GameObject.FindWithTag("SelectDesk");
         if (!_test)
         {
-            GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
             _player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
-            enemy = new GameObject[enemy.Length];
-            for (int i = 0; i < enemy.Length; i++)
-            {
-                _enemy[i] = enemy[i].GetComponent<CharacterBase>();
-            }
         }
         transform.SetParent(_desk.transform);
     }
+    public void LateUpdate()
+    {
+        
+    }
+
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
         if (_isPlayer)
@@ -93,9 +91,21 @@ public abstract class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandle
         CardUsing();
         CardUseEvent();
     }
-    public virtual void CardUsing()
+    public void CardUsing()
     {
+        if(_isBuff == BuffDebuff.Buff)
+        {
+            _player._buff.Add(_buff);
+        }
+        else if(_isBuff == BuffDebuff.OneTimeBuff)
+        {
+            _player._oneTimeBuff.Add(_buff);
+        }
+        else if(_isBuff == BuffDebuff.Debuff)
+        {
 
+        }
+        
     }
     public virtual void CardUseEvent()
     {
@@ -107,4 +117,17 @@ public enum AttackPaturn
     Single,
     All,
     Mine
+}
+public enum BuffDebuff
+{
+    OverRide,
+    Buff,
+    OneTimeBuff,
+    Debuff
+}
+public enum DebuffSelectState
+{
+    None,
+    SelectBefore,
+    SelectAfter
 }

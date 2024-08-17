@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Desk
   - DeskOut
+  - SelectDesk
   layers:
   - Default
   - TransparentFX
