@@ -6,69 +6,80 @@ public class BattleManager : MonoBehaviour
 {
     [SerializeField] int _firstDraw;
     [SerializeField] Transform _waitingCardListParent;
+    [SerializeField] CharacterBase[] _characterBases;
     public static BattleManager _instance;
     bool _EndTarn;
-    Trun _trun;
     Trun _nextTrun;
-    CharacterBase _player;
+    [SerializeField]CharacterBase _player;
     List<CharacterBase> _enemyList = new List<CharacterBase>();
+    List<Queue<CardBase>> _enemyDeck = new List<Queue<CardBase>>();
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
+    Trun _trun;
+    Trun CurrentTurn
+    {
+        get 
+        { 
+            return _trun; 
+        }
+        set
+        { 
+            if(_trun != value)
+            {
+                _trun = value;
+                ChangeTrun();
+            }
+        }
+    }
     void Start()
     {
-
+        CurrentTurn=Trun.Start;
+        //BattelStart(_characterBases);
     }
     void Update()
     {
-        switch (_trun)
+        
+    }
+    void ChangeTrun()
+    {
+        switch (CurrentTurn)
         {
             case Trun.Start:
-                SetData();
-                _trun = Trun.None;
+                StartTest();
+                //バトルスタート時の演出がいる。
                 break;
             case Trun.ChoiceCard:
                 DrawCard(_firstDraw);
-                _trun = Trun.None;
                 break;
             case Trun.UseCard:
                 UseCard();
-                _trun = Trun.None;
                 break;
             case Trun.PlayerAttack:
                 PlayerAttack();
-                _trun = Trun.None;
                 break;
             case Trun.EnemyAttack:
                 EnemyAttack();
-                _trun = Trun.None;
                 break;
-            default:
-                if (_EndTarn)
-                {
-                    NextTrun(_nextTrun);
-                }
+            case Trun.Result:
+                //result処理
                 break;
         }
     }
-    void NextTrun(Trun trun)
+    void StartTest()
     {
-        _EndTarn = false;
-        _trun = trun;
+        BattelStart(_characterBases);
     }
-    public void SetData()
+    void BattelStart(CharacterBase[] enemyArray)
     {
-        CharacterBase[] character = GameObject.FindObjectsOfType<CharacterBase>();
-        foreach (var chara in character)
+        SetData(enemyArray);
+    }
+    public void SetData(CharacterBase[] enemyArray)
+    {
+        if(_playerDeck!=null)_playerDeck = DeckShuffle(_player?._deck);
+        foreach (CharacterBase enemy in enemyArray)
         {
-            if (chara.gameObject.tag == "Player")
-            {
-                _player = chara;
-            }
-            else
-            {
-                _enemyList.Add(chara);
-            }
+            _enemyList.Add(enemy);
+            _enemyDeck.Add(DeckShuffle(enemy._deck));
         }
-        _playerDeck = DeckShuffle(_player._deck);
     }
     void DrawCard(int DrawCount)
     {
@@ -87,7 +98,7 @@ public class BattleManager : MonoBehaviour
         CardBase[] cards = _waitingCardListParent.GetComponentsInChildren<CardBase>();
         foreach (var playCard in cards)
         {
-            playCard.CardUse();
+            playCard.CardUse(_player);
         }
     }
     IEnumerator PlayerAttack()
@@ -139,7 +150,7 @@ public class BattleManager : MonoBehaviour
     {
         List<T> cardsList = new List<T>();//playerのカードリスト（仮想）
         Queue<T> deckQueue = new Queue<T>();
-        foreach (var Card in DeckData)
+        foreach (T Card in DeckData)
         {
             cardsList.Add(Card);
         }
@@ -150,7 +161,9 @@ public class BattleManager : MonoBehaviour
             cardsList[i] = cardsList[j];
             cardsList[j] = temp;
             deckQueue.Enqueue(cardsList[i]);
+            Debug.Log($"カードリスト{cardsList[i]}");
         }
+        Debug.Log("end");
         return deckQueue;
     }
     CharacterBase GetMouseClickEnemy()
@@ -181,5 +194,6 @@ public enum Trun
     ChoiceCard,
     UseCard,
     PlayerAttack,
-    EnemyAttack
+    EnemyAttack,
+    Result
 }
