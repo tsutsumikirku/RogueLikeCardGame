@@ -6,17 +6,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPointerUpHandler, IPointerDownHandler
+public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPointerUpHandler, IPointerDownHandler
 {
-  
     GameObject _desk;
     GameObject _nulldesk;
     GameObject _selectdesk;
     CharacterBase _player;
     [SerializeField] BuffDebuff _isBuff;
     [SerializeField] Buff _buff;
-    [SerializeField] AttackPaturn _attackPaturn;
-    [SerializeField] float _damage;
     [SerializeField] int _attackCount = 1;
     [SerializeField] bool _isPlayer = true;
     [SerializeField] bool _test = true;
@@ -29,13 +26,11 @@ public abstract class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandle
         {
             _player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
         }
-        transform.SetParent(_desk.transform);
+        if (_isPlayer)
+        {
+            transform.SetParent(_desk.transform);
+        }
     }
-    public void LateUpdate()
-    {
-        
-    }
-
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
         if (_isPlayer)
@@ -86,14 +81,23 @@ public abstract class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandle
         }
        
     }
-    public void CardUse()
+    public BuffDebuff CardUse(CharacterBase enemy)
     {
-        CardUsing();
+        CardUsing(enemy);
         CardUseEvent();
+        return _isBuff;
     }
-    public void CardUsing()
+    public void CardUsing(CharacterBase enemy)
     {
-        if(_isBuff == BuffDebuff.Buff)
+        if(_isBuff == BuffDebuff.OverRide)
+        {
+            CardOverRide();
+        }
+        else if(_isBuff == BuffDebuff.Attack)
+        {
+            enemy.Attack(_player);
+        }
+        else if(_isBuff == BuffDebuff.Buff)
         {
             _player._buff.Add(_buff);
         }
@@ -101,28 +105,36 @@ public abstract class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandle
         {
             _player._oneTimeBuff.Add(_buff);
         }
+        else if(_isBuff == BuffDebuff.AllAttack)
+        {
+            _player._attackPattern = AttackPattern.All;
+        }
+        else if(_isBuff == BuffDebuff.AttackCount)
+        {
+            _player._attackCount = _attackCount;
+        }
         else if(_isBuff == BuffDebuff.Debuff)
         {
-
         }
         
+    }
+    public virtual void CardOverRide()
+    {
+
     }
     public virtual void CardUseEvent()
     {
         Destroy(gameObject);
     }
 }
-public enum AttackPaturn
-{
-    Single,
-    All,
-    Mine
-}
 public enum BuffDebuff
 {
     OverRide,
+    Attack,
     Buff,
     OneTimeBuff,
+    AllAttack,
+    AttackCount,
     Debuff
 }
 public enum DebuffSelectState
