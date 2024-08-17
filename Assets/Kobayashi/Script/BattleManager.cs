@@ -25,8 +25,8 @@ public class BattleManager : MonoBehaviour
         }
         else if (_trun == Trun.ChoiceCard && _turnChange)
         {
-            DrawCard();
             _turnChange = false;
+            DrawCard();
         }
         else if (_trun == Trun.UseCard && _turnChange)
         {
@@ -36,7 +36,7 @@ public class BattleManager : MonoBehaviour
         else if (_trun == Trun.Attack && _turnChange)
         {
             Attack();
-            NextTrun(Trun.EnemyAttack);
+            _turnChange = false;
         }
         else if (_trun == Trun.EnemyAttack && _turnChange)
         {
@@ -82,31 +82,40 @@ public class BattleManager : MonoBehaviour
     }
     void Attack()
     {
-
+        if (_enemyList == null)
+        {
+            Victory();
+        }
     }
     void EnemyAttack()
     {
-
+        foreach(var enemy in _enemyList)
+        {
+            enemy.Attack(_player);
+        }
+        if (_player._hp <= 0)
+        {
+            Defeat();
+        }
     }
     void Defeat()
     {
-
+        Debug.Log("defeat");
     }
     void Victory()
     {
-
+        Debug.Log("victory");
     }
     void DeckShuffle()
     {
-
         List<CardBase> playerCards = new List<CardBase>();//playerのカードリスト（仮想）
-        foreach (var Card in _player._cards)
+        foreach (var Card in _player._deck)
         {
             playerCards.Add(Card);
         }
-        for (int i = 0; i < _player._cards.Count; i++)
+        for (int i = 0; i < _player._deck.Count; i++)
         {
-            var j = Random.Range(0, _player._cards.Count);
+            var j = Random.Range(0, _player._deck.Count);
             var temp = playerCards[i];
             playerCards[i] = playerCards[j];
             playerCards[j] = temp;
