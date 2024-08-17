@@ -6,6 +6,8 @@ public abstract class CharacterBase : MonoBehaviour
     [SerializeField,Tooltip("永続バフでの数値の上昇値")] float _buffUp = 0.1f;
     [SerializeField,Tooltip("今回バフでの数値の上昇値")] float _oneTimeBuffUp = 0.1f;
     [SerializeField, Tooltip("デバフの数値の上昇値")] float _debuffUp = 0.1f;
+    public AttackPattern _attackPattern = AttackPattern.Single;
+    public AttackCount _attackCount = AttackCount.One;
     public string _name;
     public float _hp;
     public float _attackpower;
@@ -69,6 +71,17 @@ public abstract class CharacterBase : MonoBehaviour
         _oneTimeBuff.Clear();
     }
    
+}
+public enum AttackPattern
+{
+    Single,
+    All
+}
+public enum AttackCount
+{
+    One,
+    Two,
+    Three
 }
 public enum Buff
 {
