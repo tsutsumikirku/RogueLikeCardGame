@@ -13,18 +13,16 @@ MonoBehaviour:
   m_Name: EnemyData
   m_EditorClassIdentifier: 
   _FirstStep:
-  - _name: 
-    _maxHp: 0
-    _cardData: []
+  - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
+  - {fileID: 8761956576690952840, guid: 54a252fc18cf3074abcb60c23cdf6ede, type: 3}
   _SecondStep:
-  - _name: 
-    _maxHp: 0
-    _cardData: []
+  - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
+  - {fileID: 8761956576690952840, guid: 54a252fc18cf3074abcb60c23cdf6ede, type: 3}
   _TherdStep:
-  - _name: 
-    _maxHp: 0
-    _cardData: []
+  - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
+  - {fileID: 8761956576690952840, guid: 54a252fc18cf3074abcb60c23cdf6ede, type: 3}
   _TresureBox:
-  - _name: 
-    _maxHp: 0
-    _cardData: []
+  - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
+  - {fileID: 8761956576690952840, guid: 54a252fc18cf3074abcb60c23cdf6ede, type: 3}
+  Boss:
+  - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}

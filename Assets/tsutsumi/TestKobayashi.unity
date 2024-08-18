@@ -466,6 +466,7 @@ MonoBehaviour:
   - {fileID: 885124727}
   _tresureBoxTransform: {fileID: 885124727}
   _bossTransform: {fileID: 885124727}
+  _enemyData: {fileID: 11400000, guid: 400c24bb198864d479a142268c0339e8, type: 2}
 --- !u!4 &726140647
 Transform:
   m_ObjectHideFlags: 0
