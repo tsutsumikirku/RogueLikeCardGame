@@ -112,7 +112,7 @@ public class BattleManager : MonoBehaviour
             _enemyList?.Add(enemy);
             _enemyDeck?.Add(DeckShuffle(enemy?._deck));
         }
-        StartCoroutine(NextTrun(Trun.Draw, 3));
+        StartCoroutine(NextTrun(Trun.Draw, 1));
     }
     void DrawCard(int DrawCount)
     {
@@ -125,7 +125,7 @@ public class BattleManager : MonoBehaviour
             }
         }
         Debug.Log("カードドロー");
-        StartCoroutine(NextTrun(Trun.UseCard, 3));
+        StartCoroutine(NextTrun(Trun.UseCard, 1));
     }
     void UseCard()
     {
