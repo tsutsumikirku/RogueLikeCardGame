@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour
         GameManagerMove _move = RandomSetMap();
         if(_move == GameManagerMove.Battle)
         {
+           Debug.Log("バトルに行きました");
            CharacterBase[]enemy = new CharacterBase[_steps[_turnCount]];
            for(int i =0; i < _steps[_turnCount]; i++)
             {
@@ -97,7 +98,8 @@ public class GameManager : MonoBehaviour
                      break;
                 }
             }
-            //ここでバトルマネージャーを呼び出す
+           BattleManager.Instance.SetData(enemy);
+            Debug.Log("を送りました");
             _turnCount++;
             if(_turnCount == _stepTurnCount)
             {
@@ -114,9 +116,11 @@ public class GameManager : MonoBehaviour
         }
         else if(_move == GameManagerMove.TresureBox)
         {
-            CharacterBase tresurebox = Instantiate(EnemyData.Instance._TresureBox[RandomEnemySet(EnemyData.Instance._TresureBox.Count)]);
-            tresurebox.transform.position = _tresureBoxTransform.transform.position;
-            //ここでバトルマネージャーを呼び出す
+            Debug.Log("宝箱に行きました");
+            CharacterBase[]tresurebox = new CharacterBase[0];
+            tresurebox[0] = Instantiate(EnemyData.Instance._TresureBox[RandomEnemySet(EnemyData.Instance._TresureBox.Count)]);
+            tresurebox[0].transform.position = _tresureBoxTransform.transform.position;
+            BattleManager.Instance.SetData(tresurebox);
             _turnCount++;
             if (_turnCount == _stepTurnCount)
             {
@@ -134,8 +138,10 @@ public class GameManager : MonoBehaviour
         else if(_move == GameManagerMove.Boss)
         {
             _afterBoss = true;
-            CharacterBase boss = Instantiate(EnemyData.Instance.Boss[RandomEnemySet(EnemyData.Instance.Boss.Count)]);
-            boss.transform.position = _bossTransform.transform.position;
+            CharacterBase [] boss = new CharacterBase[0];
+            boss [0] = Instantiate(EnemyData.Instance.Boss[RandomEnemySet(EnemyData.Instance.Boss.Count)]);
+            boss[0].transform.position = _bossTransform.transform.position;
+            BattleManager.Instance.SetData(boss);
             //ここでバトルマネージャーを呼び出す
         }
     }
@@ -175,11 +181,12 @@ public class GameManager : MonoBehaviour
     }
     int RandomEnemySet(int max)
     {
-        int random = Random.Range(0, max + 1);
+        int random = Random.Range(0, max);
         return random;
     }
     public void BattleEnd()
     {
+        Debug.Log("バトルが終わりサーチモードになりました");
         State = GameManagerState.Serch;
     }
     //ここから下ボタンのための関数許して
