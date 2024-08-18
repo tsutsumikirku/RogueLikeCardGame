@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField, Tooltip("敵キャラクターの位置を敵の最大値の想定された形で配置してください")] Transform [] _enemyTransform;
     [SerializeField, Tooltip("宝箱の位置を指定してください")] Transform _tresureBoxTransform;
     [SerializeField, Tooltip("ボスの位置を指定してください")] Transform _bossTransform;
+    [SerializeField] EnemyData _enemyData;
     int _turnCount;
     public static GameManager Instance;
     GameManagerState _state;
@@ -85,15 +86,15 @@ public class GameManager : MonoBehaviour
                 switch (_gameBattleStep)
                 {
                      case GameManagerBattleStep.First:
-                     enemy[i] = Instantiate(EnemyData.Instance._FirstStep[RandomEnemySet(EnemyData.Instance._FirstStep.Count)]);
+                     enemy[i] = Instantiate(_enemyData._FirstStep[RandomEnemySet(_enemyData._FirstStep.Count)]);
                      enemy[i].transform.position = _enemyTransform[i].position;
                      break;
                      case GameManagerBattleStep.Second:
-                     enemy[i] = Instantiate(EnemyData.Instance._SecondStep[RandomEnemySet(EnemyData.Instance._SecondStep.Count)]);
+                     enemy[i] = Instantiate(_enemyData._SecondStep[RandomEnemySet(_enemyData._SecondStep.Count)]);
                      enemy[i].transform.position = _enemyTransform[i].position;
                      break;
                      case GameManagerBattleStep.Third:
-                     enemy[i] = Instantiate(EnemyData.Instance._TherdStep[RandomEnemySet(EnemyData.Instance._TherdStep.Count)]);
+                     enemy[i] = Instantiate(_enemyData._TherdStep[RandomEnemySet(_enemyData._TherdStep.Count)]);
                      enemy[i].transform.position = _enemyTransform[i].position;
                      break;
                 }
@@ -118,7 +119,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("宝箱に行きました");
             CharacterBase[]tresurebox = new CharacterBase[0];
-            tresurebox[0] = Instantiate(EnemyData.Instance._TresureBox[RandomEnemySet(EnemyData.Instance._TresureBox.Count)]);
+            tresurebox[0] = Instantiate(_enemyData._TresureBox[RandomEnemySet(_enemyData._TresureBox.Count)]);
             tresurebox[0].transform.position = _tresureBoxTransform.transform.position;
             BattleManager.Instance.SetData(tresurebox);
             _turnCount++;
@@ -139,7 +140,7 @@ public class GameManager : MonoBehaviour
         {
             _afterBoss = true;
             CharacterBase [] boss = new CharacterBase[0];
-            boss [0] = Instantiate(EnemyData.Instance.Boss[RandomEnemySet(EnemyData.Instance.Boss.Count)]);
+            boss [0] = Instantiate(_enemyData.Boss[RandomEnemySet(_enemyData.Boss.Count)]);
             boss[0].transform.position = _bossTransform.transform.position;
             BattleManager.Instance.SetData(boss);
             //ここでバトルマネージャーを呼び出す
