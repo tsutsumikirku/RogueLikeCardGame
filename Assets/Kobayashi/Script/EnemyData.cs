@@ -10,6 +10,7 @@ public class EnemyData : ScriptableObject
     public List<Data> _SecondStep = new List<Data>();
     public List<Data> _TherdStep = new List<Data>();
     public List<Data> _TresureBox = new List<Data>();
+    public List<Data> Boss = new List<Data>();
 }
 [System.Serializable]
 public class Data

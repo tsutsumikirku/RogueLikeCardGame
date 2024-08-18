@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     GameManagerState _state;
     GameManagerBattleStep _gameBattleStep;
+    bool _boss = false;
 
     private void Start()
     {
@@ -35,7 +36,7 @@ public class GameManager : MonoBehaviour
         switch (_state)
         {
             case GameManagerState.Serch:
-            OnSurch();
+            OnSerch();
             break;
             case GameManagerState.Move: 
             OnMove();
@@ -54,19 +55,19 @@ public class GameManager : MonoBehaviour
             break;
         }
     }
-    void OnSurch()
+    void OnSerch()
     {
-
+       
     }
     void OnMove()
     {
-        GameManagerMove _move = RandomSet();
+        GameManagerMove _move = RandomSetMap();
         if(_move == GameManagerMove.Battle)
         {
-           List<CharacterBase>enemy = new List<CharacterBase>();
+           CharacterBase[]enemy = new CharacterBase[_steps[_turnCount]];
            for(int i =0; i < _steps[_turnCount]; i++)
             {
-                enemy.Add(Instantiate(_base));
+                enemy[i] = (Instantiate(_base));
                 if(_gameBattleStep == GameManagerBattleStep.First)
                 {
                     enemy[i].SetStatus(EnemyData.Instance._FirstStep[RandomEnemySet(EnemyData.Instance._FirstStep.Count)]);
@@ -84,8 +85,15 @@ public class GameManager : MonoBehaviour
             _turnCount++;
             if(_turnCount == _stepTurnCount)
             {
-                _turnCount = 0;
-                _gameBattleStep += 1;
+                if(_gameBattleStep > GameManagerBattleStep.Third)
+                {
+                    _turnCount = 0;
+                    _gameBattleStep += 1;
+                }
+                else
+                {
+                    _boss = true;
+                }
             }
         }
         else if(_move == GameManagerMove.TresureBox)
@@ -96,9 +104,22 @@ public class GameManager : MonoBehaviour
             _turnCount++;
             if (_turnCount == _stepTurnCount)
             {
-                _turnCount = 0;
-                _gameBattleStep += 1;
+                if (_gameBattleStep > GameManagerBattleStep.Third)
+                {
+                    _turnCount = 0;
+                    _gameBattleStep += 1;
+                }
+                else
+                {
+                    _boss = true;
+                }
             }
+        }
+        else if(_move == GameManagerMove.Boss)
+        {
+            CharacterBase boss = Instantiate(_base);
+            boss.SetStatus(EnemyData.Instance.Boss[RandomEnemySet(EnemyData.Instance.Boss.Count)]);
+            //ここでバトルマネージャーを呼び出す
         }
     }
     void OnShop()
@@ -113,11 +134,20 @@ public class GameManager : MonoBehaviour
     void OnGameOver()
     {
         Debug.Log("死 death");
+        //ゲームオーバーのシーンに行くんだったらここに書く
     }
-    GameManagerMove RandomSet()
+    GameManagerMove RandomSetMap()
     {
-        int random = Random.Range(0,2);
-        return (GameManagerMove)random;
+        if (!_boss)
+        {
+            int random = Random.Range(0, 2);
+            return (GameManagerMove)random;
+        }
+        else
+        {
+            return GameManagerMove.Boss;
+        }
+       
     }
     int RandomEnemySet(int max)
     {
@@ -141,7 +171,8 @@ public enum GameManagerState
 public enum GameManagerMove
 {
     Battle,
-    TresureBox
+    TresureBox,
+    Boss
 }
 public enum GameManagerBattleStep
 {

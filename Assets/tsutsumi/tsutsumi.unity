@@ -292,11 +292,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1187324856606068282, guid: 99fe1c7e5320ded439209d22cdc520a6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0012512207
+      value: 0.0012207031
       objectReference: {fileID: 0}
     - target: {fileID: 1187324856606068282, guid: 99fe1c7e5320ded439209d22cdc520a6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -65.45799
+      value: -65.45798
       objectReference: {fileID: 0}
     - target: {fileID: 2992541052728829660, guid: 99fe1c7e5320ded439209d22cdc520a6, type: 3}
       propertyPath: m_Name
@@ -384,7 +384,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6044319693803412323, guid: 99fe1c7e5320ded439209d22cdc520a6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.0015563965
+      value: -0.0015869141
+      objectReference: {fileID: 0}
+    - target: {fileID: 6044319693803412323, guid: 99fe1c7e5320ded439209d22cdc520a6, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 25.178986
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -655,8 +659,6 @@ MonoBehaviour:
   _isBuff: 0
   _buff: 0
   _attackCount: 1
-  _isPlayer: 0
-  _test: 1
   _dictionary: "\u8AAC\u660E\u306A\u3057"
   _price: 1
 --- !u!1 &1726594529
