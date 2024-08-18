@@ -124,7 +124,7 @@ public class BattleManager : MonoBehaviour
             Victory();
         }
     }
-    void SetData(CharacterBase[] enemyArray)
+    public void SetData(CharacterBase[] enemyArray)
     {
         Debug.Log("ゲームスタート");
         if (_playerDeck != null) _playerDeck = DeckShuffle(_player?._deck);
