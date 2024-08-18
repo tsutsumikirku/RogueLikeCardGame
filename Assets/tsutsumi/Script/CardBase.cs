@@ -9,7 +9,7 @@ public class CardBase : MonoBehaviour
     [SerializeField] Buff _buff;
     [SerializeField] int _attackCount = 1;
     [SerializeField] string _dictionary = "説明なし";
-    [SerializeField] int _price = 1;
+    public int _price = 1;
     public BuffDebuff CardUse(CharacterBase attack , CharacterBase beattacked)
     {
         Debug.Log($"カードを{attack}へ使用");
