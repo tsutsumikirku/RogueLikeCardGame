@@ -813,7 +813,7 @@ MonoBehaviour:
   _buff: 
   _oneTimeBuff: 
   _debuff: 
-  _characterBuff: 0
+  _characterBuff: 1
   data: {fileID: 0}
   num: 0
 --- !u!4 &1317239032

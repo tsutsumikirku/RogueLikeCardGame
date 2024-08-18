@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class CardBase : MonoBehaviour
 {
-    [SerializeField] BuffDebuff _isBuff;
+    public BuffDebuff _isBuff;
     [SerializeField] Buff _buff;
     [SerializeField] int _attackCount = 1;
     [SerializeField] string _dictionary = "ê‡ñæÇ»Çµ";
@@ -47,7 +47,7 @@ public class CardBase : MonoBehaviour
     }
     public virtual void CardUseEvent()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 }
 public enum BuffDebuff
