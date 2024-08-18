@@ -467,6 +467,7 @@ MonoBehaviour:
   _tresureBoxTransform: {fileID: 885124727}
   _bossTransform: {fileID: 885124727}
   _enemyData: {fileID: 11400000, guid: 400c24bb198864d479a142268c0339e8, type: 2}
+  _battleManager: {fileID: 1295531929}
 --- !u!4 &726140647
 Transform:
   m_ObjectHideFlags: 0
@@ -756,12 +757,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _firstDraw: 5
   _waitingCardListParent: {fileID: 568625782}
-  _characterBases:
-  - {fileID: 0}
-  - {fileID: 0}
+  _characterBasesTest: []
   _player: {fileID: 1431980537}
-  _enemyList: []
   Testmode: 0
+  EventSerect:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1407686497
 GameObject:
   m_ObjectHideFlags: 0
