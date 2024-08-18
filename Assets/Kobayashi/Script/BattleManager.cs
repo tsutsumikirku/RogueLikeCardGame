@@ -28,6 +28,41 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
+    void ChangeTrun()
+    {
+        switch (CurrentTurn)
+        {
+            case Trun.Start:
+                StartTest();
+                CardBase._isPlayer = false;
+                //バトルスタート時の演出がいる。
+                break;
+            case Trun.Draw:
+                int num = GameObject.FindObjectsOfType<CardBase>().Length;
+                int drawCount=_firstDraw - num;
+                DrawCard(drawCount);
+                break;
+            case Trun.UseCard:
+                UseCard();
+                CardBase._isPlayer = true;
+                break;
+            case Trun.PlayerAttack:
+                CardBase._isPlayer = false;
+                //PlayerAttack();
+                Debug.Log("敵を選べ");
+                ;
+                break;
+            case Trun.EnemyAttack:
+                EnemyAttack();
+                break;
+            case Trun.EndTrun:
+                EndTrun();
+                break;
+            case Trun.Result:
+                //result処理
+                break;
+        }
+    }
     void Start()
     {
         CurrentTurn = Trun.Start;
@@ -62,38 +97,6 @@ public class BattleManager : MonoBehaviour
             {
                 Victory();
             }
-        }
-    }
-    void ChangeTrun()
-    {
-        switch (CurrentTurn)
-        {
-            case Trun.Start:
-                StartTest();
-                //バトルスタート時の演出がいる。
-                break;
-            case Trun.Draw:
-                int num = GameObject.FindObjectsOfType<CardBase>().Length;
-                int drawCount=_firstDraw - num;
-                DrawCard(drawCount);
-                break;
-            case Trun.UseCard:
-                UseCard();
-                break;
-            case Trun.PlayerAttack:
-                //PlayerAttack();
-                Debug.Log("敵を選べ");
-                ;
-                break;
-            case Trun.EnemyAttack:
-                EnemyAttack();
-                break;
-            case Trun.EndTrun:
-                EndTrun();
-                break;
-            case Trun.Result:
-                //result処理
-                break;
         }
     }
     void StartTest()
@@ -132,7 +135,7 @@ public class BattleManager : MonoBehaviour
             playCard.CardUse(_player);
         }
         Debug.Log("カード使用");
-        //StartCoroutine(NextTrun(Trun.PlayerAttack, 3));
+        StartCoroutine(NextTrun(Trun.PlayerAttack, 3));
     }
     void EnemyAttack()
     {

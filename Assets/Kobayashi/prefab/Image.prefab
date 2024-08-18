@@ -91,7 +91,7 @@ MonoBehaviour:
   _isBuff: 2
   _buff: 1
   _attackCount: 1
-  _isPlayer: 1
+  _isPlayer: 0
   _test: 0
   _dictionary: "\u8AAC\u660E\u306A\u3057"
   _price: 1
