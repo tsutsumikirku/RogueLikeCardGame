@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -94,9 +93,13 @@ public class BattleManager : MonoBehaviour
                         Debug.Log(enemy + "を倒した");
                     }
                 }
-                if (_enemyList.Count == 0)
+                if (_enemyList.Count != 0)
                 {
                     NextTrun(Trun.EnemyAttack, 3);
+                }
+                else
+                {
+                    Victory();
                 }
                 break;
             default:
@@ -111,22 +114,23 @@ public class BattleManager : MonoBehaviour
                             _enemyList.Remove(enemy);
                             Debug.Log(enemy + "を倒した");
                         }
-                        if (_enemyList.Count == 0)
+                        if (_enemyList.Count != 0)
                         {
                             NextTrun(Trun.EnemyAttack, 3);
+                        }
+                        else
+                        {
+                            Victory();
                         }
                     }
                 }
                 break;
         }
-        if (_enemyList.Count == 0)
-        {
-            Victory();
-        }
     }
     public void SetData(CharacterBase[] enemyArray)
     {
         Debug.Log("ゲームスタート");
+        this.gameObject.SetActive(true);
         if (_playerDeck != null) _playerDeck = DeckShuffle(_player?._deck);
         foreach (CharacterBase enemy in enemyArray)
         {
@@ -138,7 +142,8 @@ public class BattleManager : MonoBehaviour
     void StartEffect()
     {
         Debug.Log("ターン開始");
-        foreach(CharacterBase enemy in _enemyList)
+        List<CharacterBase> enemyList = new List<CharacterBase>(_enemyList);
+        foreach (CharacterBase enemy in enemyList)
         {
             if (enemy._hp <= 0)
             {
@@ -146,6 +151,10 @@ public class BattleManager : MonoBehaviour
             }
         }
         if (_enemyList.Count <= 0)
+        {
+            NextTrun(Trun.Result, 1);
+        }
+        else
         {
             NextTrun(Trun.Draw, 1);
         }
@@ -216,9 +225,16 @@ public class BattleManager : MonoBehaviour
     }
     void Result()
     {
+        if (!Testmode)
+        {
+            GameManager.Instance.BattleEnd();
+        }
         gameObject.SetActive(false);
-        GameManager.Instance.BattleEnd();
 
+    }
+    public void AddNewEnemy(CharacterBase enemy)
+    {
+        _enemyList.Add(enemy);
     }
     Queue<T> DeckShuffle<T>(List<T> DeckData)
     {

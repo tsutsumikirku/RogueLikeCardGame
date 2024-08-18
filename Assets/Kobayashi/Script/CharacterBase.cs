@@ -48,8 +48,8 @@ public abstract class CharacterBase : MonoBehaviour
                     }
                 }
                 debuff += _debuffUp * _debuff.Count;
-                enemy._hp -= ((_attackpower + buff) * onetimebuff + 1) - debuff;
-                Debug.Log($"çUåÇ {(_attackpower + buff) * onetimebuff + 1 - debuff}");
+                enemy._hp -= (_attackpower + buff) * (onetimebuff + 1) - debuff;
+                Debug.Log($"çUåÇ {(_attackpower + buff) * (onetimebuff + 1) - debuff}");
                 break;
             }
         }
