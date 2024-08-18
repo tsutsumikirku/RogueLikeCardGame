@@ -39,7 +39,10 @@ public class CardBase : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDrag
         {
             transform.position = eventData.position;
         }
-
+        else if(transform.parent.tag =="DeskOut")
+        {
+            transform.SetParent(_desk.transform);
+        }
     }
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
