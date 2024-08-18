@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Store : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] bool _test;
+    private void Start()
     {
-        
+        if (_test)
+        {
+            StoreActive();
+        }
     }
-
     // Update is called once per frame
     void Update()
     {
         
+    }
+    void StoreActive()
+    {
+        gameObject.SetActive(true);
     }
 }
