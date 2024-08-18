@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
     [SerializeField] int _firstDraw;
     [SerializeField] Transform _waitingCardListParent;
-    [SerializeField] CharacterBase[] _characterBases;//テスト用
+    [SerializeField] CharacterBase[] _characterBasesTest;//テスト用
     [SerializeField] CharacterBase _player;
-    [SerializeField] List<CharacterBase> _enemyList = new List<CharacterBase>();
+     List<CharacterBase> _enemyList = new List<CharacterBase>();
     List<Queue<CardBase>> _enemyDeck = new List<Queue<CardBase>>();
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
     [SerializeField] bool Testmode;
@@ -29,11 +30,19 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
+    private void Awake()
+    {
+        if (FindObjectOfType<BattleManager>()!=null)
+        {
+            Instance = this;
+        }
+        else Destroy(gameObject);
+    }
     private void Start()
     {
         if (Testmode)
         {
-            SetData(_characterBases);
+            SetData(_characterBasesTest);
         }
     }
     void ChangeTrun()
@@ -306,11 +315,14 @@ public class BattleManager : MonoBehaviour
             CurrentTurn = trunName;
         }
     }
-    void NextTrun(Trun trunName)//アニメーションやイベントトリガーなどで呼ぶよう
+    public void NextTrun(Trun trunName)//アニメーションやイベントトリガーなどで呼ぶよう
     {
         Debug.Log($"TrunChange{trunName}");
         CurrentTurn = trunName;
     }
+    [System.Serializable]
+    public class EnumEvent : UnityEvent<Trun> { }
+    public EnumEvent EventSerect;
 }
 
 public enum Trun
