@@ -12,9 +12,9 @@ public abstract class CharacterBase : MonoBehaviour
     public float _hp;
     public float _attackpower;
     public List<CardBase> _deck;
-     List<Buff> _buff;//永続バフのリスト
-     List<Buff> _oneTimeBuff;//今回バフのリスト
-     List<Buff> _debuff;//デバフのリスト
+    [HideInInspector]public List<Buff> _buff;//永続バフのリスト
+    [HideInInspector] List<Buff> _oneTimeBuff;//今回バフのリスト
+    [HideInInspector]public List<Buff> _debuff;//デバフのリスト
     public Buff _characterBuff;//キャラクターの属性値メインプレイヤーの属性はNoneの想定です
     public void Attack(CharacterBase enemy)
     {
