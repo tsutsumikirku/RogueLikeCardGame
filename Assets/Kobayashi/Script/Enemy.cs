@@ -17,8 +17,4 @@ public class Enemy : CharacterBase
     {
 
     }
-    public override void CardExecution(CardBase card, GameObject actionGameObject)
-    {
-        throw new System.NotImplementedException();
-    }
 }

@@ -15,8 +15,4 @@ public class Player : CharacterBase
     {
         
     }
-    public override void CardExecution(CardBase card, GameObject attackObject)
-    {
-        throw new System.NotImplementedException();
-    }
 }
