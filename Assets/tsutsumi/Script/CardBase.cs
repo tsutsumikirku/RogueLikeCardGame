@@ -1,13 +1,10 @@
-using JetBrains.Annotations;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPointerUpHandler, IPointerDownHandler,IPointerEnterHandler, IPointerExitHandler
+public class CardBase : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
 {
+    public static bool _isPlayer = true;
     GameObject _desk;
     GameObject _nulldesk;
     GameObject _selectdesk;
@@ -15,7 +12,6 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
     [SerializeField] BuffDebuff _isBuff;
     [SerializeField] Buff _buff;
     [SerializeField] int _attackCount = 1;
-    [SerializeField] bool _isPlayer = true;
     [SerializeField] bool _test = true;
     [SerializeField] string _dictionary = "ê‡ñæÇ»Çµ";
     [SerializeField] int _price = 1;
@@ -28,10 +24,7 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
         {
             _player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
         }
-        if (_isPlayer)
-        {
-            transform.SetParent(_desk.transform);
-        }
+        transform.SetParent(_desk.transform);
     }
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
@@ -46,37 +39,9 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
         {
             transform.position = eventData.position;
         }
-      
-    }
 
-    GameObject GetCurrentDeck(PointerEventData eventData)
-    {
-            var results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(eventData, results);
-            RaycastResult result = default;
-            foreach (var item in results)
-            {
-                if (item.gameObject.CompareTag("Desk"))
-                {
-                    result = item;
-                    break;
-                }
-            }
-            return result.gameObject;   
     }
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
-    }
-    public void OnPointerDown(PointerEventData eventData)
-    {
-    }
-    public void OnPointerUp(PointerEventData eventData)
+    void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
         if (_isPlayer)
         {
@@ -90,7 +55,22 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
                 transform.SetParent(_selectdesk.transform);
             }
         }
-       
+    }
+
+    GameObject GetCurrentDeck(PointerEventData eventData)
+    {
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        RaycastResult result = default;
+        foreach (var item in results)
+        {
+            if (item.gameObject.CompareTag("Desk"))
+            {
+                result = item;
+                break;
+            }
+        }
+        return result.gameObject;
     }
     public BuffDebuff CardUse(CharacterBase enemy)
     {
@@ -100,34 +80,34 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
     }
     public void CardUsing(CharacterBase enemy)
     {
-        if(_isBuff == BuffDebuff.OverRide)
+        if (_isBuff == BuffDebuff.OverRide)
         {
             CardOverRide();
         }
-        else if(_isBuff == BuffDebuff.Attack)
+        else if (_isBuff == BuffDebuff.Attack)
         {
             enemy.Attack(_player);
         }
-        else if(_isBuff == BuffDebuff.Buff)
+        else if (_isBuff == BuffDebuff.Buff)
         {
             _player._buff.Add(_buff);
         }
-        else if(_isBuff == BuffDebuff.OneTimeBuff)
+        else if (_isBuff == BuffDebuff.OneTimeBuff)
         {
             _player._oneTimeBuff.Add(_buff);
         }
-        else if(_isBuff == BuffDebuff.AllAttack)
+        else if (_isBuff == BuffDebuff.AllAttack)
         {
             _player._attackPattern = AttackPattern.All;
         }
-        else if(_isBuff == BuffDebuff.AttackCount)
+        else if (_isBuff == BuffDebuff.AttackCount)
         {
             _player._attackCount = _attackCount;
         }
-        else if(_isBuff == BuffDebuff.Debuff)
+        else if (_isBuff == BuffDebuff.Debuff)
         {
         }
-        
+
     }
     public virtual void CardOverRide()
     {
@@ -138,7 +118,7 @@ public class CardBase : MonoBehaviour , IDragHandler , IBeginDragHandler, IPoint
         Destroy(gameObject);
     }
 
-    
+
 }
 public enum BuffDebuff
 {

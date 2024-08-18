@@ -9,7 +9,7 @@ public class Enemy : CharacterBase
     // Start is called before the first frame update
     void Start()
     {
-        SetStatus(data._enemyList[1]);
+        //SetStatus(data._enemyList[1]);
     }
 
     // Update is called once per frame
