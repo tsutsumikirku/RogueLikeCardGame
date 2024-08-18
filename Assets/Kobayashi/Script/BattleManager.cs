@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleManager : MonoBehaviour
@@ -7,12 +8,12 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance;
     [SerializeField] int _firstDraw;
     [SerializeField] Transform _waitingCardListParent;
-    [SerializeField] CharacterBase[] _characterBases;
+    [SerializeField] CharacterBase[] _characterBases;//テスト用
     [SerializeField] CharacterBase _player;
     [SerializeField] List<CharacterBase> _enemyList = new List<CharacterBase>();
     List<Queue<CardBase>> _enemyDeck = new List<Queue<CardBase>>();
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
-    Coroutine _trunChange;
+    [SerializeField] bool Testmode;
     Trun _trun;
     Trun CurrentTurn
     {
@@ -31,15 +32,15 @@ public class BattleManager : MonoBehaviour
     }
     private void Start()
     {
-        CurrentTurn = Trun.SetData;
+        if (Testmode)
+        {
+            SetData(_characterBases);
+        }
     }
     void ChangeTrun()
     {
         switch (CurrentTurn)
         {
-            case Trun.SetData:
-                SetDataTest();
-                break;
             case Trun.Start:
                 StartEffect();
                 //バトルスタート時の演出がいる。
@@ -68,6 +69,7 @@ public class BattleManager : MonoBehaviour
                 break;
             case Trun.Result:
                 //result処理
+                Result();
                 break;
         }
     }
@@ -122,13 +124,9 @@ public class BattleManager : MonoBehaviour
             Victory();
         }
     }
-    void SetDataTest()
+    void SetData(CharacterBase[] enemyArray)
     {
-        BattelSeting(_characterBases);
         Debug.Log("ゲームスタート");
-    }
-    void BattelSeting(CharacterBase[] enemyArray)
-    {
         if (_playerDeck != null) _playerDeck = DeckShuffle(_player?._deck);
         foreach (CharacterBase enemy in enemyArray)
         {
@@ -140,7 +138,17 @@ public class BattleManager : MonoBehaviour
     void StartEffect()
     {
         Debug.Log("ターン開始");
-        NextTrun(Trun.Draw, 1);
+        foreach(CharacterBase enemy in _enemyList)
+        {
+            if (enemy._hp <= 0)
+            {
+                _enemyList.Remove(enemy);
+            }
+        }
+        if (_enemyList.Count <= 0)
+        {
+            NextTrun(Trun.Draw, 1);
+        }
     }
     void DrawCard(int DrawCount)
     {
@@ -191,11 +199,6 @@ public class BattleManager : MonoBehaviour
         }
         NextTrun(Trun.EndTrun, 3);
     }
-    void EndTrun()
-    {
-        Debug.Log("ターン終了");
-        NextTrun(Trun.Start);
-    }
     void Victory()
     {
         Debug.Log("victory");
@@ -205,6 +208,17 @@ public class BattleManager : MonoBehaviour
     {
         Debug.Log("defeat");
         NextTrun(Trun.Result, 2);
+    }
+    void EndTrun()
+    {
+        Debug.Log("ターン終了");
+        NextTrun(Trun.Start);
+    }
+    void Result()
+    {
+        gameObject.SetActive(false);
+        GameManager.Instance.BattleEnd();
+
     }
     Queue<T> DeckShuffle<T>(List<T> DeckData)
     {
@@ -265,13 +279,12 @@ public class BattleManager : MonoBehaviour
     void NextTrun(Trun trunName, float waiteTimer)
     {
         //StopCoroutine(NextTrunCoroutine(trunName, waiteTimer));
-        _trunChange = StartCoroutine(NextTrunCoroutine(trunName, waiteTimer));
+        StartCoroutine(NextTrunCoroutine(trunName, waiteTimer));
     }
     IEnumerator NextTrunCoroutine(Trun trunName, float waiteTimer)//デバッグ、アニメーションにも使うかもねくらい
     {
         Debug.Log($"TrunChange{trunName}");
         yield return new WaitForSeconds(waiteTimer);
-        _trunChange = null;
         if (CurrentTurn != Trun.Result)
         {
             CurrentTurn = trunName;
@@ -287,7 +300,6 @@ public class BattleManager : MonoBehaviour
 public enum Trun
 {
     None,
-    SetData,
     Start,
     Draw,
     ChoiseUseCard,
