@@ -129,12 +129,13 @@ public class BattleManager : MonoBehaviour
     }
     void UseCard()
     {
-        CardBase[] cards = _waitingCardListParent.GetComponentsInChildren<CardBase>();
+        CardBase[] cards = _waitingCardListParent.GetComponentsInChildren<TestCard>();
+        Debug.Log(cards.Length);
         foreach (var playCard in cards)
         {
             playCard.CardUse(_player);
-        }
         Debug.Log("カード使用");
+        }
         StartCoroutine(NextTrun(Trun.PlayerAttack, 3));
     }
     void EnemyAttack()
@@ -205,7 +206,7 @@ public class BattleManager : MonoBehaviour
         Debug.Log("raycast=null");
         return null;
     }
-    IEnumerator NextTrun(Trun trunName,float waiteTimer)//あんまり使わないかも
+    IEnumerator NextTrun(Trun trunName,float waiteTimer)//デバッグ、アニメーションにも使うかもねくらい
     {
         yield return new WaitForSeconds(waiteTimer);
         CurrentTurn = trunName;

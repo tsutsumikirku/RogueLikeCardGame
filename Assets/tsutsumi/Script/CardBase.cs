@@ -77,6 +77,7 @@ public class CardBase : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDrag
     }
     public BuffDebuff CardUse(CharacterBase enemy)
     {
+        Debug.Log($"カードを{enemy}へ使用");
         CardUsing(enemy);
         CardUseEvent();
         return _isBuff;
