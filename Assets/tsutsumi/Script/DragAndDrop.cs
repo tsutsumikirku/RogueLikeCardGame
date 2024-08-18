@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Experimental.Rendering;
 
 public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public bool _isuse = true;
+    [SerializeField,Tooltip("選択するカードの上限値を設定してくださいちなみに初期値は3です")] int _maxSelect = 3;
     GameObject _desk;
     GameObject _selectDesk;
     GameObject _nullDesk;
@@ -54,7 +56,14 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
             GameObject _isdesk = GetCurrentDeck(eventData);
             if (!_isdesk)
             {
-                gameObject.transform.SetParent(_selectDesk.transform);
+                if(_selectDesk.transform.childCount < _maxSelect)
+                {
+                    gameObject.transform.SetParent(_selectDesk.transform);
+                }
+                else
+                {
+                    gameObject.transform.SetParent(_desk.transform);
+                }
             }
             else
             {
