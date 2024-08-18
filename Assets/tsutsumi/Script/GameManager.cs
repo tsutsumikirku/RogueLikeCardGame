@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
     {
         switch (_state)
         {
-            case GameManagerState.Surch:
+            case GameManagerState.Serch:
             OnSurch();
             break;
             case GameManagerState.Move: 
@@ -126,24 +126,12 @@ public class GameManager : MonoBehaviour
     }
     public void BattleEnd()
     {
-        State = GameManagerState.Surch;
-    }
-    public void ShopEnd()
-    {
-        State = GameManagerState.Surch;
-    }
-    public void DeckEnd()
-    {
-        State = GameManagerState.Surch;
-    }
-    public void UserManualEnd()
-    {
-        State = GameManagerState.Surch;
+        State = GameManagerState.Serch;
     }
 }
 public enum GameManagerState
 {
-    Surch,
+    Serch,
     Move,
     Shop,
     Deck,
