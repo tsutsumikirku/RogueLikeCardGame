@@ -26,6 +26,14 @@ public class GameManager : MonoBehaviour
     GameManagerBattleStep _gameBattleStep;
     bool _boss = false;
     bool _afterBoss = false;
+    private void Awake()
+    {
+        if (FindObjectOfType<GameManager>() != null)
+        {
+            Instance = this;
+        }
+        else Destroy(gameObject);
+    }
 
     public GameManagerState State
     {
