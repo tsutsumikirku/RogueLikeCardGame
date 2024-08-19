@@ -1,16 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
     [SerializeField] int _firstDraw;
     [SerializeField] Transform _waitingCardListParent;
+    [SerializeField] GameObject _nextStepButton;
     [SerializeField] CharacterBase[] _characterBasesTest;//テスト用
     [SerializeField] CharacterBase _player;
-     List<CharacterBase> _enemyList = new List<CharacterBase>();
+    List<CharacterBase> _enemyList = new List<CharacterBase>();
     List<Queue<CardBase>> _enemyDeck = new List<Queue<CardBase>>();
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
     [SerializeField] bool Testmode;
@@ -32,7 +34,7 @@ public class BattleManager : MonoBehaviour
     }
     private void Awake()
     {
-        if (FindObjectOfType<BattleManager>()!=null)
+        if (FindObjectOfType<BattleManager>() != null)
         {
             Instance = this;
         }
@@ -209,7 +211,17 @@ public class BattleManager : MonoBehaviour
         Debug.Log("敵の攻撃");
         for (int i = 0; i < _enemyList.Count; i++)
         {
-            _enemyDeck[i].Dequeue().CardUse(_enemyList[i], _player);
+            CharacterBase attackObj=_player;
+            foreach(var enemy in _enemyList[i]._debuff)
+            {
+                //混乱デバフの名前が決まり次第書き換えます
+                if (1 == 0)
+                {
+                    var random =Random.Range(0, _enemyList.Count);
+                    attackObj = _enemyList[random];
+                }
+            }
+            _enemyDeck[i].Dequeue().CardUse(_enemyList[i], attackObj);
         }
         if (_player._hp <= 0)
         {
@@ -230,7 +242,7 @@ public class BattleManager : MonoBehaviour
     void EndTrun()
     {
         Debug.Log("ターン終了");
-        NextTrun(Trun.Start);
+        NextTrun(Trun.Start, 0);
     }
     void Result()
     {
@@ -289,24 +301,33 @@ public class BattleManager : MonoBehaviour
     IEnumerator UseDebuffCrad(List<CardBase> debufCardList, CharacterBase useCharacter)
     {
         int count = 0;
+        Debug.Log("デバフ対象を選んでください");
         while (count < debufCardList.Count)
         {
-            var enemy = GetMouseClickEnemy();
-            if (enemy != null)
+            CharacterBase enemy = null;
+            if (Input.GetMouseButton(0))
             {
-                count++;
-                debufCardList[count].CardUse(useCharacter, enemy);
+                enemy = GetMouseClickEnemy();
+                if (enemy != null)
+                {
+                    Debug.Log($"{enemy}にデバフをかけた");
+                    count++;
+                    debufCardList[count].CardUse(useCharacter, enemy);
+                }
             }
             yield return new WaitForEndOfFrame();
         }
-        NextTrun(Trun.PlayerAttack);
+        if (_nextStepButton == null)
+        {
+            NextTrun(Trun.PlayerAttack, 0);
+        }
     }
     void NextTrun(Trun trunName, float waiteTimer)
     {
         //StopCoroutine(NextTrunCoroutine(trunName, waiteTimer));
         StartCoroutine(NextTrunCoroutine(trunName, waiteTimer));
     }
-    IEnumerator NextTrunCoroutine(Trun trunName, float waiteTimer)//デバッグ、アニメーションにも使うかもねくらい
+    IEnumerator NextTrunCoroutine(Trun trunName, float waiteTimer)
     {
         Debug.Log($"TrunChange{trunName}");
         yield return new WaitForSeconds(waiteTimer);
@@ -315,14 +336,11 @@ public class BattleManager : MonoBehaviour
             CurrentTurn = trunName;
         }
     }
-    public void NextTrun(Trun trunName)//アニメーションやイベントトリガーなどで呼ぶよう
+    public void NextTrun(string trunName)//eventTrigger用
     {
         Debug.Log($"TrunChange{trunName}");
-        CurrentTurn = trunName;
+        CurrentTurn = (Trun)Enum.Parse(typeof(Trun), trunName);
     }
-    [System.Serializable]
-    public class EnumEvent : UnityEvent<Trun> { }
-    public EnumEvent EventSerect;
 }
 
 public enum Trun
