@@ -32,7 +32,10 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
-        else Destroy(gameObject);
+        else
+        {
+            Destroy(gameObject);
+        }   
     }
 
     public GameManagerState State
