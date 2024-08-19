@@ -12,32 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4f245d694870145892603cc28a8fba, type: 3}
   m_Name: TestCard
   m_EditorClassIdentifier: 
-  cards:
-  - name: 
-    _isBuff: 0
-    _buff: 0
-    _attackCount: 0
-    _dictionary: 
-    _price: 0
-    _sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  - name: 
-    _isBuff: 0
-    _buff: 0
-    _attackCount: 0
-    _dictionary: 
-    _price: 0
-    _sprite: {fileID: 0}
-  - name: 
-    _isBuff: 0
-    _buff: 0
-    _attackCount: 0
-    _dictionary: 
-    _price: 0
-    _sprite: {fileID: 0}
-  - name: 
-    _isBuff: 0
-    _buff: 0
-    _attackCount: 0
-    _dictionary: 
-    _price: 0
-    _sprite: {fileID: 0}
+  Cards:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
