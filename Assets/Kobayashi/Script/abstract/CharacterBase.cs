@@ -16,6 +16,7 @@ public abstract class CharacterBase : MonoBehaviour
     [HideInInspector]public List<Buff> _oneTimeBuff;//今回バフのリスト
     [HideInInspector]public List<Buff> _debuff;//デバフのリスト
     public Buff _characterBuff;//キャラクターの属性値メインプレイヤーの属性はNoneの想定です
+    public bool _allElementAttack = false;
     public void Attack(CharacterBase enemy)
     {
         //forループでエネミーの属性値と対象となるバフを検索して計算式にわり当てはめています。
@@ -28,17 +29,36 @@ public abstract class CharacterBase : MonoBehaviour
                 float debuff = 0;
                 for (int j = 0; j < _buff.Count; j++)
                 {
-                    if (_buff[j] == (Buff)i)
+                    if (!_allElementAttack)
+                    {
+                        if (_buff[j] == (Buff)i)
+                        {
+                            buff += _buffUp;
+                        }
+                    }
+                    else
                     {
                         buff += _buffUp;
                     }
+                  
                 }
                 for(int h = 0; h < _oneTimeBuff.Count; h++)
                 {
-                    if (_buff[h] == (Buff)i)
+                    if (!_allElementAttack)
+                    {
+                        if (_buff[h] == (Buff)i)
+                        {
+                            onetimebuff += _oneTimeBuffUp;
+                        }
+                    }
+                    else
                     {
                         onetimebuff += _oneTimeBuffUp;
                     }
+                }
+                if (_allElementAttack)
+                {
+                    _buff.Clear();
                 }
                 debuff += _debuffUp * _debuff.Count;
                 enemy._hp -= (_attackpower + buff) * (onetimebuff + 1) - debuff;

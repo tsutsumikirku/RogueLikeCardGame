@@ -40,6 +40,9 @@ public class CardBase : MonoBehaviour
             case BuffDebuff.AttackCount:
             attack._attackCount = _attackCount;
             break;
+            case BuffDebuff.AllElementAttack:
+            attack._allElementAttack = true;
+            break;
         }
     }
     public virtual void CardOverRide()
@@ -63,7 +66,8 @@ public enum BuffDebuff
     OneTimeBuff,
     AllAttack,
     AttackCount,
-    Debuff
+    Debuff,
+    AllElementAttack
 }
 public enum DebuffSelectState
 {
