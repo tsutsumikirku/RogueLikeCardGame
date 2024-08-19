@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CardBase : MonoBehaviour
 {
@@ -47,7 +48,11 @@ public class CardBase : MonoBehaviour
     }
     public virtual void CardUseEvent()
     {
-        //Destroy(gameObject);
+        bool dest = TryGetComponent<DragAndDrop>(out DragAndDrop sss);
+        if (dest)
+        {
+            Destroy(gameObject);
+        }
     }
 }
 public enum BuffDebuff
