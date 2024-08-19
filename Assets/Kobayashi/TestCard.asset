@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestCard
   m_EditorClassIdentifier: 
   Cards:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3858537949265670636, guid: d3755866f00510a4886ad6a61540b69b, type: 3}
+  - {fileID: 3858537949265670636, guid: d3755866f00510a4886ad6a61540b69b, type: 3}
+  - {fileID: 2740953625566849548, guid: 45536f9f0890778498b43a3414ae832b, type: 3}
+  - {fileID: 2740953625566849548, guid: 45536f9f0890778498b43a3414ae832b, type: 3}

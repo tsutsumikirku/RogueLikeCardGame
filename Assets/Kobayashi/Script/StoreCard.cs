@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoreCard : CardBase
+public class StoreCard : MonoBehaviour
 {
-    public void CallStoreBuy()
+    [HideInInspector]public CardBase CardData;
+    public void OnClickCallStoreMethod()
     {
-        Store.Instance.Buy(GetComponent<StoreCard>());
+        Store.Instance.CardOnClick(CardData);
         Destroy(gameObject);
     }
 }

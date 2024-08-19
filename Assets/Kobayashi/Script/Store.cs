@@ -1,16 +1,30 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Store : MonoBehaviour
 {
     public static Store Instance;
+    StoreMode _mode;
+    StoreMode _storeMode
+    {
+        get { return _mode; }
+        set
+        {
+            if (_mode != value)
+            {
+                _mode = value;
+                ChangeState();
+            }
+        }
+    }
     [SerializeField] CardBase[] cards;
-    [SerializeField] GameObject _storePanel;
     [SerializeField] int _cardCount;
     [SerializeField] GameObject _enptyCardPrefab;
+    [SerializeField] GameObject[] _storePanels;
     [SerializeField] GameObject[] _tableArray;
+    bool _buyCords;
     //下記のシリアライズはデバッグ用です。シリアライズだけ削除してください
     [SerializeField] CharacterBase _player;
     [SerializeField] List<CardBase> _cards;
@@ -27,21 +41,55 @@ public class Store : MonoBehaviour
     {
         if (_test)
         {
-            StoreActive();
+            StoreStart();
         }
     }
-    // Update is called once per frame
-    void Update()
+    void StoreStart()
     {
-
-    }
-    void StoreActive()
-    {
+        _storeMode = StoreMode.StoreMain;
         gameObject.SetActive(true);
-        _storePanel.SetActive(true);
         _player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
         _cards = _player?._deck;
-        CreatCards(RandomCard(_dataScriptablObj.Cards, 6));
+        if (!_buyCords)
+        {
+            _buyCords = true;
+            var count = GameObject.FindObjectsOfType<StoreCard>().Length;
+            CreatCards(RandomCard(_dataScriptablObj.Cards, _cardCount - count));
+        }
+    }
+    void StoreEnd()
+    {
+        gameObject.SetActive(false);
+        _storeMode = StoreMode.None;
+        GameManager.Instance.BattleEnd();
+    }
+    void ChangeState()
+    {
+        switch (_storeMode)
+        {
+            case StoreMode.StoreSell:
+                StoreModeActive("SellPanel");
+                break;
+            case StoreMode.StoreBuy:
+                StoreModeActive("BuyPanel");
+                break;
+            case StoreMode.StoreMain:
+                StoreModeActive("MainPanel");
+                break;
+            default:
+                break;
+        }
+    }
+    void StoreModeActive(string name)
+    {
+        foreach (var panel in _storePanels)
+        {
+            if (panel.name == name)
+            {
+                panel.SetActive(true);
+            }
+            else panel.SetActive(false);
+        }
     }
     CardBase[] RandomCard(List<CardBase> cards, int count)
     {
@@ -59,25 +107,63 @@ public class Store : MonoBehaviour
         var num2 = _cardCount % _tableArray.Length;
         foreach (var table in _tableArray)
         {
-            int plus1=0;
+            int plus1 = 0;
             if (num2 > 0)
             {
                 plus1 = 1;
                 num2--;
             }
-            for (int i = 0; i < num+plus1; i++)
+            for (int i = 0; i < num + plus1; i++)
             {
-                var cardObj=Instantiate(_enptyCardPrefab, table.transform);
-                var enptyCard = cardObj.GetComponent<CardBase>();
+                var cardObj = Instantiate(_enptyCardPrefab, table.transform);
+                cardObj.GetComponent<StoreCard>().CardData = cards[i];
+                Debug.Log(cards[i]);
+                Debug.Log(cardObj.GetComponent<StoreCard>().CardData);
+                var enptyCard = cardObj.AddComponent<CardBase>();
                 enptyCard = cards[i];
             }
         }
     }
-    public void Buy(CardBase card)
+    public void StateChange(string enumName)
     {
-        Debug.Log("Buy");
-        _player._deck.Add(card);
-        _player._hp -= card._price;
+        Debug.Log(_storeMode);
+        _storeMode = (StoreMode)Enum.Parse(typeof(StoreMode), enumName);
+    }
+    public void CardOnClick(CardBase card)
+    {
+        if (_storeMode == StoreMode.StoreBuy)
+        {
+            Debug.Log("Buy");
+            _player._deck.Add(card);
+            Debug.Log(card._price);
+            _player._hp -= card._price;
+        }
+        else if (_storeMode == StoreMode.StoreSell)
+        {
+            Debug.Log("sell");
+            _player._deck.Remove(card);
+            _player._hp += card._price;
+        }
+        else
+        {
+            Debug.LogError("カードが存在しないはずデス。");
+        }
+    }
+    void AllCardDestroy()
+    {
+        var cards = GameObject.FindObjectsOfType<StoreCard>();
+        foreach (var card in cards)
+        {
+            Destroy(card);
+        }
+    }
+
+    enum StoreMode
+    {
+        None,
+        StoreMain,
+        StoreBuy,
+        StoreSell,
     }
     HashSet<CardBase> RandomCardHashSet(List<CardBase> cards, int count)
     {
