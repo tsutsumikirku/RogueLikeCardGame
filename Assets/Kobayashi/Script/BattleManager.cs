@@ -131,6 +131,8 @@ public class BattleManager : MonoBehaviour
     public void SetData(CharacterBase[] enemyArray)
     {
         Debug.Log("ゲームスタート");
+        var playerObj = GameObject.FindWithTag("Player");
+        _player = playerObj.GetComponent<CharacterBase>();
         this.gameObject.SetActive(true);
         if (_playerDeck != null) _playerDeck = DeckShuffle(_player?._deck);
         foreach (CharacterBase enemy in enemyArray)
@@ -210,7 +212,7 @@ public class BattleManager : MonoBehaviour
             {
                 for(int i = 0; i < _player._buff.Count; i++)
                 {
-
+                    //バフ探し
                 }
             }
             NextTrun(CurrentTurn++, 3);
@@ -258,13 +260,17 @@ public class BattleManager : MonoBehaviour
         Debug.Log("ターン終了");
         NextTrun(Trun.Start, 2);
     }
-    void Result()
+    void Result()//
+    {
+
+    }
+    void BattleEnd()
     {
         if (!Testmode)
         {
             GameManager.Instance.BattleEnd();
         }
-        gameObject.SetActive(false);
+gameObject.SetActive(false);
     }
     public void AddNewEnemy(CharacterBase enemy)
     {
