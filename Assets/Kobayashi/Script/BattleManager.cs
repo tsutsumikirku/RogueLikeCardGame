@@ -12,11 +12,16 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject _nextStepButton;
     [SerializeField] CharacterBase[] _characterBasesTest;//テスト用
     [SerializeField] CharacterBase _player;
+    [SerializeField] Canvas _canvas;
     List<CharacterBase> _enemyList = new List<CharacterBase>();
     List<Queue<CardBase>> _enemyDeck = new List<Queue<CardBase>>();
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
-    [SerializeField] bool Testmode;
+    List<CardBase> _trashZone;
     Trun _trun;
+    [SerializeField]GameObject _resultPanel;
+    [SerializeField] bool Testmode;
+    [SerializeField] GameObject _emptyCard;
+    [SerializeField] CardBase[] _praiseCardList;
     Trun CurrentTurn
     {
         get
@@ -81,7 +86,7 @@ public class BattleManager : MonoBehaviour
                 break;
             case Trun.Result:
                 //result処理
-                Result();
+                Result(3);
                 break;
         }
     }
@@ -140,7 +145,7 @@ public class BattleManager : MonoBehaviour
             _enemyList?.Add(enemy);
             _enemyDeck?.Add(DeckShuffle(enemy?._deck));
         }
-        NextTrun(Trun.Start, 1);
+        NextTrun(Trun.Result, 1);
     }
     void StartEffect()
     {
@@ -169,7 +174,7 @@ public class BattleManager : MonoBehaviour
             Instantiate(_playerDeck.Dequeue());
             if (_playerDeck.Count >= 0)
             {
-                _playerDeck = DeckShuffle(_player._deck);
+                _playerDeck = DeckShuffle(_trashZone);
             }
         }
         Debug.Log("カードドロー");
@@ -185,6 +190,7 @@ public class BattleManager : MonoBehaviour
         List<CardBase> debuffCard = new List<CardBase>();
         foreach (var playCard in cards)
         {
+            _trashZone.Add(playCard);
             if (playCard._isBuff == BuffDebuff.Debuff)
             {
                 debuffCard.Add(playCard);
@@ -245,6 +251,11 @@ public class BattleManager : MonoBehaviour
         }
         NextTrun(CurrentTurn++, 3);
     }
+    void EndTrun()
+    {
+        Debug.Log("ターン終了");
+        NextTrun(Trun.Start, 2);
+    }
     void Victory()
     {
         Debug.Log("victory");
@@ -255,14 +266,14 @@ public class BattleManager : MonoBehaviour
         Debug.Log("defeat");
         NextTrun(Trun.Result, 2);
     }
-    void EndTrun()
+    void Result(int count)//
     {
-        Debug.Log("ターン終了");
-        NextTrun(Trun.Start, 2);
-    }
-    void Result()//
-    {
-
+        var cards=RandomCard(_praiseCardList, count);
+        var result = Instantiate(_resultPanel,_canvas.transform);
+        for (int i = 0; i < count; i++)
+        {
+            var obj = Instantiate(_emptyCard,result.transform.GetChild(0));
+        }
     }
     void BattleEnd()
     {
@@ -270,7 +281,7 @@ public class BattleManager : MonoBehaviour
         {
             GameManager.Instance.BattleEnd();
         }
-gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
     public void AddNewEnemy(CharacterBase enemy)
     {
@@ -341,6 +352,26 @@ gameObject.SetActive(false);
             NextTrun(Trun.PlayerAttack, 0);
         }
     }
+    T[] RandomCard<T>(T[] randomizeArray,int count)
+    {
+        if (randomizeArray.Length < count)
+        {
+            return randomizeArray;
+        }
+        else
+        {
+            T[] randomCopy = new T[randomizeArray.Length];
+            randomCopy = randomizeArray;
+            T[] result = new T[count];
+            for (int i = 0; i < count; i++)
+            {
+                var random = Random.Range(0, randomizeArray.Length - i);
+                result[i] = randomCopy[random];
+                randomCopy[random] = randomCopy[randomCopy.Length-1 - i];
+            }
+            return result;
+        }
+    }
     void NextTrun(Trun trunName, float waiteTimer)
     {
         //StopCoroutine(NextTrunCoroutine(trunName, waiteTimer));
@@ -361,7 +392,6 @@ gameObject.SetActive(false);
         CurrentTurn = (Trun)Enum.Parse(typeof(Trun), trunName);
     }
 }
-
 public enum Trun
 {
     None,
