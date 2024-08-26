@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public class BattleManager : MonoBehaviour
@@ -49,7 +51,8 @@ public class BattleManager : MonoBehaviour
     {
         if (Testmode)
         {
-            SetData(_characterBasesTest);
+            //SetData(_characterBasesTest);
+            NextTrun(Trun.Result, 0);
         }
     }
     void ChangeTrun()
@@ -268,12 +271,37 @@ public class BattleManager : MonoBehaviour
     }
     void Result(int count)//
     {
+        Debug.Log("risult");
         var cards=RandomCard(_praiseCardList, count);
         var result = Instantiate(_resultPanel,_canvas.transform);
         for (int i = 0; i < count; i++)
         {
+            Debug.Log("カード追加");
             var obj = Instantiate(_emptyCard,result.transform.GetChild(0));
+            // EventTrigger コンポーネントを取得または追加
+            EventTrigger trigger = obj.GetComponent<EventTrigger>();
+            if (trigger == null)
+            {
+                trigger = obj.AddComponent<EventTrigger>();
+            }
+
+            // PointerClick イベント用のエントリを作成
+            EventTrigger.Entry entry = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerClick
+            };
+
+            // イベント時に実行するコールバックを追加
+            entry.callback.AddListener((data) => { OnClick(); });
+
+            // Entry を EventTrigger に追加
+            trigger.triggers.Add(entry);
+            Debug.Log("Evenntotuika");
         }
+    }
+    void OnClick()
+    {
+        Debug.Log("clickされた "+this.gameObject.name);
     }
     void BattleEnd()
     {
