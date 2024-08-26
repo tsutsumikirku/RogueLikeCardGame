@@ -119,7 +119,7 @@ public class Store : MonoBehaviour
                 cardObj.GetComponent<StoreCard>().CardData = cards[i];
                 Debug.Log(cards[i]);
                 Debug.Log(cardObj.GetComponent<StoreCard>().CardData);
-                var enptyCard = cardObj.AddComponent<CardBase>();
+                var enptyCard = cardObj.AddComponent<CardBase>();//—\Šú‚¹‚Ê‹““®
                 enptyCard = cards[i];
             }
         }
