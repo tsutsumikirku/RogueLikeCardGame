@@ -310,6 +310,7 @@ MonoBehaviour:
   _oneTimeBuff: 
   _debuff: 
   _characterBuff: 2
+  _allElementAttack: 0
   data: {fileID: 0}
   num: 0
 --- !u!4 &859807168
@@ -532,7 +533,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1019731363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -636,7 +637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1070114747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -925,6 +926,7 @@ MonoBehaviour:
   _oneTimeBuff: 
   _debuff: 
   _characterBuff: 1
+  _allElementAttack: 0
   data: {fileID: 0}
   num: 0
 --- !u!4 &1317239032
@@ -992,6 +994,7 @@ MonoBehaviour:
   _oneTimeBuff: 
   _debuff: 
   _characterBuff: 0
+  _allElementAttack: 0
 --- !u!4 &1431980538
 Transform:
   m_ObjectHideFlags: 0

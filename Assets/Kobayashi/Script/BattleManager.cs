@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class BattleManager : MonoBehaviour
@@ -11,15 +13,17 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance;
     [SerializeField] int _firstDraw;
     [SerializeField] Transform _waitingCardListParent;
-    [SerializeField] GameObject _nextStepButton;
     [SerializeField] CharacterBase[] _characterBasesTest;//テスト用
     [SerializeField] CharacterBase _player;
-    [SerializeField] Canvas _canvas;
+    [SerializeField] GameObject _stateEndButton;
+    [SerializeField] Vector2 _stateEndButtonAnchor;
+    [SerializeField] Canvas _resultCanvas;
     List<CharacterBase> _enemyList = new List<CharacterBase>();
     List<Queue<CardBase>> _enemyDeck = new List<Queue<CardBase>>();
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
-    List<CardBase> _trashZone;
+    List<CardBase> _trashZone=new List<CardBase>();
     Trun _trun;
+    Dictionary<Action, Func<bool>> _cardPlayQueue=new Dictionary<Action, Func<bool>>();
     [SerializeField]GameObject _resultPanel;
     [SerializeField] bool Testmode;
     [SerializeField] GameObject _emptyCard;
@@ -39,22 +43,6 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-    private void Awake()
-    {
-        if (FindObjectOfType<BattleManager>() != null)
-        {
-            Instance = this;
-        }
-        else Destroy(gameObject);
-    }
-    private void Start()
-    {
-        if (Testmode)
-        {
-            //SetData(_characterBasesTest);
-            NextTrun(Trun.Result, 0);
-        }
-    }
     void ChangeTrun()
     {
         switch (CurrentTurn)
@@ -71,13 +59,16 @@ public class BattleManager : MonoBehaviour
             case Trun.ChoiseUseCard:
                 ChoiseUseCard();
                 break;
+                //ボタンで次のstateに
             case Trun.UseCard:
                 UseCard();
                 break;
+                //ボタンで次のstateに
             case Trun.PlayerAttackTargetSelection:
                 Debug.Log("敵を選べ");
                 ;// PlayerAttackTargetSelection();
                 break;
+                //ボタンで次のstateに
             case Trun.PlayerAttack:
                 ;//PlayerAttack
                 break;
@@ -91,6 +82,21 @@ public class BattleManager : MonoBehaviour
                 //result処理
                 Result(3);
                 break;
+        }
+    }
+    private void Awake()
+    {
+        if (FindObjectOfType<BattleManager>() != null)
+        {
+            Instance = this;
+        }
+        else Destroy(gameObject);
+    }
+    private void Start()
+    {
+        if (Testmode)
+        {
+            SetData(_characterBasesTest);
         }
     }
     void Update()
@@ -116,7 +122,7 @@ public class BattleManager : MonoBehaviour
                 }
                 if (_enemyList.Count != 0)
                 {
-                    NextTrun(CurrentTurn++, 3);
+                    NextTrun(Trun.PlayerAttack, 3);
                 }
                 else
                 {
@@ -126,10 +132,10 @@ public class BattleManager : MonoBehaviour
             default:
                 if (Input.GetMouseButtonDown(0))
                 {
-                    var enemy = GetMouseClickEnemy();
+                    var enemy = GetMousePositionEnemy<CharacterBase>();
                     if (enemy != null)
                     {
-                        NextTrun(CurrentTurn++, 1);
+                        NextTrun(Trun.PlayerAttack, 1);
                         PlayerAttack(enemy);
                     }
                 }
@@ -148,7 +154,7 @@ public class BattleManager : MonoBehaviour
             _enemyList?.Add(enemy);
             _enemyDeck?.Add(DeckShuffle(enemy?._deck));
         }
-        NextTrun(Trun.Result, 1);
+        NextTrun(Trun.Start, 1);
     }
     void StartEffect()
     {
@@ -167,7 +173,7 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            NextTrun(CurrentTurn++, 1);
+            NextTrun(Trun.Draw, 1);
         }
     }
     void DrawCard(int DrawCount)
@@ -175,17 +181,24 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < DrawCount; i++)
         {
             Instantiate(_playerDeck.Dequeue());
-            if (_playerDeck.Count >= 0)
+            if (_playerDeck.Count <= 0)
             {
                 _playerDeck = DeckShuffle(_trashZone);
             }
         }
         Debug.Log("カードドロー");
-        NextTrun(CurrentTurn++, 1);
+        NextTrun(Trun.ChoiseUseCard, 1);
     }
     void ChoiseUseCard()
     {
-        NextTrun(CurrentTurn++, 3);
+        Debug.Log("カード選択");
+        GameObject obj = Instantiate(_stateEndButton, _stateEndButtonAnchor, Quaternion.identity,_resultCanvas.transform);
+        obj.TryGetComponent(out Button button);
+        if (button == null)
+        {
+            obj.AddComponent<Button>();
+        }
+        button.onClick.AddListener(()=>NextTrun(Trun.UseCard,0));
     }
     void UseCard()
     {
@@ -204,7 +217,19 @@ public class BattleManager : MonoBehaviour
                 Debug.Log("カード使用");
             }
         }
-        StartCoroutine(UseDebuffCrad(debuffCard, _player));//コルーチン内でターンを管理する
+        StartCoroutine(UseDebuffCrad(debuffCard, _player));//コルーチン内でステートを管理する
+        //StartCoroutine(CallBack(_cardPlayQueue));
+    }
+    IEnumerator CallBack(Dictionary<Action,Func<bool>> taskList)//カードの待機
+    {
+        foreach(var task in taskList)
+        {
+            Debug.Log("タスク開始");
+            task.Key.Invoke();
+            yield return null;
+            yield return new WaitUntil(task.Value);
+            Debug.Log("タスク終了");
+        }
     }
     void PlayerAttack(CharacterBase enemy)
     {
@@ -252,7 +277,7 @@ public class BattleManager : MonoBehaviour
         {
             Defeat();
         }
-        NextTrun(CurrentTurn++, 3);
+        NextTrun(Trun.EndTrun, 3);
     }
     void EndTrun()
     {
@@ -267,13 +292,12 @@ public class BattleManager : MonoBehaviour
     void Defeat()
     {
         Debug.Log("defeat");
-        NextTrun(Trun.Result, 2);
     }
     void Result(int count)//
     {
         Debug.Log("risult");
         var cards=RandomCard(_praiseCardList, count);
-        var result = Instantiate(_resultPanel,_canvas.transform);
+        var result = Instantiate(_resultPanel,_resultCanvas.transform);
         for (int i = 0; i < count; i++)
         {
             Debug.Log("カード追加");
@@ -299,9 +323,10 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Evenntotuika");
         }
     }
-    void OnClick()
+    void OnClick()//resultでの報酬選択用のメソッド
     {
         Debug.Log("clickされた "+this.gameObject.name);
+        //アニメーション発火、プレイヤーのカードリストに登録、result画面を閉じる
     }
     void BattleEnd()
     {
@@ -336,17 +361,17 @@ public class BattleManager : MonoBehaviour
         }
         return deckQueue;
     }
-    CharacterBase GetMouseClickEnemy()
+    [return: MaybeNull]
+    public T GetMousePositionEnemy<T>()
     {
-#nullable enable
-        CharacterBase? hitGameObject;
-#nullable disable
+
+        T hitGameObject;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 100);
         Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
         if (hit.transform != null)
         {
-            hitGameObject = hit.transform.gameObject.GetComponent<CharacterBase>();
+            hitGameObject = hit.transform.gameObject.GetComponent<T>();
             if (hitGameObject != null)
             {
                 Debug.Log(hitGameObject);
@@ -354,7 +379,7 @@ public class BattleManager : MonoBehaviour
             }
         }
         Debug.Log("raycast=null");
-        return null;
+        return default;
     }
     IEnumerator UseDebuffCrad(List<CardBase> debufCardList, CharacterBase useCharacter)
     {
@@ -365,7 +390,7 @@ public class BattleManager : MonoBehaviour
             CharacterBase enemy = null;
             if (Input.GetMouseButton(0))
             {
-                enemy = GetMouseClickEnemy();
+                enemy = GetMousePositionEnemy<CharacterBase>();
                 if (enemy != null)
                 {
                     Debug.Log($"{enemy}にデバフをかけた");
@@ -375,7 +400,7 @@ public class BattleManager : MonoBehaviour
             }
             yield return new WaitForEndOfFrame();
         }
-        if (_nextStepButton == null)
+        if (_stateEndButton == null)
         {
             NextTrun(Trun.PlayerAttack, 0);
         }
@@ -407,7 +432,6 @@ public class BattleManager : MonoBehaviour
     }
     IEnumerator NextTrunCoroutine(Trun trunName, float waiteTimer)
     {
-        Debug.Log($"TrunChange{trunName}");
         yield return new WaitForSeconds(waiteTimer);
         if (CurrentTurn != Trun.Result)
         {
@@ -416,7 +440,6 @@ public class BattleManager : MonoBehaviour
     }
     public void NextTrun(string trunName)//eventTrigger用
     {
-        Debug.Log($"TrunChange{trunName}");
         CurrentTurn = (Trun)Enum.Parse(typeof(Trun), trunName);
     }
 }
