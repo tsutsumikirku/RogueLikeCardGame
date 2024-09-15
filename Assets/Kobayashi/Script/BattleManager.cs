@@ -425,6 +425,10 @@ public class BattleManager : MonoBehaviour
             return result;
         }
     }
+    public void SetCardUse(Action action,Func<bool> endConditions)
+    {
+        _cardPlayQueue.Add(action, endConditions);
+    }
     void NextTrun(Trun trunName, float waiteTimer)
     {
         //StopCoroutine(NextTrunCoroutine(trunName, waiteTimer));
