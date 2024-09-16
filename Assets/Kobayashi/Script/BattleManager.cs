@@ -217,7 +217,8 @@ public class BattleManager : MonoBehaviour
                 Debug.Log("カード使用");
             }
         }
-        StartCoroutine(UseDebuffCrad(debuffCard, _player));//コルーチン内でステートを管理する
+        if(debuffCard.Count>0) StartCoroutine(UseDebuffCrad(debuffCard, _player));//コルーチン内でステートを管理する
+        else NextTrun(Trun.PlayerAttackTargetSelection,1);
         //StartCoroutine(CallBack(_cardPlayQueue));
     }
     IEnumerator CallBack(Dictionary<Action,Func<bool>> taskList)//カードの待機
@@ -249,8 +250,8 @@ public class BattleManager : MonoBehaviour
                     //バフ探し
                 }
             }
-            NextTrun(CurrentTurn++, 3);
         }
+        NextTrun(Trun.EnemyAttack, 3);
     }
     void EnemyAttack()
     {
@@ -390,6 +391,7 @@ public class BattleManager : MonoBehaviour
             CharacterBase enemy = null;
             if (Input.GetMouseButton(0))
             {
+                Debug.Log("ボタンが押された");
                 enemy = GetMousePositionEnemy<CharacterBase>();
                 if (enemy != null)
                 {
