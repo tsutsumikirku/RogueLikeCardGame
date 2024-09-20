@@ -29,7 +29,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] GameObject _resultPanel;
     [SerializeField] bool Testmode;
     [SerializeField] GameObject _emptyCard;
-    [SerializeField] CardBase[] _praiseCardList;
+    CardBase[] _praiseCardArray;
 
     [SerializeField] Transform _trashParent;
     [SerializeField] GameObject _stateEndButton;
@@ -104,15 +104,22 @@ public class BattleManager : MonoBehaviour
     {
         if (Testmode)
         {
-            SetData(_characterBasesTest);
+            BattleStart(GameObject.FindWithTag("Player").GetComponent<CharacterBase>(), null, new CardBase[3]);
         }
     }
-    public void SetData(CharacterBase[] enemyArray)
+    /// <summary>
+    /// バトル開始時に呼ぶ関数
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="enemyArray"></param>
+    /// <param name="prizeCards"></param>
+    public void BattleStart(CharacterBase player, CharacterBase[] enemyArray, CardBase[] prizeCards)
     {
-        var playerObj = GameObject.FindWithTag("Player");
+        var playerObj = player;
         _player = playerObj.GetComponent<CharacterBase>();
         this.gameObject.SetActive(true);
         _playerAttackTarget.Clear();
+        _praiseCardArray = prizeCards;
         if (enemyArray.Length <= 0)
         {
             CurrentTurn = Trun.Result;
@@ -187,15 +194,8 @@ public class BattleManager : MonoBehaviour
         foreach (var playCard in cards)
         {
             _trashZone.Add(playCard);
-            if (playCard._isBuff == BuffDebuff.Debuff)
-            {
-                debuffCard.Add(playCard);
-            }
-            else
-            {
-                playCard.CardUse(_player, null);
-                Debug.Log("カード使用");
-            }
+            playCard.CardUse(_player, null);
+            Debug.Log("カード使用");
         }
         if (debuffCard.Count > 0) StartCoroutine(UseDebuffCrad(debuffCard, _player));//コルーチン内でステートを管理する
         else NextTrun(Trun.PlayerAttackTargetSelection, 1);
@@ -210,7 +210,6 @@ public class BattleManager : MonoBehaviour
             CharacterBase enemy = null;
             if (Input.GetMouseButton(0))
             {
-                Debug.Log("ボタンが押された");
                 enemy = GetMousePositionEnemy<CharacterBase>();
                 if (enemy != null)
                 {
@@ -350,7 +349,7 @@ public class BattleManager : MonoBehaviour
     void Result(int count)//
     {
         Debug.Log("risult");
-        var cards = RandomCard(_praiseCardList, count);
+        var cards = RandomCard(_praiseCardArray, count);
         var result = Instantiate(_resultPanel, _resultCanvas.transform);
         for (int i = 0; i < count; i++)
         {
