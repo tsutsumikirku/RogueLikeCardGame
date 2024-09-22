@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8376729983869261236}
   - component: {fileID: 8020923790416487258}
   - component: {fileID: 5268965715094234545}
-  - component: {fileID: 2740953625566849548}
+  - component: {fileID: 6455296687387361472}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isuse: 1
   _maxSelect: 3
---- !u!114 &2740953625566849548
+--- !u!114 &6455296687387361472
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,11 +100,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4159872650467004202}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e81be06ec3104b647b9b2774f079f65b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4446bc19eac83514aad4c68c93cef2ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isBuff: 2
-  _buff: 1
-  _attackCount: 1
-  _dictionary: "\u8AAC\u660E\u306A\u3057"
+  Cardspite: {fileID: 0}
+  CardName: 
+  explanation: 
   _price: 1
+  _cardPlayCount: 1
+  effect: {fileID: 11400000, guid: 8472b0d664e83c94c9284a3c18d2961f, type: 2}
+  animation: {fileID: 0}
+  animationName: 
