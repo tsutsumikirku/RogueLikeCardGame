@@ -1,0 +1,10 @@
+diff a/Assets/Kobayashi/Script/component.meta b/Assets/Kobayashi/Script/component.meta	(rejected hunks)
+@@ -0,0 +1,8 @@
++fileFormatVersion: 2
++guid: 2b3f988b558030045918ff20c57614ad
++folderAsset: yes
++DefaultImporter:
++  externalObjects: {}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
