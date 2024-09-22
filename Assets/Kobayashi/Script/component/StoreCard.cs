@@ -12,9 +12,9 @@ public class StoreCard : MonoBehaviour
     {
         _canvas = transform.root;
         var cardBase = GetComponent<CardBase>();
-        Debug.Log(cardBase._price);
-        _priceText.text = cardBase?._price.ToString();
-        _cardInstructionText.text = cardBase._dictionary;
+        //Debug.Log(cardBase._price);
+        //_priceText.text = cardBase?._price.ToString();
+        //_cardInstructionText.text = cardBase._dictionary;
     }
     public void CallStoreMethodOnClick()
     {
