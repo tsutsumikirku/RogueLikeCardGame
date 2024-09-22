@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestCard : CardBase
+public class TestPickCardData : MonoBehaviour
 {
-
+    //[SerializeField] 
 }

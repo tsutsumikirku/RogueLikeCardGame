@@ -19,19 +19,17 @@ public class BattleManager : MonoBehaviour
     [SerializeField] Transform _handCard;
     [SerializeField] ButtleTimeLineManager _timeLine;
     //デバッグ用シリアライズ
-    [SerializeField] List<CharacterBase> _enemyList = new List<CharacterBase>();
-    List<Queue<CardBase>> _enemyDeck = new List<Queue<CardBase>>();
+    [SerializeField] Dictionary<CharacterBase, Queue<CardBase>> _enemyDictionary = new Dictionary<CharacterBase, Queue<CardBase>>();
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
     List<CardBase> _trashZone = new List<CardBase>();
     //
     Trun _trun;
-    Dictionary<Action, Func<bool>> _cardPlayQueue = new Dictionary<Action, Func<bool>>();
     [SerializeField] GameObject _resultPanel;
     [SerializeField] bool Testmode;
     [SerializeField] GameObject _emptyCard;
     CardBase[] _praiseCardArray;
 
-    [SerializeField] Transform _trashParent;
+    public Transform _trashParent;
     [SerializeField] GameObject _stateEndButton;
     [SerializeField] Vector2 _stateEndButtonAnchor;
 
@@ -78,10 +76,10 @@ public class BattleManager : MonoBehaviour
                 StartCoroutine(PlayerAttackTargetSelection());
                 break;
             case Trun.PlayerAttack:
-                PlayerAttack(_playerAttackTarget);
+                StartCoroutine(PlayerAttack(_playerAttackTarget));
                 break;
             case Trun.EnemyAttack:
-                EnemyAttack();
+                StartCoroutine(EnemyAttack());
                 break;
             case Trun.EndTrun:
                 EndTrun();
@@ -104,48 +102,47 @@ public class BattleManager : MonoBehaviour
     {
         if (Testmode)
         {
-            BattleStart(GameObject.FindWithTag("Player").GetComponent<CharacterBase>(), null, new CardBase[3]);
+            BattleStart(GameObject.FindWithTag("Player").GetComponent<CharacterBase>(), _characterBasesTest, new CardBase[3]);
         }
     }
     /// <summary>
     /// バトル開始時に呼ぶ関数
     /// </summary>
-    /// <param name="player"></param>
-    /// <param name="enemyArray"></param>
-    /// <param name="prizeCards"></param>
+    /// <param name="player">操作キャラ</param>
+    /// <param name="enemyArray">敵の配列</param>
+    /// <param name="prizeCards">報酬のテーブル</param>
     public void BattleStart(CharacterBase player, CharacterBase[] enemyArray, CardBase[] prizeCards)
     {
-        var playerObj = player;
-        _player = playerObj.GetComponent<CharacterBase>();
-        this.gameObject.SetActive(true);
-        _playerAttackTarget.Clear();
-        _praiseCardArray = prizeCards;
-        if (enemyArray.Length <= 0)
+        //playerのカードベース取得
+        _player = player.gameObject.GetComponent<CharacterBase>();
+        gameObject.SetActive(true);//一応
+        _praiseCardArray = prizeCards;//報酬の設定
+        //エネミーがいない場合即座に報酬画面に進みメソッドを終了する
+        if (enemyArray == null)
         {
             CurrentTurn = Trun.Result;
             return;
         }
         Debug.Log("ゲームスタート");
-        if (_playerDeck != null) _playerDeck = DeckShuffle(_player?._deck);
+        _playerDeck = DeckShuffle(_player?._deck);
         foreach (CharacterBase enemy in enemyArray)
         {
-            _enemyList?.Add(enemy);
-            _enemyDeck?.Add(DeckShuffle(enemy?._deck));
+            _enemyDictionary.Add(enemy, DeckShuffle(enemy._deck));
         }
         NextTrun(Trun.Start, 1);
     }
     void StartEffect()
     {
         Debug.Log("ターン開始");
-        List<CharacterBase> enemyList = new List<CharacterBase>(_enemyList);
+        List<CharacterBase> enemyList = new List<CharacterBase>(_enemyDictionary.Keys);
         foreach (CharacterBase enemy in enemyList)
         {
             if (enemy._hp <= 0)
             {
-                _enemyList.Remove(enemy);
+                _enemyDictionary.Remove(enemy);
             }
         }
-        if (_enemyList.Count <= 0)
+        if (_enemyDictionary.Count <= 0)
         {
             NextTrun(Trun.Result, 1);
         }
@@ -189,58 +186,17 @@ public class BattleManager : MonoBehaviour
     }
     void UseCard()
     {
-        CardBase[] cards = _waitingCardListParent.GetComponentsInChildren<CardBase>();
-        List<CardBase> debuffCard = new List<CardBase>();
-        foreach (var playCard in cards)
-        {
-            _trashZone.Add(playCard);
-            playCard.CardUse(_player, null);
-            Debug.Log("カード使用");
-        }
-        if (debuffCard.Count > 0) StartCoroutine(UseDebuffCrad(debuffCard, _player));//コルーチン内でステートを管理する
-        else NextTrun(Trun.PlayerAttackTargetSelection, 1);
-        //StartCoroutine(CallBack(_cardPlayQueue));
-    }
-    IEnumerator UseDebuffCrad(List<CardBase> debufCardList, CharacterBase useCharacter)
-    {
+        List<Action> actions = new List<Action>();
         int count = 0;
-        Debug.Log("デバフ対象を選んでください");
-        while (count < debufCardList.Count)
-        {
-            CharacterBase enemy = null;
-            if (Input.GetMouseButton(0))
+        Debug.Log("カード使用");
+        Array.ForEach(_waitingCardListParent.GetComponentsInChildren<CardBase>(),
+            card => actions.Add(() => card.CardUse(_player, () =>
             {
-                enemy = GetMousePositionEnemy<CharacterBase>();
-                if (enemy != null)
-                {
-                    Debug.Log($"{enemy}にデバフをかけた");
-                    count++;
-                    debufCardList[count].CardUse(useCharacter, enemy);
-                }
-            }
-            yield return new WaitForEndOfFrame();
-        }
-        //if (_stateEndButton == null)
-        //{
-        //    NextTrun(Trun.PlayerAttack, 0);
-        //}
-    }
-    /// <summary>
-    /// カード効果処理を直列で行うための関数
-    /// </summary>
-    /// <param name="taskList"></param>
-    /// <returns></returns>
-    IEnumerator CallBack(Dictionary<Action, Func<bool>> taskList)//カードの待機
-    {
-        foreach (var task in taskList)
-        {
-            Debug.Log("タスク開始");
-            task.Key.Invoke();
-            yield return new WaitForEndOfFrame();
-            yield return new WaitForEndOfFrame();
-            yield return new WaitUntil(task.Value);
-            Debug.Log("タスク終了");
-        }
+                count++;
+                actions[count]();
+            })));
+        actions.Add(() => NextTrunCoroutine(Trun.PlayerAttackTargetSelection, 0f));
+        actions[count]();
     }
     IEnumerator CallBack(Action action, Action EndAction, Func<bool> endIf)
     {
@@ -255,11 +211,11 @@ public class BattleManager : MonoBehaviour
         switch (_player._attackPattern)
         {
             case AttackPattern.All:
-                foreach (var enemy in _enemyList)
+                foreach (var enemy in _enemyDictionary.Keys)
                 {
                     _playerAttackTarget.Add(enemy);
                 }
-                if (_enemyList.Count != 0)
+                if (_enemyDictionary.Count != 0)
                 {
                     NextTrun(Trun.PlayerAttack, 3);
                 }
@@ -286,50 +242,62 @@ public class BattleManager : MonoBehaviour
                 break;
         }
     }
-    void PlayerAttack(List<CharacterBase> enemys)
+    IEnumerator PlayerAttack(List<CharacterBase> enemys)
     {
         foreach (var enemy in enemys)
         {
             Debug.Log("playerの攻撃");
             _player.Attack(enemy);
+            if (enemy.TryGetComponent(out Animator animator))
+            {
+                yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
+            }
             if (enemy._hp <= 0)
             {
-                _enemyList.Remove(enemy);
+                _enemyDictionary.Remove(enemy);
                 Debug.Log(enemy + "を倒した");
-                if (_enemyList.Count == 0)
+                if (_enemyDictionary.Count == 0)
                 {
                     Victory();
-                    return;
+                    yield break;
                 }
             }
         }
         _playerAttackTarget.Clear();
-        NextTrun(Trun.EnemyAttack, 3);
+        NextTrun(Trun.EnemyAttack, 0);
     }
-    void EnemyAttack()
+    IEnumerator EnemyAttack()
     {
+        List<Action> actions = new List<Action>();
+        int count = 0;
+        var a = false;
         Debug.Log("敵の攻撃");
-        for (int i = 0; i < _enemyList.Count; i++)
+        foreach (var enemy in _enemyDictionary)
         {
             CharacterBase attackObj = _player;
-            foreach (var enemy in _enemyList[i]._debuff)
+            enemy.Value.TryDequeue(out CardBase nextcard);
+            if (nextcard == null)
             {
-                //混乱デバフの名前が決まり次第書き換えます
-                if (1 == 0)
+                enemy.Value.Clear();
+                _enemyDictionary[enemy.Key] = new Queue<CardBase>(DeckShuffle(enemy.Key._deck));
+            }
+            actions.Add(() => nextcard.CardUse(enemy.Key, () =>
+            {
+                count++;
+                if (actions.Count > count) actions[count]();
+                else
                 {
-                    var random = Random.Range(0, _enemyList.Count);
-                    attackObj = _enemyList[random];
+                    Debug.Log("コルーチン終了");
+                    a = true;
                 }
-            }
-            _enemyDeck[i].Dequeue().CardUse(_enemyList[i], attackObj);
-            if (_enemyDeck[i].Count == 0)
-            {
-                _enemyDeck[i] = DeckShuffle(_enemyList[i]._deck);
-            }
+            }));
         }
+        actions[0]();
+        yield return new WaitUntil(() => a);
         if (_player._hp <= 0)
         {
             Defeat();
+            yield break;
         }
         NextTrun(Trun.EndTrun, 3);
     }
@@ -392,7 +360,7 @@ public class BattleManager : MonoBehaviour
     }
     public void AddNewEnemy(CharacterBase enemy)
     {
-        _enemyList.Add(enemy);
+        _enemyDictionary.Add(enemy, DeckShuffle(enemy._deck));
     }
     Queue<T> DeckShuffle<T>(List<T> DeckData)
     {
@@ -414,6 +382,21 @@ public class BattleManager : MonoBehaviour
             deckQueue.Enqueue(Card);
         }
         return deckQueue;
+    }
+    public IEnumerator GetClickMousePositionObj<T>()
+    {
+        while (true)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                var obj = GetMousePositionEnemy<T>();
+                if (obj != null)
+                {
+                    yield return obj;
+                }
+            }
+            yield return new WaitForEndOfFrame();
+        }
     }
     /// <summary>
     /// マウスポインタの位置から指定したコンポーネントを取得する。
@@ -452,15 +435,6 @@ public class BattleManager : MonoBehaviour
             }
             return result;
         }
-    }
-    /// <summary>
-    /// CardUseの処理を待機させるためのキュー
-    /// </summary>
-    /// <param name="action">実行したい処理</param>
-    /// <param name="endConditions">処理の終了条件</param>
-    public void SetCardUse(Action action, Func<bool> endConditions)
-    {
-        _cardPlayQueue.Add(action, endConditions);
     }
     void NextTrun(Trun trunName, float waiteTimer)
     {

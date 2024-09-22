@@ -54,7 +54,7 @@ public class Store : MonoBehaviour
         {
             _buyCords = true;
             var count = GameObject.FindObjectsOfType<StoreCard>().Length;
-            CreatCards(RandomCard(_dataScriptablObj.Cards, _cardCount - count));
+            //CreatCards(RandomCard(_dataScriptablObj.Cards, _cardCount - count));
         }
     }
     void StoreEnd()
@@ -135,14 +135,14 @@ public class Store : MonoBehaviour
         {
             Debug.Log("Buy");
             _player._deck.Add(card);
-            Debug.Log(card._price);
-            _player._hp -= card._price;
+            //Debug.Log(card._price);
+            //_player._hp -= card._price;
         }
         else if (_storeMode == StoreMode.StoreSell)
         {
             Debug.Log("sell");
             _player._deck.Remove(card);
-            _player._hp += card._price;
+            //_player._hp += card._price;
         }
         else
         {

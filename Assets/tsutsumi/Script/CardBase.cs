@@ -1,61 +1,27 @@
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+using System;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CardBase : MonoBehaviour
 {
-    public BuffDebuff _isBuff;
-    [SerializeField] Buff _buff;
-    [SerializeField] int _attackCount = 1;
-    [SerializeField] public string _dictionary = "説明なし";
-    public int _price = 1;
-    public BuffDebuff CardUse(CharacterBase attack , CharacterBase beattacked)
+    [SerializeField] Sprite _sprite;
+    [SerializeField] Text _explanationText;
+    public CardData _cardData;
+    CardBase(CardData cardData)
     {
-        Debug.Log($"カードを{attack}へ使用");
-        CardUsing(attack,beattacked);
-        CardUseEvent();
-        return _isBuff;
+        Instantiate(gameObject);
+        _explanationText.text=_cardData._explanation;
+        _sprite=_cardData._cardSpite;
     }
-    public void CardUsing(CharacterBase attack,CharacterBase beattacked)
+    public void CardUse(CharacterBase useCharacter, Action animationEndAction)
     {
-        switch (_isBuff)
-        {
-            case BuffDebuff.OverRide:
-            CardOverRide();
-            break;
-            case BuffDebuff.Attack:
-            attack.Attack(beattacked);
-            break;
-            case BuffDebuff.Buff:
-            attack._buff.Add(_buff);
-            break;
-            case BuffDebuff.OneTimeBuff:
-            attack._oneTimeBuff.Add(_buff);
-            break;
-            case BuffDebuff.AllAttack:
-            attack._attackPattern = AttackPattern.All;
-            break;
-            case BuffDebuff.AttackCount:
-            attack._attackCount = _attackCount;
-            break;
-            case BuffDebuff.AllElementAttack:
-            attack._allElementAttack = true;
-            break;
-        }
-    }
-    public virtual void CardOverRide()
-    {
-        Debug.Log("オーバーライドされていません");
+        StartCoroutine(_cardData.CardUse(useCharacter,  animationEndAction));
     }
     public virtual void CardUseEvent()
     {
-        bool dest = TryGetComponent<DragAndDrop>(out DragAndDrop sss);
-        if (dest)
-        {
-            Destroy(gameObject);
-        }
+        BattleManager.Instance._trashParent.SetParent(transform);
     }
 }
 public enum BuffDebuff
