@@ -7,6 +7,8 @@ TagManager:
   - Desk
   - DeskOut
   - SelectDesk
+  - TrashZone
+  - Deck
   layers:
   - Default
   - TransparentFX

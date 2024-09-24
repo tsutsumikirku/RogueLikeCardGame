@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 169050688546802450}
   - component: {fileID: 5578497565424115185}
   - component: {fileID: -6795246202984372122}
+  - component: {fileID: 8679078561047829732}
   m_Layer: 5
   m_Name: Image 1
   m_TagString: Untagged
@@ -85,14 +86,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 8816740527122210411}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4446bc19eac83514aad4c68c93cef2ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 07f41ec201ec92a48a53470307051b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cardspite: {fileID: 0}
-  CardName: 
-  explanation: 
-  _price: 1
-  _cardPlayCount: 1
-  effect: {fileID: 11400000, guid: 8472b0d664e83c94c9284a3c18d2961f, type: 2}
-  animation: {fileID: 0}
-  animationName: 
+  _sprite: {fileID: 0}
+  _nameText: {fileID: 0}
+  _explanationText: {fileID: 0}
+  _cardData: {fileID: 0}
+  _cardEffect:
+    rid: 2627666210950742047
+  references:
+    version: 2
+    RefIds:
+    - rid: 2627666210950742047
+      type: {class: OneTimeBuffCard, ns: , asm: Assembly-CSharp}
+      data:
+        _buff: 0
+        _stats: 0
+--- !u!114 &8679078561047829732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8816740527122210411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38de962a5a3d4ee47b1fb2c9b9a44ca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isuse: 1
+  _moveTime: 1
+  _maxSelect: 3
