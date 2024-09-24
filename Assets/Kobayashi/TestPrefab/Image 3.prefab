@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4159872650467004202
+--- !u!1 &8816740527122210411
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5759943382288093465}
-  - component: {fileID: 8376729983869261236}
-  - component: {fileID: 8020923790416487258}
-  - component: {fileID: 5268965715094234545}
-  - component: {fileID: 19001796765522862}
+  - component: {fileID: 3134280080930704691}
+  - component: {fileID: 169050688546802450}
+  - component: {fileID: 5578497565424115185}
+  - component: {fileID: -6795246202984372122}
+  - component: {fileID: 2511925030975149593}
   m_Layer: 5
   m_Name: Image 3
   m_TagString: Untagged
@@ -20,13 +20,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &5759943382288093465
+--- !u!224 &3134280080930704691
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4159872650467004202}
+  m_GameObject: {fileID: 8816740527122210411}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -39,28 +39,28 @@ RectTransform:
   m_AnchoredPosition: {x: -213, y: -27}
   m_SizeDelta: {x: 64.5, y: 86}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &8376729983869261236
+--- !u!222 &169050688546802450
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4159872650467004202}
+  m_GameObject: {fileID: 8816740527122210411}
   m_CullTransparentMesh: 1
---- !u!114 &8020923790416487258
+--- !u!114 &5578497565424115185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4159872650467004202}
+  m_GameObject: {fileID: 8816740527122210411}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.1745283, b: 0.6777985, a: 1}
+  m_Color: {r: 0, g: 0.2390244, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -77,37 +77,63 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5268965715094234545
+--- !u!114 &-6795246202984372122
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4159872650467004202}
+  m_GameObject: {fileID: 8816740527122210411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07f41ec201ec92a48a53470307051b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprite: {fileID: 0}
+  _nameText: {fileID: 0}
+  _explanationText: {fileID: 0}
+  _cardData: {fileID: 0}
+  _cardEffect:
+    rid: 2627666210950742066
+  _cardEffects:
+  - rid: 2627666210950742050
+  - rid: 2627666210950742064
+  - rid: 2627666210950742065
+  references:
+    version: 2
+    RefIds:
+    - rid: 2627666210950742050
+      type: {class: BuffCard, ns: , asm: Assembly-CSharp}
+      data:
+        _buff: 0
+        _stats: 0
+    - rid: 2627666210950742064
+      type: {class: PlayerDebuffCard, ns: , asm: Assembly-CSharp}
+      data:
+        _debuff: 0
+        _cardStats: 0
+    - rid: 2627666210950742065
+      type: {class: BuffCard, ns: , asm: Assembly-CSharp}
+      data:
+        _buff: 0
+        _stats: 0
+    - rid: 2627666210950742066
+      type: {class: BuffCard, ns: , asm: Assembly-CSharp}
+      data:
+        _buff: 1
+        _stats: 1
+--- !u!114 &2511925030975149593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8816740527122210411}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38de962a5a3d4ee47b1fb2c9b9a44ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _isuse: 1
+  _moveTime: 1
   _maxSelect: 3
---- !u!114 &19001796765522862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4159872650467004202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4446bc19eac83514aad4c68c93cef2ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Cardspite: {fileID: 0}
-  CardName: 
-  explanation: 
-  _price: 1
-  _cardPlayCount: 1
-  effect: {fileID: 11400000, guid: 8472b0d664e83c94c9284a3c18d2961f, type: 2}
-  animation: {fileID: 0}
-  animationName: 

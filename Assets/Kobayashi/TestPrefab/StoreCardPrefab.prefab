@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 4742078176813989699}
   - component: {fileID: 8190665385494200200}
   - component: {fileID: 300171755997270142}
-  - component: {fileID: 3858537949265670636}
+  - component: {fileID: 4080056711876775772}
   m_Layer: 5
   m_Name: StoreCardPrefab
   m_TagString: Untagged
@@ -362,7 +362,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!114 &3858537949265670636
+--- !u!114 &4080056711876775772
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -371,11 +371,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 8404064366961324438}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4446bc19eac83514aad4c68c93cef2ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 07f41ec201ec92a48a53470307051b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isBuff: 0
-  _buff: 0
-  _attackCount: 1
-  _dictionary: "\u8AAC\u660E\u306A\u3057"
-  _price: 1
+  _sprite: {fileID: 0}
+  _nameText: {fileID: 0}
+  _explanationText: {fileID: 0}
+  _cardData: {fileID: 0}
+  target: {fileID: 0}
+  _cardEffect:
+    rid: 2627666210950742028
+  references:
+    version: 2
+    RefIds:
+    - rid: 2627666210950742028
+      type: {class: OneTimeBuffCard, ns: , asm: Assembly-CSharp}
+      data:
+        _buff: 1
