@@ -2,19 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OneTimeBuffCard : IUseCard
+public class OneTimeBuffCard : IUseEffect
 {
     public Buff _buff;
     [SerializeField] int _stats;
-    public bool ChoiseTarget()
-    {
-        return true;
-    }
-    public void Effect(CharacterBase useCharacter)
+    public void Effect(CharacterBase useCharacter,CharacterBase target)
     {
         for (var i = 0; i < _stats; i++)
         {
-            useCharacter._oneTimeBuff.Add(_buff);
+            target._oneTimeBuff.Add(_buff);
         }
     }
 }

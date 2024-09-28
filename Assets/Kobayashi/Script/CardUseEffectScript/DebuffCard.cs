@@ -2,22 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerDebuffCard : IUseCard
+public class SerectTargetMouseClick : IChoiseTarget
 {
-    public Buff _debuff;
-    [SerializeField] int _cardStats;
-    CharacterBase _target;
-    public bool ChoiseTarget()
+    public bool ChoiseTarget(CharacterBase usecharacter,out CharacterBase target)
     {
         Debug.Log("“G‚ð‘I‚×");
-        _target = BattleManager.Instance.GetMousePositionEnemy<CharacterBase>();
-        return Input.GetMouseButton(0) && _target != null;
+        target = BattleManager.Instance.GetMousePositionObject<CharacterBase>();
+        return Input.GetMouseButton(0) && target != null;
     }
-    public void Effect(CharacterBase useCharacter)
+}
+public class UseCharacterTarget : IChoiseTarget
+{
+    public bool ChoiseTarget(CharacterBase useCharacter, out CharacterBase target)
     {
-        for (var i = 0; i < _cardStats; i++)
-        {
-            _target._buff.Add(_debuff);
-        }
+        target = useCharacter;
+        return true;
+    }
+}
+public class PlayerTarGet : IChoiseTarget
+{
+    public bool ChoiseTarget(CharacterBase useCharacter, out CharacterBase target)
+    {
+        target = BattleManager.Instance._player;
+        return true;
     }
 }

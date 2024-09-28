@@ -93,29 +93,21 @@ MonoBehaviour:
   _nameText: {fileID: 0}
   _explanationText: {fileID: 0}
   _cardData: {fileID: 0}
+  _choiseTarget:
+    rid: 2627666242836103178
   _cardEffect:
-    rid: 2627666210950742036
-  _cardEffects:
-  - rid: 2627666210950742048
-  - rid: 2627666210950742049
+  - rid: 2627666242836103179
   references:
     version: 2
     RefIds:
-    - rid: 2627666210950742036
-      type: {class: PlayerDebuffCard, ns: , asm: Assembly-CSharp}
-      data:
-        _debuff: 1
-        _cardStats: 0
-    - rid: 2627666210950742048
+    - rid: 2627666242836103178
+      type: {class: SerectTargetMouseClick, ns: , asm: Assembly-CSharp}
+      data: 
+    - rid: 2627666242836103179
       type: {class: BuffCard, ns: , asm: Assembly-CSharp}
       data:
-        _buff: 0
-        _stats: 0
-    - rid: 2627666210950742049
-      type: {class: PlayerDebuffCard, ns: , asm: Assembly-CSharp}
-      data:
-        _debuff: 0
-        _cardStats: 0
+        _buff: 1
+        _stats: 1
 --- !u!114 &-8135968407375825830
 MonoBehaviour:
   m_ObjectHideFlags: 0

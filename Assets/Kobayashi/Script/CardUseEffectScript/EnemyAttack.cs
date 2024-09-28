@@ -2,15 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttack : IUseCard
+public class EnemyAttack : IUseEffect
 {
-    public bool ChoiseTarget()
-    {
-        return true;
-    }
 
-    public void Effect(CharacterBase useCharacter)
+    public void Effect(CharacterBase useCharacter, CharacterBase target)
     {
-        useCharacter.Attack(BattleManager.Instance._player);
+        useCharacter.Attack(target);
     }
 }
