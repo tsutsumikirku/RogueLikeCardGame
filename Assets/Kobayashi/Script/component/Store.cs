@@ -1,178 +1,191 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public class Store : MonoBehaviour
 {
     public static Store Instance;
-    StoreMode _mode;
-    StoreMode _storeMode
-    {
-        get { return _mode; }
-        set
-        {
-            if (_mode != value)
-            {
-                _mode = value;
-                ChangeState();
-            }
-        }
-    }
-    [SerializeField] CardBase[] cards;
-    [SerializeField] int _cardCount;
-    [SerializeField] GameObject _enptyCardPrefab;
-    [SerializeField] GameObject[] _storePanels;
-    [SerializeField] GameObject[] _tableArray;
-    bool _buyCords;
+    [SerializeField] GameObject _tablePrefab;
+    [SerializeField] int _prizeCardCount;
+    [SerializeField] public int _maxChildElement;
+    [SerializeField] StorePrefabData _storeCanvasPrefab; //ストアprefab
+    StorePrefabData _storeCanvas;//ストアprefabのinstans情報
+    [SerializeField] public CardBaseArray _cardArray; //報酬のtable
+    [SerializeField] List<CardBase> _prizeCards = new List<CardBase>();//報酬の量//デバック用にシリアライズしてます。
+    bool _buyCards;
+    //カードがDestroyされたときの挙動用
+    //List<Transform> _buyCardsTransform = new List<Transform>();
+    //List<Transform> _buyTablesTransform = new List<Transform>();
+    //List<Transform> _sellCardsTransform = new List<Transform>();
+    //List<Transform> _sellTablesTransform = new List<Transform>();
     //下記のシリアライズはデバッグ用です。シリアライズだけ削除してください
-    [SerializeField] CharacterBase _player;
+    CharacterBase _player;
     [SerializeField] List<CardBase> _cards;
     //[SerializeField] Dictionary<> //ランダムの内容によって使うかも
     //デバッグようの変数
     [SerializeField] bool _test;
-    [SerializeField] CardDataScriptablObj _dataScriptablObj;
-    //基本的にEventSystemで呼ぶ。deckを確認する隙間を作る
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else Destroy(gameObject);
     }
     private void Start()//スタートには何も書かない
     {
         if (_test)
         {
+            SetPrizeCard(_cardArray);
             StoreStart();
         }
     }
-    void StoreStart()
+    private void SetPrizeCard(CardBaseArray cardBaseArray)
     {
-        _storeMode = StoreMode.StoreMain;
+        _prizeCards.Clear();
+        _cardArray = cardBaseArray;
+        var cardList = ShuffleList(_cardArray.Cards.ToList());
+        Debug.Log($"{cardList.Count} {_prizeCards}");
+        for (var i = 0; i < _prizeCardCount; i++)
+        {
+            Debug.Log(cardList[i]);
+            _prizeCards.Add(cardList[i]);
+        }
+    }
+    public void StoreStart()
+    {
         gameObject.SetActive(true);
         _player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
-        _cards = _player?._deck;
-        if (!_buyCords)
+        _storeCanvas = Instantiate(_storeCanvasPrefab);
+        _storeCanvas._BuyPanel.gameObject.SetActive(false);
+        _storeCanvas._SellPanel.gameObject.SetActive(false);
+        CreatCards(_prizeCards, _storeCanvas._BuyTableParent, _prizeCardCount, true);
+        CreatCards(_player._deck, _storeCanvas._SellTableParent, _player._deck.Count, false);
+    }
+    void CreatCards(List<CardBase> cards, Transform parent, int count, bool buyMode)
+    {
+        if (_maxChildElement <= 0)
         {
-            _buyCords = true;
-            var count = GameObject.FindObjectsOfType<StoreCard>().Length;
-            //CreatCards(RandomCard(_dataScriptablObj.Cards, _cardCount - count));
+            Debug.LogError("_maxChildElementがゼロです。");
+            return;
         }
-    }
-    void StoreEnd()
-    {
-        gameObject.SetActive(false);
-        _storeMode = StoreMode.None;
-        GameManager.Instance.BattleEnd();
-    }
-    void ChangeState()
-    {
-        switch (_storeMode)
+        //if (buyMode)
+        //{
+        //    _buyCardsTransform.Clear();
+        //    _buyTablesTransform.Clear();
+        //}
+        //else
+        //{
+        //    _sellCardsTransform.Clear();
+        //    _sellTablesTransform.Clear();
+        //}
+        float num = (float)cards.Count / _maxChildElement;
+        int createCardCount = 0;
+        for (var i = 0; i < num; i++)
         {
-            case StoreMode.StoreSell:
-                StoreModeActive("SellPanel");
-                break;
-            case StoreMode.StoreBuy:
-                StoreModeActive("BuyPanel");
-                break;
-            case StoreMode.StoreMain:
-                StoreModeActive("MainPanel");
-                break;
-            default:
-                break;
-        }
-    }
-    void StoreModeActive(string name)
-    {
-        foreach (var panel in _storePanels)
-        {
-            if (panel.name == name)
+            var table = Instantiate(_tablePrefab, parent);
+            //if (buyMode) _buyTablesTransform.Add(table.transform);
+            //else _sellTablesTransform.Add(table.transform);
+            for (int j = 0; j < _maxChildElement && createCardCount < count; j++)
             {
-                panel.SetActive(true);
-            }
-            else panel.SetActive(false);
-        }
-    }
-    CardBase[] RandomCard(List<CardBase> cards, int count)
-    {
-        CardBase[] result = new CardBase[count];
-        for (var i = 0; i < count; i++)
-        {
-            int num = Random.Range(0, cards.Count);
-            result[i] = cards[num];
-        }
-        return result;
-    }
-    void CreatCards(CardBase[] cards)
-    {
-        var num = _cardCount / _tableArray.Length;
-        var num2 = _cardCount % _tableArray.Length;
-        foreach (var table in _tableArray)
-        {
-            int plus1 = 0;
-            if (num2 > 0)
-            {
-                plus1 = 1;
-                num2--;
-            }
-            for (int i = 0; i < num + plus1; i++)
-            {
-                var cardObj = Instantiate(_enptyCardPrefab, table.transform);
-                cardObj.GetComponent<StoreCard>().CardData = cards[i];
-                Debug.Log(cards[i]);
-                Debug.Log(cardObj.GetComponent<StoreCard>().CardData);
-                var enptyCard = cardObj.AddComponent<CardBase>();//予期せぬ挙動
-                enptyCard = cards[i];
+                Debug.Log(cards[createCardCount]);
+                var obj = cards[createCardCount];
+                var card = Instantiate(cards[createCardCount].gameObject, table.transform);
+                if (buyMode)
+                {
+                    //_buyCardsTransform.Add(card.transform);
+                    SetEventTrigger(card, () =>
+                    {
+                        BuyCardOnClick(obj);
+                        Destroy(card);
+                        //CardParentResetStart();
+                    });
+                }
+                else
+                {
+                    //_sellCardsTransform.Add(card.transform);
+                    SetEventTrigger(card, () =>
+                    {
+                        if (_player._deck.Count > Setting.Instans._minDeckRange)
+                        {
+                            SellCardOnClick(obj);
+                            Destroy(card);
+                            //CardParentResetStart();
+                        }
+                        else Debug.Log("それ以上は売れません");
+                    });
+                }
+                createCardCount++;
             }
         }
     }
-    public void StateChange(string enumName)
-    {
-        Debug.Log(_storeMode);
-        _storeMode = (StoreMode)Enum.Parse(typeof(StoreMode), enumName);
-    }
-    public void CardOnClick(CardBase card)
-    {
-        if (_storeMode == StoreMode.StoreBuy)
-        {
-            Debug.Log("Buy");
-            _player._deck.Add(card);
-            //Debug.Log(card._price);
-            //_player._hp -= card._price;
-        }
-        else if (_storeMode == StoreMode.StoreSell)
-        {
-            Debug.Log("sell");
-            _player._deck.Remove(card);
-            //_player._hp += card._price;
-        }
-        else
-        {
-            Debug.LogError("カードが存在しないはずデス。");
-        }
-    }
-    void AllCardDestroy()
-    {
-        var cards = GameObject.FindObjectsOfType<StoreCard>();
-        foreach (var card in cards)
-        {
-            Destroy(card);
-        }
-    }
+    //void CardParentResetStart()
+    //{
+    //    StartCoroutine(CardParentReset(_sellCardsTransform));
 
-    enum StoreMode
+    //}
+    //IEnumerator CardParentReset(List<Transform> _cardTransform)
+    //{
+    //    yield return null;
+    //    Debug.Log("開始");
+    //    foreach (var transform in _cardTransform)
+    //    {
+    //        for (var i = 0; i < _sellTablesTransform.Count; i++)
+    //        {
+    //            if (_sellTablesTransform[i].childCount < _maxChildElement)
+    //            {
+    //                Debug.Log("Set");
+    //                transform.SetParent(_sellTablesTransform[i]);
+    //                break;
+    //            }
+    //        }
+    //    }
+    //}
+    public void CreatPlayerDeckCard(Transform parent)
     {
-        None,
-        StoreMain,
-        StoreBuy,
-        StoreSell,
+        CreatCards(_player._deck, parent, _player._deck.Count, false);
     }
-    HashSet<CardBase> RandomCardHashSet(List<CardBase> cards, int count)
+    void SetEventTrigger(GameObject card, Action action)
     {
-        HashSet<CardBase> result = new HashSet<CardBase>();
-        for (var i = 0; i < count; i++)
+        EventTrigger trigger = card.GetComponent<EventTrigger>();
+        if (trigger == null)
         {
-            int num = Random.Range(0, cards.Count);
-            result.Add(cards[num]);
+            trigger = card.gameObject.AddComponent<EventTrigger>();
         }
-        return result;
+        EventTrigger.Entry entry = new EventTrigger.Entry
+        {
+            eventID = EventTriggerType.PointerClick
+        };
+        entry.callback.AddListener((data) => { action(); });
+        trigger.triggers.Add(entry);
+    }
+    public void BuyCardOnClick(CardBase card)
+    {
+        Debug.Log("Buy");
+        _player._deck.Add(card);
+        Debug.Log(card.cardData._price);
+        _player._hp -= card.cardData._price;
+    }
+    public void SellCardOnClick(CardBase card)
+    {
+        Debug.Log("sell");
+        _player._deck.Remove(card);
+        _player._hp += card.cardData._price;
+    }
+    public List<T> ShuffleList<T>(List<T> DeckData)//バトルマネージャーにも同じメソッドがある　木目
+    {
+        List<T> cardsList = new List<T>(DeckData);//playerのカードリスト(コピー)
+        for (int i = 0; i < DeckData.Count; i++)
+        {
+            var j = Random.Range(0, DeckData.Count);
+            var temp = cardsList[i];
+            cardsList[i] = cardsList[j];
+            cardsList[j] = temp;
+        }
+        return cardsList;
     }
 }

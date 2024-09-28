@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.Rendering;
@@ -14,35 +15,22 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
     GameObject _desk;
     GameObject _selectDesk;
     GameObject _nullDesk;
-    GameObject _trashZone;
-    Transform _parent;
     private void Start()
     {
         _deck = GameObject.FindWithTag("Deck");
         _desk = GameObject.FindWithTag("Desk");
         _selectDesk = GameObject.FindWithTag("SelectDesk");
         _nullDesk = GameObject.FindWithTag("DeskOut");
-        _trashZone = GameObject.FindWithTag("TrashZone");
-        gameObject.transform.SetParent(_desk.transform);
+        //gameObject.transform.SetParent(_desk.transform);
         if (_deck)
         {
             transform.position=_deck.transform.position;
-            transform.SetParent(_desk.transform);
-            _parent = _deck.transform;
+            //transform.SetParent(_desk.transform);
         }
     }
     private void Update()
     {
-        if (_parent != transform.parent)
-        {
-            if (transform.parent.tag!="DeskOut")
-            {
-                if(_parent.TryGetComponent(out ICardDirective directive))
-                    directive.OutParent(gameObject);
-                StartCoroutine(ToMove(transform.parent));
-            }
-            _parent = transform.parent;
-        }
+        
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -98,22 +86,4 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
             }
         }
     }
-    IEnumerator ToMove(Transform pearet)
-    {
-        if (pearet.TryGetComponent(out ICardDirective directive))
-        {
-            yield return transform.DOMove(directive.GetPos(), _moveTime).WaitForCompletion();
-            directive.InParent(gameObject);
-        }
-        else
-        {
-            yield return transform.DOMove(pearet.position, _moveTime);
-        }
-    }
-}
-public interface ICardDirective
-{
-    public Vector2 GetPos();
-    public void InParent(GameObject obj);
-    public void OutParent(GameObject obj);
 }

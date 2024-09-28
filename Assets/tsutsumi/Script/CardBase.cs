@@ -1,59 +1,59 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class CardBase : MonoBehaviour
+public class CardBase : MonoBehaviour, IHaveCardData
 {
-    [SerializeField] Sprite _sprite;
-    [SerializeField] Text _nameText;
-    [SerializeField] Text _explanationText;
-    [SerializeField] CardData _cardData;
-    [SerializeReference, SubclassSelector] IUseCard _cardEffect;
-    [SerializeReference, SubclassSelector] IUseCard[] _cardEffects;
-    public CardData CardData
-    {
-        get => _cardData;
-        set
-        {
-            _cardData = value;
-            _sprite = value._cardSpite;
-            _explanationText.text = value._explanation;
-            _explanationText.text = value._explanation;
-        }
-    }
+    public CardData cardData;
+    public string _animationName;
+    [SerializeReference, SubclassSelector] IChoiseTarget _choiseTarget;
+    [SerializeReference, SubclassSelector] IUseEffect[] _cardEffect;
+    CardData IHaveCardData.CardData => cardData;
+
     public IEnumerator CardUse(CharacterBase useCharacter, Action animationEndAction)
     {
-        float timer = 0;
-        yield return new WaitUntil(() => _cardEffect.ChoiseTarget());
-        _cardEffect.Effect(useCharacter);
+        CharacterBase target = null;
+        BattleManager.Instance._selectEffect.SelectModeStart();
+        yield return new WaitUntil(() => _choiseTarget.ChoiseTarget(useCharacter, out target));
+        BattleManager.Instance._selectEffect.SelectModeEnd();
+        foreach (var effect in _cardEffect)
+        {
+            effect.Effect(useCharacter, target);
+        }
         var animator = useCharacter.GetComponent<Animator>();
-        CardUseEvent();
         if (animator == null)
         {
+            CardUseEvent();
             animationEndAction();
             yield break;
         }
-        animator.Play(CardData._animationName);
-        while (true)
-        {
-            timer += Time.deltaTime;
-            if (timer >= animator.GetCurrentAnimatorStateInfo(0).normalizedTime)
-            {
-                Debug.Log("èIóπ");
-                animationEndAction();
-                break;
-            }
-        }
+        animator.Play(_animationName);
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        Debug.Log("èIóπ");
+        animationEndAction();
+        CardUseEvent();
     }
     public virtual void CardUseEvent()
     {
-        transform.SetParent(BattleManager.Instance._trashParent);
+        if (BattleCardManager.instance._playerCards.ContainsKey(this))
+        {
+            BattleCardManager.instance.ChangeCardParent(this, CardPos.TrashZone);
+        }
     }
 }
-interface IUseCard
+[Serializable]
+public struct CardData
 {
-    public void Effect(CharacterBase useCharacter);
-    public bool ChoiseTarget();
+    public string _cardName;
+    public string _information;
+    public int _price;
+}
+interface IUseEffect
+{
+    public void Effect(CharacterBase useCharacter, CharacterBase target);
+}
+interface IChoiseTarget
+{
+    public bool ChoiseTarget(CharacterBase useCharacter, out CharacterBase target);
 }
 

@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d4f245d694870145892603cc28a8fba, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b81e149f0160fb4382bfbf8ebd58095, type: 3}
   m_Name: TestCard
   m_EditorClassIdentifier: 
   Cards:
-  - {fileID: 3858537949265670636, guid: d3755866f00510a4886ad6a61540b69b, type: 3}
-  - {fileID: 3858537949265670636, guid: d3755866f00510a4886ad6a61540b69b, type: 3}
-  - {fileID: 2740953625566849548, guid: 45536f9f0890778498b43a3414ae832b, type: 3}
-  - {fileID: 2740953625566849548, guid: 45536f9f0890778498b43a3414ae832b, type: 3}
+  - {fileID: -6795246202984372122, guid: c1691957ca1b04445b4e4fe44c8cbae2, type: 3}
+  - {fileID: -6795246202984372122, guid: 562e504af2a55fe41883a5239cc5060d, type: 3}
+  - {fileID: -6795246202984372122, guid: 264094150a6b3394bbeeb516a8f6cbf2, type: 3}
+  - {fileID: -6795246202984372122, guid: 4f9e624822c44e645b5aecbda8223dc7, type: 3}
