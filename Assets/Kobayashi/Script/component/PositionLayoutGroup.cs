@@ -8,7 +8,7 @@ public class PositionLayoutGroup : MonoBehaviour
     [SerializeField] float _maxSpace;
     [SerializeField] float _maxScal;
     [SerializeField] float _cardMoveSpeed;
-    [SerializeField] bool InCardSetActive;
+    [SerializeField] public bool InCardSetActive;
     int _childCount;
     RectTransform _rectTransform;
     List<GameObject> _children;
@@ -30,16 +30,18 @@ public class PositionLayoutGroup : MonoBehaviour
                 var child = transform.GetChild(i - 1);
                 var movePos = new Vector2(startPoint + space * (i - (childCenterElement + 0.5f)), transform.position.y);
                 //0.5は偶奇のポジションをずらす必要があるため
-                //StartCoroutine(CallBackDoTween(child, movePos));
-                child.DOMove(movePos, _cardMoveSpeed);
+                if (child.TryGetComponent(out DragAndDrop dragAndDrop))
+                {
+                    dragAndDrop.enabled=InCardSetActive;
+                }
+                StartCoroutine(CallBackDoTween(child, movePos));
+                //else child.DOMove(movePos, _cardMoveSpeed);
             }
             _childCount = transform.childCount;
         }
     }
     IEnumerator CallBackDoTween(Transform obj, Vector2 endPos)
     {
-        obj.gameObject.SetActive(true);
         yield return obj.DOMove(endPos, _cardMoveSpeed).WaitForCompletion();
-        obj.gameObject.SetActive(InCardSetActive);
     }
 }

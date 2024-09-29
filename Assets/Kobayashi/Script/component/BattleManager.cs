@@ -13,18 +13,20 @@ public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
     [SerializeField] int _firstDraw;
-    [SerializeField] Transform _waitingCardListParent;
+    [SerializeField] BattleCanvasChildData _battleCanvasChildData;
+    Transform _waitingCardListParent;
+    [HideInInspector]public Transform _trashParent;
+    Transform _handCard;
+    Transform _resultCanvas;
+    [SerializeField] GameObject _resultPanel;
+    [SerializeField] GameObject _stateEndButton;
+    [SerializeField] Vector2 _stateEndButtonAnchor;
+    [SerializeField] public SelectEffect _selectEffect;
     [HideInInspector] public CharacterBase _player;
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
     List<CharacterBase> _playerAttackTarget = new List<CharacterBase>();
     public Dictionary<CharacterBase, Queue<CardBase>> _enemyDictionary = new Dictionary<CharacterBase, Queue<CardBase>>();
-    [SerializeField] Canvas _resultCanvas;
-    [SerializeField] GameObject _resultPanel;
-    [SerializeField] Transform _handCard;
-    public Transform _trashParent;
-    [SerializeField] GameObject _stateEndButton;
-    [SerializeField] Vector2 _stateEndButtonAnchor;
-    [SerializeField] public SelectEffect _selectEffect;
+    BattleCardManager _cardManager;
     //カード能力用フラグ
     [HideInInspector] public bool _doubleAttack;
     //報酬選択をしたかどうかのフラグ
@@ -62,7 +64,7 @@ public class BattleManager : MonoBehaviour
                 //バトルスタート時の演出がいる。
                 break;
             case Trun.Draw:
-                BattleCardManager.instance.AllCardDragMode(true);
+                _cardManager.AllCardDragMode(true);
                 int num = _handCard.childCount;
                 int drawCount = _firstDraw - num;
                 Debug.Log("手札を" + drawCount + "引きました");
@@ -73,7 +75,7 @@ public class BattleManager : MonoBehaviour
                 //ボタンで次のstateに
                 break;
             case Trun.UseCard:
-                BattleCardManager.instance.AllCardDragMode(false);
+                _cardManager.AllCardDragMode(false);
                 UseCard();
                 //ボタンで次のstateに
                 break;
@@ -120,6 +122,12 @@ public class BattleManager : MonoBehaviour
     /// <param name="prizeCards">報酬のテーブル</param>
     public void BattleStart(CharacterBase player, CharacterBase[] enemyArray, CardBase[] prizeCards)
     {
+        var canvas=Instantiate(_battleCanvasChildData);
+        _trashParent = canvas._trashParent;
+        _waitingCardListParent = canvas._waitingCardListParent;
+        _handCard = canvas._handCard;
+        _cardManager = canvas._cardManager;
+        _resultCanvas = canvas.transform;
         //playerのカードベース取得
         _player = player.gameObject.GetComponent<CharacterBase>();
         gameObject.SetActive(true);//一応
@@ -133,7 +141,7 @@ public class BattleManager : MonoBehaviour
             return;
         }
         Debug.Log("ゲームスタート");
-        var instansCardData = BattleCardManager.instance.CardCreatSeting(_player._deck);
+        var instansCardData = _cardManager.CardCreatSeting(_player._deck);
         _playerDeck = new Queue<CardBase>(ShuffleList(instansCardData.ToList()));
         foreach (CharacterBase enemy in enemyArray)
         {
@@ -168,13 +176,13 @@ public class BattleManager : MonoBehaviour
             if (_playerDeck.Count <= 0)
             {
                 Debug.Log("捨て札をデッキに戻しました");
-                var trashZone = BattleCardManager.instance.TrashZoneReset();
+                var trashZone = _cardManager.TrashZoneReset();
                 _playerDeck = new Queue<CardBase>(ShuffleList(trashZone));
             }
             yield return null;
             if (_playerDeck.TryDequeue(out CardBase card))
             {
-                BattleCardManager.instance.ChangeCardParent(card, CardPos.Desk);
+                _cardManager.ChangeCardParent(card, CardPos.Desk);
             }
         }
         NextTrun(Trun.ChoiseUseCard, 1);
@@ -186,7 +194,7 @@ public class BattleManager : MonoBehaviour
     }
     void CreatTrunChangeButton(Action nextTrunState)
     {
-        GameObject obj = Instantiate(_stateEndButton, _stateEndButtonAnchor, Quaternion.identity, _resultCanvas.transform);
+        GameObject obj = Instantiate(_stateEndButton, _stateEndButtonAnchor, Quaternion.identity, _resultCanvas);
         obj.TryGetComponent(out Button button);
         if (button == null)
         {
