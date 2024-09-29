@@ -17,29 +17,33 @@ public class SelectEffect : MonoBehaviour
     Coroutine _coroutine;
     public void SelectModeStart()
     {
-        _renderer=FindObjectsOfType<SpriteRenderer>().ToList();
+        _renderer = FindObjectsOfType<SpriteRenderer>().ToList();
         _images = FindObjectsOfType<Image>().ToList();
         _text = FindObjectsOfType<Text>().ToList();
-        _coroutine= StartCoroutine(SelectMode<SpriteRenderer>());
+        _coroutine = StartCoroutine(SelectMode<SpriteRenderer>());
     }
-    IEnumerator SelectMode<T>()where T : Component
+    IEnumerator SelectMode<T>() where T : Component
     {
-            T changeColorObj=null;
+        T changeColorObj = null;
         ColorChange();
         while (true)
         {
-            var hitObj=GetMousePositionObject<T>();
-            if (hitObj != null) {
-                if (hitObj.TryGetComponent(out SpriteRenderer renderer))
+            var hitObj = GetMousePositionObject<T>();
+            if (hitObj != null)
+            {
+                if (hitObj.TryGetComponent(out SpriteRenderer renderer) && changeColorObj != hitObj)
                 {
-                    renderer.color = new Color(1, 1, 1, 1);
+                    renderer.color += new Color(_changeColorBrightness, _changeColorBrightness, _changeColorBrightness, 0);
                     changeColorObj = hitObj;
+                    _renderer.Remove(renderer);
                 }
             }
             if (changeColorObj != hitObj)
             {
-                changeColorObj.GetComponent<SpriteRenderer>().color -= new Color(_changeColorBrightness, _changeColorBrightness, _changeColorBrightness, 0);
-                changeColorObj=hitObj;
+                var renderer = changeColorObj.GetComponent<SpriteRenderer>();
+                renderer.color -= new Color(_changeColorBrightness, _changeColorBrightness, _changeColorBrightness, 0);
+                _renderer.Add(renderer);
+                changeColorObj = hitObj;
             }
 
             //‰¹“ü‚ê‚é‚©‚à‚Ë
@@ -51,7 +55,7 @@ public class SelectEffect : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, Vector2.zero);
-        Debug.DrawRay(ray.origin, new Vector3(0,0,1)*100, Color.red);
+        Debug.DrawRay(ray.origin, new Vector3(0, 0, 1) * 100, Color.red);
 #nullable enable
         if (hit.transform != null && hit.transform.TryGetComponent(out T? hitGameObjectComponent))
         {

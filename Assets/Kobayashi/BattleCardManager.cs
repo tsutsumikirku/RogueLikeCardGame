@@ -7,9 +7,10 @@ using UnityEngine.UI;
 public class BattleCardManager : MonoBehaviour
 {
     public static BattleCardManager instance;
-    [SerializeField] GameObject _deck;
-    [SerializeField] GameObject _trashZone;
-    [SerializeField] GameObject _desk;
+    Transform _deck;
+    Transform _trashZone;
+    Transform _desk;
+    [SerializeField] BattleCanvasChildData _childData;
     [SerializeField] Text _deckChildCount;
     List<DragAndDrop> AllDragCard = new List<DragAndDrop>();
     public Dictionary<CardBase, CardPos> _playerCards = new Dictionary<CardBase, CardPos>();
@@ -26,14 +27,19 @@ public class BattleCardManager : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (_deckChildCount) _deckChildCount.text = _deck.transform.GetComponentsInChildren<DragAndDrop>().Length.ToString();
+        if (_deckChildCount) _deckChildCount.text = _deck.GetComponentsInChildren<DragAndDrop>().Length.ToString();
     }
     public CardBase[] CardCreatSeting(List<CardBase> cards)
     {
+        _deck = _childData._deck;
+        _trashZone = _childData._trashParent;
+        _desk = _childData._handCard;
         foreach (CardBase obj in cards)
         {
+            Debug.Log(obj);
+            Debug.Log(_deck);
             var card = Instantiate(obj, _deck.transform);
-            if(!card.GetComponent<DragAndDrop>())card.AddComponent<DragAndDrop>();
+            if (!card.GetComponent<DragAndDrop>()) card.AddComponent<DragAndDrop>();
             card.transform.position = _deck.transform.position;
             _playerCards.Add(card, CardPos.Deck);
             if (card.TryGetComponent(out DragAndDrop drag))
@@ -57,7 +63,7 @@ public class BattleCardManager : MonoBehaviour
             cards.Add(_trashZone.transform.GetChild(i));
             //_playerCards[card] = CardPos.Deck;
         }
-        List<CardBase> cardBases=new List<CardBase>();
+        List<CardBase> cardBases = new List<CardBase>();
         cards.ForEach(card =>
         {
             card.SetParent(_deck.transform);

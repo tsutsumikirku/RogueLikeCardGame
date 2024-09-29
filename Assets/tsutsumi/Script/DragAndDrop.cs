@@ -28,9 +28,13 @@ public class DragAndDrop : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndD
             //transform.SetParent(_desk.transform);
         }
     }
-    private void Update()
+    void ChangeParentAction()
     {
-        
+        if(transform.parent.TryGetComponent(out PositionLayoutGroup layOut))
+        {
+            Debug.Log(layOut.InCardSetActive);
+            enabled=layOut.InCardSetActive;
+        }
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
