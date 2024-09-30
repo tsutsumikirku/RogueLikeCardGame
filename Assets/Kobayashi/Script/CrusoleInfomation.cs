@@ -35,14 +35,14 @@ public class CrusoleInfomation : MonoBehaviour
             transform.position =
                 Input.mousePosition;
             //マイフレームray飛ばしてる
-            var data = GetUiRayChast<IHaveCardData>();
+            var data = GetUiRayChast<IHaveCardBase>();
             if (data != null)
             {
                 _timer += Time.deltaTime;
                 if (_timer > _displayInfoOnCursorTime)
                 {
                     FadeAnimationBool("FadeIn", true);
-                    SetData(GetUiRayChast<IHaveCardData>().CardData);
+                    SetData(GetUiRayChast<IHaveCardBase>().CardBase);
                 }
             }
             else
@@ -60,11 +60,12 @@ public class CrusoleInfomation : MonoBehaviour
             animator.SetBool("Fade", fade);
         }
     }
-    void SetData(CardData cardData)
+    void SetData(CardBase cardBase)
     {
-        _name.text = cardData._cardName;
-        _information.text = cardData._information;
-        if (_prizeDisplay) _prize.text = $"値段 : {cardData._price.ToString()}";
+        _name.text = cardBase.cardData._cardName;
+        var card = cardBase;
+        _information.text = cardBase.cardData._infometion;
+        if (_prizeDisplay) _prize.text = $"値段 : {cardBase.cardData._price.ToString()}";
         else _prize.text = null;
     }
     T GetUiRayChast<T>()
@@ -87,7 +88,7 @@ public class CrusoleInfomation : MonoBehaviour
         return default;
     }
 }
-interface IHaveCardData
+interface IHaveCardBase
 {
-    public CardData CardData { get; }
+    public CardBase CardBase { get; }
 }

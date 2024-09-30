@@ -1,15 +1,64 @@
 using System;
 using System.Collections;
+using System.Drawing;
 using UnityEngine;
 
-public class CardBase : MonoBehaviour, IHaveCardData
+public class CardBase : MonoBehaviour, IHaveCardBase
 {
     public CardData cardData;
+    public string _infometion;
     public string _animationName;
-    [SerializeReference, SubclassSelector] IChoiseTarget _choiseTarget;
-    [SerializeReference, SubclassSelector] IUseEffect[] _cardEffect;
-    CardData IHaveCardData.CardData => cardData;
-
+    [SerializeReference, SubclassSelector] public IChoiseTarget _choiseTarget;
+    [SerializeReference, SubclassSelector] public IUseEffect[] _cardEffect;
+    CardBase IHaveCardBase.CardBase => this;
+    private void Start()
+    {
+        _infometion = cardData._infometion;
+    }
+    //人間に任せます
+    //string SetInfo(string infometion)
+    //{
+    //    int state = 0;
+    //    int color = 0;
+    //    foreach (var effect in _cardEffect)
+    //    {
+    //        switch (effect)
+    //        {
+    //            case BuffCard:
+    //                if (cardData._infometion.Contains("state" + state))
+    //                {
+    //                    Debug.Log("文字列が置き換えられました。");
+    //                    _infometion = infometion.Replace(
+    //                        $"state{state}", effect.GetEffectClass<BuffCard>()._stats.ToString());
+    //                    state++;
+    //                }
+    //                if (cardData._infometion.Contains("buffColor" + color))
+    //                {
+    //                    Debug.Log("文字列が置き換えられました。");
+    //                    cardData._infometion = infometion.Replace(
+    //                        $"buffColor{color}", effect.GetEffectClass<BuffCard>()._buff.ToString());
+    //                    color++;
+    //                }
+    //                break;
+    //            case OneTimeBuffCard:
+    //                if (cardData._infometion.Contains("state" + state))
+    //                {
+    //                    Debug.Log("文字列が置き換えられました。");
+    //                    cardData._infometion = infometion.Replace(
+    //                        $"state{state}", effect.GetEffectClass<OneTimeBuffCard>()._stats.ToString());
+    //                    state++;
+    //                }
+    //                if (cardData._infometion.Contains("buffColor" + color))
+    //                {
+    //                    Debug.Log("文字列が置き換えられました。");
+    //                    cardData._infometion = infometion.Replace(
+    //                        $"buffColor{color}", effect.GetEffectClass<OneTimeBuffCard>()._buff.ToString());
+    //                    color++;
+    //                }
+    //                break;
+    //        }
+    //    }
+    //}
     public IEnumerator CardUse(CharacterBase useCharacter, Action animationEndAction)
     {
         CharacterBase target = null;
@@ -23,6 +72,7 @@ public class CardBase : MonoBehaviour, IHaveCardData
         var animator = useCharacter.GetComponent<Animator>();
         if (animator == null)
         {
+            yield return new WaitForSeconds(0.5f);
             CardUseEvent();
             animationEndAction();
             yield break;
@@ -45,14 +95,15 @@ public class CardBase : MonoBehaviour, IHaveCardData
 public struct CardData
 {
     public string _cardName;
-    public string _information;
+    public string _infometion;
     public int _price;
 }
-interface IUseEffect
+public interface IUseEffect
 {
     public void Effect(CharacterBase useCharacter, CharacterBase target);
+    public T GetEffectClass<T>() where T : IUseEffect;
 }
-interface IChoiseTarget
+public interface IChoiseTarget
 {
     public bool ChoiseTarget(CharacterBase useCharacter, out CharacterBase target);
 }
