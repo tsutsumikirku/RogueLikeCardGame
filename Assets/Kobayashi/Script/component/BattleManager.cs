@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -15,13 +14,14 @@ public class BattleManager : MonoBehaviour
     [SerializeField] int _firstDraw;
     [SerializeField] BattleCanvasChildData _battleCanvasChildData;
     Transform _waitingCardListParent;
-    [HideInInspector]public Transform _trashParent;
+    [HideInInspector] public Transform _trashParent;
     Transform _handCard;
     Transform _resultCanvas;
     [SerializeField] GameObject _resultPanel;
     [SerializeField] GameObject _stateEndButton;
     [SerializeField] Vector2 _stateEndButtonAnchor;
     [SerializeField] public SelectEffect _selectEffect;
+    ButtleTimeLineManager _timeLine;
     [HideInInspector] public CharacterBase _player;
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
     List<CharacterBase> _playerAttackTarget = new List<CharacterBase>();
@@ -33,8 +33,6 @@ public class BattleManager : MonoBehaviour
     [HideInInspector] public bool _getReward;
     CardBase[] _praiseCardTable;//報酬のテーブル
     Trun _trun;//ステート管理     CurrentTurnからいじれます。直接いじるな
-    //何に使っているのかわかんないから整理中
-    [SerializeField] ButtleTimeLineManager _timeLine;
     //デバッグ用     初期値のテストに使っているためマージの時消して
     [SerializeField] CharacterBase[] _characterBasesTest;
     [SerializeField] CardBaseArray _CardDataScriptablObj;
@@ -76,7 +74,7 @@ public class BattleManager : MonoBehaviour
                 break;
             case Trun.UseCard:
                 _cardManager.AllCardDragMode(false);
-                UseCard();
+                CardUse();
                 //ボタンで次のstateに
                 break;
             case Trun.PlayerAttackTargetSelection:
@@ -122,7 +120,9 @@ public class BattleManager : MonoBehaviour
     /// <param name="prizeCards">報酬のテーブル</param>
     public void BattleStart(CharacterBase player, CharacterBase[] enemyArray, CardBase[] prizeCards)
     {
-        var canvas=Instantiate(_battleCanvasChildData);
+        //battleUIのcloneと初期設定
+        var canvas = Instantiate(_battleCanvasChildData);
+        _timeLine = canvas._timeLineManager;
         _trashParent = canvas._trashParent;
         _waitingCardListParent = canvas._waitingCardListParent;
         _handCard = canvas._handCard;
@@ -133,7 +133,7 @@ public class BattleManager : MonoBehaviour
         gameObject.SetActive(true);//一応
         _praiseCardTable = prizeCards;//報酬の設定
         _getReward = false;
-        _doubleAttack=false;
+        _doubleAttack = false;
         //エネミーがいない場合即座に報酬画面に進みメソッドを終了する
         if (enemyArray == null)
         {
@@ -203,7 +203,7 @@ public class BattleManager : MonoBehaviour
         button.onClick.AddListener(() => nextTrunState());
         button.onClick.AddListener(() => Destroy(button.gameObject));
     }
-    void UseCard()
+    void CardUse()
     {
         List<Action> actions = new List<Action>();
         int count = 0;
@@ -217,13 +217,13 @@ public class BattleManager : MonoBehaviour
         actions.Add(() => NextTrun(Trun.PlayerAttackTargetSelection, .5f));
         actions[count]();
     }
-    IEnumerator CallBack(Action action, Action EndAction, Func<bool> endIf)
+    IEnumerator CallBack(Action action, Action endAction, Func<bool> endIf)
     {
         action();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         yield return new WaitUntil(endIf);
-        EndAction();
+        endAction();
     }
     IEnumerator CallBack(Action action, Action EndAction, float timar)
     {
@@ -329,6 +329,7 @@ public class BattleManager : MonoBehaviour
     }
     void Result(int count)//
     {
+        _player.BuffReset();
         Debug.Log("risult");
         var cards = ShuffleList(_praiseCardTable.ToList());//, count);
         var result = Instantiate(_resultPanel, _resultCanvas.transform);
@@ -350,7 +351,9 @@ public class BattleManager : MonoBehaviour
             };
 
             // イベント時に実行するコールバックを追加
-            entry.callback.AddListener((data) => { OnClick(cards[i]);
+            entry.callback.AddListener((data) =>
+            {
+                OnClick(cards[i]);
                 GameManager.Instance.BattleEnd();
             });
 
@@ -428,6 +431,7 @@ public class BattleManager : MonoBehaviour
     }
     IEnumerator NextTrunCoroutine(Trun trunName, float waiteTimer)
     {
+        Debug.Log(_timeLine);
         bool endCroutine = false;
         switch (trunName)
         {

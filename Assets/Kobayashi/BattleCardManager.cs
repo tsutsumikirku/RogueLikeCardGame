@@ -19,12 +19,6 @@ public class BattleCardManager : MonoBehaviour
     {
         instance = this;
     }
-    private void Start()
-    {
-        _cardParent.Add(CardPos.Deck, _deck.transform);
-        _cardParent.Add(CardPos.TrashZone, _trashZone.transform);
-        _cardParent.Add(CardPos.Desk, _desk.transform);
-    }
     private void LateUpdate()
     {
         if (_deckChildCount) _deckChildCount.text = _deck.GetComponentsInChildren<DragAndDrop>().Length.ToString();
@@ -34,6 +28,9 @@ public class BattleCardManager : MonoBehaviour
         _deck = _childData._deck;
         _trashZone = _childData._trashParent;
         _desk = _childData._handCard;
+        _cardParent.Add(CardPos.Deck, _deck.transform);
+        _cardParent.Add(CardPos.TrashZone, _trashZone.transform);
+        _cardParent.Add(CardPos.Desk, _desk.transform);
         foreach (CardBase obj in cards)
         {
             Debug.Log(obj);
