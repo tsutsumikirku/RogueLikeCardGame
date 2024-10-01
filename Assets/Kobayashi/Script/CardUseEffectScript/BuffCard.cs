@@ -1,22 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 public class BuffCard : IUseEffect
 {
     public Buff _buff;
     [SerializeField] public int _stats;
-    public void Effect(CharacterBase useCharacter,CharacterBase target)
+    public void Effect(CharacterBase useCharacter, CharacterBase target)
     {
-        for (var i = 0; i < _stats; i++)
-        {
-            Debug.Log("バフの追加");
-            useCharacter._buff.Add(_buff);
-        }
+        Debug.Log("バフの追加");
+        useCharacter._buff[_buff]+=_stats;
     }
 
     public T GetEffectClass<T>() where T : IUseEffect
     {
-        if(this is T effect)
+        if (this is T effect)
         {
             return effect;
         }
