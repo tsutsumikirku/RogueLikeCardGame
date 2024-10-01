@@ -1,77 +1,59 @@
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-public class CardBase : MonoBehaviour
+public class CardBase : MonoBehaviour, IHaveCardData
 {
-    public BuffDebuff _isBuff;
-    [SerializeField] Buff _buff;
-    [SerializeField] int _attackCount = 1;
-    [SerializeField] public string _dictionary = "説明なし";
-    public int _price = 1;
-    public BuffDebuff CardUse(CharacterBase attack , CharacterBase beattacked)
+    public CardData cardData;
+    public string _animationName;
+    [SerializeReference, SubclassSelector] IChoiseTarget _choiseTarget;
+    [SerializeReference, SubclassSelector] IUseEffect[] _cardEffect;
+    CardData IHaveCardData.CardData => cardData;
+
+    public IEnumerator CardUse(CharacterBase useCharacter, Action animationEndAction)
     {
-        Debug.Log($"カードを{attack}へ使用");
-        CardUsing(attack,beattacked);
-        CardUseEvent();
-        return _isBuff;
-    }
-    public void CardUsing(CharacterBase attack,CharacterBase beattacked)
-    {
-        switch (_isBuff)
+        CharacterBase target = null;
+        BattleManager.Instance._selectEffect.SelectModeStart();
+        yield return new WaitUntil(() => _choiseTarget.ChoiseTarget(useCharacter, out target));
+        BattleManager.Instance._selectEffect.SelectModeEnd();
+        foreach (var effect in _cardEffect)
         {
-            case BuffDebuff.OverRide:
-            CardOverRide();
-            break;
-            case BuffDebuff.Attack:
-            attack.Attack(beattacked);
-            break;
-            case BuffDebuff.Buff:
-            attack._buff.Add(_buff);
-            break;
-            case BuffDebuff.OneTimeBuff:
-            attack._oneTimeBuff.Add(_buff);
-            break;
-            case BuffDebuff.AllAttack:
-            attack._attackPattern = AttackPattern.All;
-            break;
-            case BuffDebuff.AttackCount:
-            attack._attackCount = _attackCount;
-            break;
-            case BuffDebuff.AllElementAttack:
-            attack._allElementAttack = true;
-            break;
+            effect.Effect(useCharacter, target);
         }
-    }
-    public virtual void CardOverRide()
-    {
-        Debug.Log("オーバーライドされていません");
+        var animator = useCharacter.GetComponent<Animator>();
+        if (animator == null)
+        {
+            CardUseEvent();
+            animationEndAction();
+            yield break;
+        }
+        animator.Play(_animationName);
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        Debug.Log("終了");
+        animationEndAction();
+        CardUseEvent();
     }
     public virtual void CardUseEvent()
     {
-        bool dest = TryGetComponent<DragAndDrop>(out DragAndDrop sss);
-        if (dest)
+        if (BattleCardManager.instance._playerCards.ContainsKey(this))
         {
-            Destroy(gameObject);
+            BattleCardManager.instance.ChangeCardParent(this, CardPos.TrashZone);
         }
     }
 }
-public enum BuffDebuff
+[Serializable]
+public struct CardData
 {
-    OverRide,
-    Attack,
-    Buff,
-    OneTimeBuff,
-    AllAttack,
-    AttackCount,
-    Debuff,
-    AllElementAttack
+    public string _cardName;
+    public string _information;
+    public int _price;
 }
-public enum DebuffSelectState
+interface IUseEffect
 {
-    None,
-    SelectBefore,
-    SelectAfter
+    public void Effect(CharacterBase useCharacter, CharacterBase target);
 }
+interface IChoiseTarget
+{
+    public bool ChoiseTarget(CharacterBase useCharacter, out CharacterBase target);
+}
+
