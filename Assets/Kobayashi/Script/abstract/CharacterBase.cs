@@ -5,6 +5,7 @@ public abstract class CharacterBase : MonoBehaviour
 {
     [HideInInspector] public AttackPattern _attackPattern = AttackPattern.Single;
     [HideInInspector] public int _attackCount = 1;
+    public List<CardBase> _deck;
     public string _name;
     public float _hp;
     public float _attackpower;
