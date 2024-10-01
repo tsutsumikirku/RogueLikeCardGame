@@ -14,19 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Enemies:
   - _character:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
+    - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
   - _character:
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
+    - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
   - _character:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
+    - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
+    - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
+    - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
   _TresureBox:
   - {fileID: 1405515082087897326, guid: 70e999b1f68eb9343bb6038a597faef9, type: 3}
   - {fileID: 8761956576690952840, guid: 54a252fc18cf3074abcb60c23cdf6ede, type: 3}
