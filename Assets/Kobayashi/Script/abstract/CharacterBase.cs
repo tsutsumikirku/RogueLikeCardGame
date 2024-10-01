@@ -3,52 +3,79 @@ using UnityEngine;
 
 public abstract class CharacterBase : MonoBehaviour
 {
+    [SerializeField,Tooltip("永続バフでの数値の上昇値")] float _buffUp = 0.1f;
+    [SerializeField,Tooltip("今回バフでの数値の上昇値")] float _oneTimeBuffUp = 0.1f;
+    [SerializeField, Tooltip("デバフの数値の上昇値")] float _debuffUp = 0.1f;
     [HideInInspector]public AttackPattern _attackPattern = AttackPattern.Single;
     [HideInInspector] public int _attackCount = 1;
     public string _name;
     public float _hp;
     public float _attackpower;
-    public Dictionary<Buff, float> _buff = new Dictionary<Buff, float>() { {Buff.Red,0},{Buff.Green,0},{ Buff.Blue, 0 },
-                                            {Buff.NowRed, 0},{Buff.NowGreen,0},{Buff.NowBlue,0},{Buff.OllEnemyAttack,0},{Buff.OllElementAttack,0},
-                                            {Buff.Debuff,0}};
+    public List<CardBase> _deck;
+    [HideInInspector]public List<Buff> _buff;//永続バフのリスト
+    [HideInInspector]public List<Buff> _oneTimeBuff;//今回バフのリスト
+    [HideInInspector]public List<Buff> _debuff;//デバフのリスト
     public Buff _characterBuff;//キャラクターの属性値メインプレイヤーの属性はNoneの想定です
+    public bool _allElementAttack = false;
     public void Attack(CharacterBase enemy)
     {
-        float buffUp = 0;
-        float debuffUp = 0;
-        if (_buff[Buff.OllEnemyAttack] >= 1) 
+        //forループでエネミーの属性値と対象となるバフを検索して計算式にわり当てはめています。
+        for(int i= 0; i< 3; i++)
         {
-            buffUp = _buff[Buff.Red] + _buff[Buff.Green] + _buff[Buff.Blue] + _buff[Buff.NowRed] + _buff[Buff.NowGreen] + _buff[Buff.NowBlue];
-            _buff[Buff.NowRed] = 0;
-            _buff[Buff.NowGreen] = 0;
-            _buff[Buff.NowBlue] = 0;
-        }
-        else if (_buff[Buff.OllElementAttack] <= 1)
-        {
-            switch (enemy._characterBuff)
+            if (enemy._characterBuff == (Buff)i)
             {
-                case Buff.Red:
-                    break;
-                case Buff.Green:
-                    break;
-                case Buff.Blue:
-                    break;
+                float buff = 0;
+                float onetimebuff = 0;
+                float debuff = 0;
+                for (int j = 0; j < _buff.Count; j++)
+                {
+                    if (!_allElementAttack)
+                    {
+                        if (_buff[j] == (Buff)i)
+                        {
+                            buff += _buffUp;
+                        }
+                    }
+                    else
+                    {
+                        buff += _buffUp;
+                    }
+                  
+                }
+                for(int h = 0; h < _oneTimeBuff.Count; h++)
+                {
+                    if (!_allElementAttack)
+                    {
+                        if (_buff[h] == (Buff)i)
+                        {
+                            onetimebuff += _oneTimeBuffUp;
+                        }
+                    }
+                    else
+                    {
+                        onetimebuff += _oneTimeBuffUp;
+                    }
+                }
+                if (_allElementAttack)
+                {
+                    _buff.Clear();
+                }
+                debuff += _debuffUp * _debuff.Count;
+                enemy._hp -= (_attackpower + buff) * (onetimebuff + 1) - debuff;
+                Debug.Log($"攻撃 {(_attackpower + buff) * (onetimebuff + 1) - debuff}");
+                break;
             }
-            _buff[Buff.NowRed] = 0;
-            _buff[Buff.NowGreen] = 0;
-            _buff[Buff.NowBlue] = 0;
         }
-    }
-    public void AddBuffDictionary(Buff key,float value)
-    {
-        
     }
     public void BuffReset()
     {
-        _buff[Buff.Red] = 0;
-        _buff[Buff.Green] = 0;
-        _buff[Buff.Blue] = 0;
-    } 
+        _buff.Clear();
+    }
+    public void OneTimeBuffReset()
+    {
+        _oneTimeBuff.Clear();
+    }
+   
 }
 public enum AttackPattern
 {
@@ -60,12 +87,6 @@ public enum Buff
     None,
     Red,
     Green,
-    Blue,
-    NowRed,
-    NowGreen,
-    NowBlue,
-    OllEnemyAttack,
-    OllElementAttack,
-    Debuff
+    Blue
 }
 
