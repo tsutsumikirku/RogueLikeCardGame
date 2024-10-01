@@ -10,7 +10,7 @@ public class OneTimeBuffCard : IUseEffect
     {
         for (var i = 0; i < _stats; i++)
         {
-            target._oneTimeBuff.Add(_buff);
+            target._buff[_buff]+=_stats;
         }
     }
 
