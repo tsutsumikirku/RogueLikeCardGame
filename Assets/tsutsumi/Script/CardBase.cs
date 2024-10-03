@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Drawing;
 using UnityEngine;
 
 public class CardBase : MonoBehaviour, IHaveCardBase
@@ -61,10 +60,21 @@ public class CardBase : MonoBehaviour, IHaveCardBase
     //}
     public IEnumerator CardUse(CharacterBase useCharacter, Action animationEndAction)
     {
+
         CharacterBase target = null;
-        BattleManager.Instance._selectEffect.SelectModeStart();
-        yield return new WaitUntil(() => _choiseTarget.ChoiseTarget(useCharacter, out target));
-        BattleManager.Instance._selectEffect.SelectModeEnd();
+        bool effectMode = _choiseTarget._effect ? true : false;
+        if (effectMode)//æÜß‚Ì‹CŽ‚¿
+        {
+            BattleManager.Instance._selectEffect.SelectModeStart();
+            yield return new WaitUntil(() => _choiseTarget.ChoiseTarget(useCharacter, out target));
+            BattleManager.Instance._selectEffect.SelectModeEnd();
+        }
+        else if (_choiseTarget is CallShopCard callShop)
+        {
+            _choiseTarget.ChoiseTarget(useCharacter, out target);
+            yield return new WaitUntil(() => callShop.storeEnd);
+        }
+        else _choiseTarget.ChoiseTarget(useCharacter, out target);
         foreach (var effect in _cardEffect)
         {
             effect.Effect(useCharacter, target);
@@ -105,6 +115,7 @@ public interface IUseEffect
 }
 public interface IChoiseTarget
 {
+    public bool _effect { get; }
     public bool ChoiseTarget(CharacterBase useCharacter, out CharacterBase target);
 }
 

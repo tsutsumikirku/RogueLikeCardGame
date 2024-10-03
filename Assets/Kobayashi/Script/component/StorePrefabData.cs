@@ -12,7 +12,7 @@ public class StorePrefabData : MonoBehaviour
     public Transform _SellTableParent;
     public void StoreEnd()
     {
-        GameManager.Instance.BattleEnd();
+        Store.Instance.StoreEnd();
         Destroy(gameObject);
     }
     public void CreatPlayerCards()

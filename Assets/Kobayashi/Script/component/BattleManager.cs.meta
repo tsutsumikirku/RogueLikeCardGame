@@ -1,23 +1,16 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: 69bd757783602894595290014e51bbaf
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - _waitingCardListParent: {instanceID: 0}
-  - _nextStepButton: {instanceID: 0}
+  - _battleCanvasChildData: {instanceID: 0}
+  - _trashParent: {instanceID: 0}
+  - _resultPanel: {fileID: 2381070805627587666, guid: 0501e57268b4baa49ba9ac7865b3dc8c, type: 3}
+  - _stateEndButton: {fileID: 2414021848331959321, guid: 25e70c1dccf82554880a0617f29905c0, type: 3}
+  - _selectEffect: {instanceID: 0}
   - _player: {instanceID: 0}
-  - _canvas: {instanceID: 0}
-  - _resultPanel: {fileID: 1276625060132778297, guid: ba0b2b41bad067c4db3ed60cfbf190d6, type: 3}
-  - _emptyCard: {fileID: 1751428171224920214, guid: 7beac483342d06b4488bb0732937ff52, type: 3}
-=======
-guid: aa2729dbd553ed54b9eae35a4daf1efa
-MonoImporter:
-  externalObjects: {}
-  serializedVersion: 2
-  defaultReferences: []
->>>>>>> c8527b02e6b7b94344d7c4a9b62f30f558734e9f
+  - _CardDataScriptablObj: {fileID: 11400000, guid: 76918f05e886f0146ab141aaf20a4f86, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

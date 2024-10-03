@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-[CreateAssetMenu(fileName = "Setting",menuName ="ScriptableObject/Setting")]
-public class Setting : ScriptableObject 
+[CreateAssetMenu(fileName = "Setting", menuName = "ScriptableObject/Setting")]
+public class Setting : ScriptableObject
 {
     private static Setting _instance;
-    public int _minDeckRange=5;
+    public int _minDeckRange = 5;
     public static Setting Instans
     {
         get

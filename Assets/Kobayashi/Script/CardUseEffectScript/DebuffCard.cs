@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SerectTargetMouseClick : IChoiseTarget
+public class SelectTargetMouseClick : IChoiseTarget
 {
+    public bool _effect { get => true; }
     public bool ChoiseTarget(CharacterBase usecharacter,out CharacterBase target)
     {
         Debug.Log("“G‚ğ‘I‚×");
@@ -13,6 +14,7 @@ public class SerectTargetMouseClick : IChoiseTarget
 }
 public class UseCharacterTarget : IChoiseTarget
 {
+    public bool _effect { get => false; }
     public bool ChoiseTarget(CharacterBase useCharacter, out CharacterBase target)
     {
         target = useCharacter;
@@ -21,6 +23,7 @@ public class UseCharacterTarget : IChoiseTarget
 }
 public class PlayerTarGet : IChoiseTarget
 {
+    public bool _effect { get => false; }
     public bool ChoiseTarget(CharacterBase useCharacter, out CharacterBase target)
     {
         target = BattleManager.Instance._player;
