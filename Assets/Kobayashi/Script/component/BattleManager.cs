@@ -122,12 +122,7 @@ public class BattleManager : MonoBehaviour
     {
         //battleUIのcloneと初期設定
         var canvas = Instantiate(_battleCanvasChildData);
-        _timeLine = canvas._timeLineManager;
-        _trashParent = canvas._trashParent;
-        _waitingCardListParent = canvas._waitingCardListParent;
-        _handCard = canvas._handCard;
-        _cardManager = canvas._cardManager;
-        _resultCanvas = canvas.transform;
+        SetData(canvas);
         //playerのカードベース取得
         _player = player.gameObject.GetComponent<CharacterBase>();
         gameObject.SetActive(true);//一応
@@ -148,6 +143,15 @@ public class BattleManager : MonoBehaviour
             _enemyDictionary.Add(enemy, new Queue<CardBase>(ShuffleList(enemy._deck)));
         }
         NextTrun(Trun.Start, 1);
+        void SetData(BattleCanvasChildData canvas)
+        {
+            _timeLine = canvas._timeLineManager;
+            _trashParent = canvas._trashParent;
+            _waitingCardListParent = canvas._waitingCardListParent;
+            _handCard = canvas._handCard;
+            _cardManager = canvas._cardManager;
+            _resultCanvas = canvas.transform;
+        }
     }
     void StartEffect()
     {
@@ -326,6 +330,7 @@ public class BattleManager : MonoBehaviour
     void Defeat()
     {
         Debug.Log("defeat");
+        Invoke(nameof(BattleEnd), 1);
     }
     void Result(int count)//
     {
@@ -372,9 +377,9 @@ public class BattleManager : MonoBehaviour
     }
     void BattleEnd()
     {
-        GameManager.Instance.BattleEnd();
-        //canvasの削除
+        Destroy(_battleCanvasChildData.gameObject);
         gameObject.SetActive(false);
+        GameManager.Instance.BattleEnd();
     }
     public void AddNewEnemy(CharacterBase enemy)
     {
