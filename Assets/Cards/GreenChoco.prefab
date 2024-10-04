@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3048025749783980754, guid: 8661941fe448bda4099ef8a19f20d43f, type: 3}
       propertyPath: cardData._cardName
-      value: "\u7DD1\u7D19\u306B\u5305\u307E\u308C\u305F\u30C1\u30E7\u30B3"
+      value: "\u30B0\u30EA\u30FC\u30F3\u30C1\u30E7\u30B3\u30EC\u30FC\u30C8"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3048025749783980754, guid: 8661941fe448bda4099ef8a19f20d43f, type: 3}
+      propertyPath: cardData._infometion
+      value: "\u7DD1\u306E\u30C1\u30E7\u30B3\u3001\u4ECA\u56DE\u306E\u30BF\u30FC\u30F3\u4E2D\u7DD1\u653B\u6483\u529B\u304C"
       objectReference: {fileID: 0}
     - target: {fileID: 3048025749783980754, guid: 8661941fe448bda4099ef8a19f20d43f, type: 3}
       propertyPath: cardData._information
@@ -18,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3048025749783980754, guid: 8661941fe448bda4099ef8a19f20d43f, type: 3}
       propertyPath: managedReferences[2627666349599752198]._buff
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7178008145561128468, guid: 8661941fe448bda4099ef8a19f20d43f, type: 3}
       propertyPath: m_Name

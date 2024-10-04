@@ -91,8 +91,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData:
-    _cardName: "\u8D64\u3044\u30C1\u30E7\u30B3"
-    _infometion: 
+    _cardName: "\u30EC\u30C3\u30C9\u30C1\u30E7\u30B3"
+    _infometion: "\u8D64\u3044\u30C1\u30E7\u30B3\u3001\u4ECA\u56DE\u306E\u30BF\u30FC\u30F3\u4E2D\u8D64\u5C5E\u6027\u653B\u6483\u529B\u304C"
     _price: 1
   _infometion: 
   _animationName: 
@@ -109,7 +109,7 @@ MonoBehaviour:
     - rid: 2627666349599752199
       type: {class: OneTimeBuffCard, ns: , asm: Assembly-CSharp}
       data:
-        _buff: 1
+        _buff: 4
         _stats: 1
 --- !u!114 &5752018660063389426
 MonoBehaviour:

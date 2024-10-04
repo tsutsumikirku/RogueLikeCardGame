@@ -9,16 +9,84 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: _choiseTarget
+      value: 1958524982994141188
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
       propertyPath: cardData._cardName
-      value: "\u9752\u3044\u98F4"
+      value: "\u30D6\u30EB\u30FC\u30AD\u30E3\u30F3\u30C7\u30A3"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: cardData._infometion
+      value: "\u9752\u306E\u98F4\u7389\u3001\u4ECA\u56DE\u306E\u6226\u95D8\u4E2D\u9752\u5C5E\u6027\u653B\u6483\u529B\u304C"
       objectReference: {fileID: 0}
     - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
       propertyPath: cardData._information
       value: "\u9752\u306E\u6C38\u7D9A\u30D0\u30D5\u30921\u5F97\u308B"
       objectReference: {fileID: 0}
     - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[-2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: _cardEffect.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: _cardEffect.Array.data[0]
+      value: 1958524982994141186
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: _cardEffect.Array.data[1]
+      value: 1958524982994141190
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141184]
+      value: Assembly-CSharp CallShopCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141185]
+      value: Assembly-CSharp BuffCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141186]
+      value: Assembly-CSharp BuffCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141187]
+      value: Assembly-CSharp CallShopCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141188]
+      value: Assembly-CSharp UseCharacterTarget
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141189]
+      value: Assembly-CSharp EnemyAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141190]
+      value: Assembly-CSharp CallShopCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141185]._buff
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141186]._buff
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
       propertyPath: managedReferences[2627666349599752200]._buff
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141185]._stats
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
+      propertyPath: managedReferences[1958524982994141186]._stats
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7347293778858840407, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
       propertyPath: m_Name

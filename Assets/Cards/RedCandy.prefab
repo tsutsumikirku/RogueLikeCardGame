@@ -98,7 +98,11 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 944919335e063d248808df8ce591f81c, type: 3}
     - target: {fileID: 7015075962761455410, guid: 5d221f884bfa0fa4eb1f4c33b64b31d5, type: 3}
       propertyPath: cardData._cardName
-      value: "\u8D64\u3044\u96E8"
+      value: "\u30EC\u30C3\u30C9\u30AD\u30E3\u30F3\u30C7\u30A3\u30FC"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7015075962761455410, guid: 5d221f884bfa0fa4eb1f4c33b64b31d5, type: 3}
+      propertyPath: cardData._infometion
+      value: "\u8D64\u3044\u98F4\u3001\u4ECA\u56DE\u306E\u6226\u95D8\u4E2D\u8D64\u5C5E\u6027\u653B\u6483\u529B\u304C"
       objectReference: {fileID: 0}
     - target: {fileID: 7015075962761455410, guid: 5d221f884bfa0fa4eb1f4c33b64b31d5, type: 3}
       propertyPath: cardData._information
