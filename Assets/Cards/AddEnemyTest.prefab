@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3999856591794427513
+--- !u!1001 &3723903458703956558
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 609357206200190027, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: m_Name
-      value: Book Variant
+      value: AddEnemyTest
+      objectReference: {fileID: 0}
+    - target: {fileID: 609357206200190027, guid: a99649deceed5a74092aaea61e57952e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1420681203807145646, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: m_Pivot.x
@@ -95,10 +99,10 @@ PrefabInstance:
     - target: {fileID: 1859513456291278056, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 158004d545f87f24d88e611b798ae03a, type: 3}
+      objectReference: {fileID: 21300000, guid: 82fcdff8481da2843acbc4730e5c072f, type: 3}
     - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: _choiseTarget
-      value: 2395685283473129472
+      value: 2395685307190870016
       objectReference: {fileID: 0}
     - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: cardData._cardName
@@ -114,7 +118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: _cardEffect.Array.data[0]
-      value: 2395685283473129473
+      value: 2395685307190870017
       objectReference: {fileID: 0}
     - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: managedReferences[2395685283473129472]
@@ -125,13 +129,17 @@ PrefabInstance:
       value: Assembly-CSharp CallShopCard
       objectReference: {fileID: 0}
     - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
-      propertyPath: managedReferences[2395685283473129472]._cards
-      value: 
-      objectReference: {fileID: 11400000, guid: 32849a54db371104691e11c3233a9973, type: 2}
-    - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
-      propertyPath: managedReferences[2395685283473129473]._cards
-      value: 
+      propertyPath: managedReferences[2395685307190870016]
+      value: Assembly-CSharp UseCharacterTarget
       objectReference: {fileID: 0}
+    - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
+      propertyPath: managedReferences[2395685307190870017]
+      value: Assembly-CSharp AddEnemyCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
+      propertyPath: managedReferences[2395685307190870017]._enemy
+      value: 
+      objectReference: {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -12,31 +12,35 @@ public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance;
     [SerializeField] int _firstDraw;
-    [SerializeField] BattleCanvasChildData _battleCanvasChildData;
-    Transform _waitingCardListParent;
-    [HideInInspector] public Transform _trashParent;
-    Transform _handCard;
-    Transform _resultCanvas;
+    [SerializeField] BattleCanvasChildData _battleCanvasPrefabChildData;
     [SerializeField] GameObject _resultPanel;
     [SerializeField] GameObject _stateEndButton;
     [SerializeField] Vector2 _stateEndButtonAnchor;
     [SerializeField] public SelectEffect _selectEffect;
-    ButtleTimeLineManager _timeLine;
     [HideInInspector] public CharacterBase _player;
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
     List<CharacterBase> _playerAttackTarget = new List<CharacterBase>();
     public Dictionary<CharacterBase, Queue<CardBase>> _enemyDictionary = new Dictionary<CharacterBase, Queue<CardBase>>();
-    BattleCardManager _cardManager;
     //カード能力用フラグ
     [HideInInspector] public bool _doubleAttack;
     //報酬選択をしたかどうかのフラグ
     [HideInInspector] public bool _getReward;
     CardBase[] _praiseCardTable;//報酬のテーブル
     Trun _trun;//ステート管理     CurrentTurnからいじれます。直接いじるな
+    //プレハブのデータを持つ部分
+    BattleCardManager _cardManager;
+    ButtleTimeLineManager _timeLine;
+    Transform _waitingCardListParent;
+    [HideInInspector] public Transform _trashParent;
+    Transform _handCard;
+    Transform _resultCanvas;
+    List<RectTransform> _enemyAnchor;
+    float _maxEnemy;
     //デバッグ用     初期値のテストに使っているためマージの時消して
     [SerializeField] CharacterBase[] _characterBasesTest;
     [SerializeField] CardBaseArray _CardDataScriptablObj;
     [SerializeField] bool Testmode;
+    [SerializeField] int enemyCount;
 
     Trun CurrentTurn
     {
@@ -112,6 +116,10 @@ public class BattleManager : MonoBehaviour
             BattleStart(GameObject.FindWithTag("Player").GetComponent<CharacterBase>(), _characterBasesTest, _CardDataScriptablObj.Cards);
         }
     }
+    private void Update()
+    {
+        enemyCount=_enemyDictionary.Count;
+    }
     /// <summary>
     /// バトル開始時に呼ぶ関数
     /// </summary>
@@ -121,7 +129,7 @@ public class BattleManager : MonoBehaviour
     public void BattleStart(CharacterBase player, CharacterBase[] enemyArray, CardBase[] prizeCards)
     {
         //battleUIのcloneと初期設定
-        var canvas = Instantiate(_battleCanvasChildData);
+        var canvas = Instantiate(_battleCanvasPrefabChildData);
         SetData(canvas);
         //playerのカードベース取得
         _player = player.gameObject.GetComponent<CharacterBase>();
@@ -151,6 +159,8 @@ public class BattleManager : MonoBehaviour
             _handCard = canvas._handCard;
             _cardManager = canvas._cardManager;
             _resultCanvas = canvas.transform;
+            _enemyAnchor =new List<RectTransform>(canvas._enemysAnchor);
+            _maxEnemy=canvas._enemysAnchor.Count;
         }
     }
     void StartEffect()
@@ -286,20 +296,22 @@ public class BattleManager : MonoBehaviour
         List<Action> actions = new List<Action>();//行動待機用リスト
         int count = 0;
         var endActions = false;
+        //foreach内で配列の要素が増える可能性があるためコピーをとる
+        var enemyList=new List<CharacterBase>(_enemyDictionary.Keys);
         Debug.Log("敵の攻撃");
-        foreach (var enemy in _enemyDictionary.Keys)
+        foreach (var enemy in enemyList)
         {
-            CharacterBase attackObj = _player;
-            CardBase nextcard;
-            _enemyDictionary[enemy].TryDequeue(out nextcard);
-            if (nextcard == null)
+            CardBase useCard;
+            _enemyDictionary[enemy].TryDequeue(out useCard);
+            if (useCard == null)
             {
                 _enemyDictionary[enemy] = new Queue<CardBase>(ShuffleList(enemy._deck));
-                _enemyDictionary[enemy].TryDequeue(out nextcard);
+                _enemyDictionary[enemy].TryDequeue(out useCard);
             }
-            actions.Add(() => StartCoroutine(nextcard.CardUse(enemy, () =>
+            actions.Add(() => StartCoroutine(useCard.CardUse(enemy, () =>
             {
                 count++;
+                Debug.Log(useCard.name);
                 if (actions.Count > count) actions[count]();
                 else
                 {
@@ -377,13 +389,21 @@ public class BattleManager : MonoBehaviour
     }
     void BattleEnd()
     {
-        Destroy(_battleCanvasChildData.gameObject);
+        Destroy(_battleCanvasPrefabChildData.gameObject);
         gameObject.SetActive(false);
         GameManager.Instance.BattleEnd();
     }
     public void AddNewEnemy(CharacterBase enemy)
     {
-        _enemyDictionary.Add(enemy, new Queue<CardBase>(ShuffleList(enemy._deck.ToList())));
+        if (_enemyDictionary.Count < _maxEnemy)
+        {
+            Debug.Log("絵ねmy－を追加しました");
+            Vector2 anchorPoint = Camera.main.ScreenToWorldPoint(_enemyAnchor[_enemyDictionary.Count].transform.position);
+            Debug.Log(anchorPoint);
+            var enemyObj = Instantiate(enemy, anchorPoint,Quaternion.identity);
+            _enemyDictionary.Add(enemyObj, new Queue<CardBase>(ShuffleList(enemyObj._deck.ToList())));
+        }
+        else Debug.Log("エネミーを追加していません");
     }
     public List<T> ShuffleList<T>(List<T> DeckData)
     {
@@ -440,6 +460,11 @@ public class BattleManager : MonoBehaviour
         bool endCroutine = false;
         switch (trunName)
         {
+            case Trun.PlayerAttackTargetSelection:
+                StartCoroutine(CallBack(() => ChangeTrunEffect("敵を選べ", null),
+                    () => endCroutine = true,
+                    () => _timeLine.Director.duration <= _timeLine.Director.time || _timeLine.Director.time == 0));
+                break;
             case Trun.PlayerAttack:
                 StartCoroutine(CallBack(() => ChangeTrunEffect("味方のの攻撃", null),
                     () => endCroutine = true,

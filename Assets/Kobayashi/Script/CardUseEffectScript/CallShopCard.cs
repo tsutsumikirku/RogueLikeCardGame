@@ -6,11 +6,16 @@ public class CallShopCard : IUseEffect, IChoiseTarget
     public bool storeEnd { get => Store.Instance._storeCanvas == null; }
     public bool ChoiseTarget(CharacterBase useCharacter, out CharacterBase target)
     {
-        if (Store.Instance._storeCanvas == null) Store.Instance.StoreStart();
+        if (Store.Instance._storeCanvas == null)
+        {
+            Store.Instance.SetPrizeCard(_cards);
+            Store.Instance.StoreStart();
+        }
         target = null;
         return Store.Instance._storeCanvas == null;
     }
 
+    [SerializeField] CardBaseArray _cards;
     public void Effect(CharacterBase useCharacter, CharacterBase target)
     {
         Store.Instance.StoreEnd();
