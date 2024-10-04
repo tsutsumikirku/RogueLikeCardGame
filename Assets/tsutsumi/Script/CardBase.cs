@@ -5,7 +5,7 @@ using UnityEngine;
 public class CardBase : MonoBehaviour, IHaveCardBase
 {
     public CardData cardData;
-    public string _infometion;
+    [HideInInspector] public string _infometion;
     public string _animationName;
     [SerializeReference, SubclassSelector] public IChoiseTarget _choiseTarget;
     [SerializeReference, SubclassSelector] public IUseEffect[] _cardEffect;
