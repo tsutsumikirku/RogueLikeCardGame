@@ -6,7 +6,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -23,10 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] EnemyData _enemyData;
     [SerializeField] BattleManager _battleManager;
     [SerializeField,Tooltip("ボスが出現するターン")] int _bossTurn;
-    [SerializeField] bool _test;
-    [SerializeField,Tooltip("ターンのテキスト")] Text _turn;
-    public int _waveCount;        
-    public int _turnCount = 1;
+    public int _turnCount;
     public static GameManager Instance;
     GameManagerState _state;
     bool _boss = false;
@@ -58,7 +54,6 @@ public class GameManager : MonoBehaviour
 
     private void OnStateChanged()
     {
-        _turn.text = _turnCount.ToString();
         switch (_state)
         {
             case GameManagerState.Serch:
@@ -103,24 +98,13 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("バトルに行きました");
             int random = Random.Range(1,_enemyTransform.Length);
-            List<CharacterBase> _enemy = new List<CharacterBase>();
             for (int i = 0; i < random; i++)
             {
-                _enemy.Add(Instantiate(_enemyData.Enemies[_waveCount]._character[Random.Range(0, _enemyData.Enemies[_waveCount]._character.Length)])); 
+                
             }
-            // BattleManager.Instance.BattleStart();
-            _enemy.Clear();
+            //BattleManager.Instance.SetData(enemy);
             Debug.Log("敵データを送りました");
             _turnCount++;
-            if(_turnCount >= _waveTurnCount)
-            {
-                _waveCount += 1;
-                _turnCount = 1;
-            }
-            if (_test)
-            {
-                BattleEnd();
-            }
             
         }
         else if (_move == GameManagerMove.TresureBox)
@@ -129,17 +113,9 @@ public class GameManager : MonoBehaviour
             CharacterBase[] tresurebox = new CharacterBase[1];
             tresurebox[0] = Instantiate(_enemyData._TresureBox[RandomEnemySet(_enemyData._TresureBox.Count)]);
             tresurebox[0].transform.position = _tresureBoxTransform.position;
+
             //BattleManager.Instance.SetData(tresurebox);
             _turnCount++;
-            if (_turnCount >= _waveTurnCount)
-            {
-                _waveCount += 1;
-                _turnCount = 1;
-            }
-            if (_test)
-            {
-                BattleEnd();
-            }
         }
         else if (_move == GameManagerMove.Boss)
         {
@@ -147,11 +123,8 @@ public class GameManager : MonoBehaviour
             CharacterBase[] boss = new CharacterBase[1];
             boss[0] = Instantiate(_enemyData.Boss[RandomEnemySet(_enemyData.Boss.Count)]);
             boss[0].transform.position = _bossTransform.position;
-            if (_test)
-            {
-                BattleEnd();
-            }
-            // BattleManager.Instance.SetData(boss);
+
+           // BattleManager.Instance.SetData(boss);
             //ここでバトルマネージャーを呼び出す
         }
     }
@@ -204,11 +177,6 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("バトルが終わりサーチモードになりました");
         State = GameManagerState.Serch;
-    }
-    public void GameOver()
-    {
-        Debug.Log("ゲームオーバー");
-        State = GameManagerState.GameOver;
     }
 
     //ここから下ボタンのための関数許して
