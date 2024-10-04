@@ -44,11 +44,11 @@ public class Store : MonoBehaviour
             StoreStart();
         }
     }
-    private void SetPrizeCard(CardBaseArray cardBaseArray)
+    public void SetPrizeCard(CardBaseArray cardBaseArray)
     {
         _prizeCards.Clear();
-        _cardArray = cardBaseArray;
-        var cardList = ShuffleList(_cardArray.Cards.ToList());
+        List<CardBase> cards=_cardArray.Cards.ToList();
+        var cardList = ShuffleList(cards);
         Debug.Log($"{cardList.Count} {_prizeCards}");
         for (var i = 0; i < _prizeCardCount; i++)
         {
