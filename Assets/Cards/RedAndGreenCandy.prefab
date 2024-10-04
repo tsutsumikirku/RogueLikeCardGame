@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2456257238301627580, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
       propertyPath: m_Name
-      value: GreenCandy Variant
+      value: RedAndGreenCandy
       objectReference: {fileID: 0}
     - target: {fileID: 3723613180964682783, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
       propertyPath: m_Sprite

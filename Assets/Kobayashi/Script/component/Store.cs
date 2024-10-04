@@ -13,7 +13,7 @@ public class Store : MonoBehaviour
     [SerializeField] int _prizeCardCount;
     [SerializeField] public int _maxChildElement;
     [SerializeField] StorePrefabData _storeCanvasPrefab; //ストアprefab
-    StorePrefabData _storeCanvas;//ストアprefabのinstans情報
+    [HideInInspector]public StorePrefabData _storeCanvas;//ストアprefabのinstans情報
     [SerializeField] public CardBaseArray _cardArray; //報酬のtable
     [SerializeField] List<CardBase> _prizeCards = new List<CardBase>();//報酬の量//デバック用にシリアライズしてます。
     bool _buyCards;
@@ -145,6 +145,10 @@ public class Store : MonoBehaviour
     //        }
     //    }
     //}
+    public void StoreEnd()
+    {
+        //GameManager.Instance.BattleEnd();
+    }
     public void CreatPlayerDeckCard(Transform parent)
     {
         CreatCards(_player._deck, parent, _player._deck.Count, false);

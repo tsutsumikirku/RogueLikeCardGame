@@ -92,7 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData:
     _cardName: "\u8D64\u3044\u30C1\u30E7\u30B3"
-    _information: "Red\u306E\u4E57\u7B97\u30D0\u30D5\u30921\u5F97\u308B"
+    _infometion: 
     _price: 1
   _infometion: 
   _animationName: 
