@@ -7,7 +7,7 @@ using UnityEngine;
 public class EnemyData : ScriptableObject
 {
     public List<EnemyList> _enemies;
-    public List<CharacterBase> _tesureBox = new List<CharacterBase>();
+    public List<CharacterBase> _tresureBox = new List<CharacterBase>();
     public List<CharacterBase> _boss = new List<CharacterBase>();
 }
 [System.Serializable]
