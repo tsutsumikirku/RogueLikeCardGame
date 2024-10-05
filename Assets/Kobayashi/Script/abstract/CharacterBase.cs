@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -115,6 +116,11 @@ public abstract class CharacterBase : MonoBehaviour
     public void SelectButton()
     {
         State = CharaBaseState.Attack;
+    }
+    IEnumerator AnimationExtension()
+    {
+        
+        yield return null;
     }
 }
 public enum AttackPattern

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Mathematics;
@@ -6,7 +7,11 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using static UnityEngine.EventSystems.EventTrigger;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
+using UnityEditor.Build.Content;
+using UnityEditor.SearchService;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,9 +25,15 @@ public class GameManager : MonoBehaviour
     [SerializeField, Tooltip("ボスの位置を指定してください")] Transform _bossTransform;
     [SerializeField, Tooltip("一回のウェーブのターン数を指定してください")] int _waveTurnCount;
     [SerializeField] EnemyData _enemyData;
-    [SerializeField] BattleManager _battleManager;
-    [SerializeField,Tooltip("ボスが出現するターン")] int _bossTurn;
+    [SerializeField, Tooltip("プレイヤーを設定してください")] CharacterBase _player;
+    [SerializeField] CardBaseArray _cards;
+    [SerializeField] string _animationName;
+    [SerializeField] string _gameOverSceneName;
+    [SerializeField] string _gameClearSceneName;
+    Animator _animation;
+    
     public int _turnCount;
+    int _phaseCount;
     public static GameManager Instance;
     GameManagerState _state;
     bool _boss = false;
@@ -93,40 +104,47 @@ public class GameManager : MonoBehaviour
     {
         _moveStart.Invoke();
         GameManagerMove _move = RandomSetMap();
-
-        if (_move == GameManagerMove.Battle)
+        if(_phaseCount < _enemyData._enemies.Count)
         {
-            Debug.Log("バトルに行きました");
-            int random = Random.Range(1,_enemyTransform.Length);
-            for (int i = 0; i < random; i++)
+            if (_move == GameManagerMove.Battle)
             {
-                
+                Debug.Log("バトルに行きました");
+                int random = Random.Range(1, _enemyTransform.Length);
+                CharacterBase[] enemy = new CharacterBase[random];
+                for (int i = 0; i < random; i++)
+                {
+                    enemy[i] = Instantiate(_enemyData._enemies[_phaseCount]._character[Random.Range(0, _enemyData._enemies[_phaseCount]._character.Length)]);
+                }
+                StartCoroutine(AnimationExtension(_animationName, enemy));
+                Debug.Log("敵データを送りました");
+
             }
-            //BattleManager.Instance.SetData(enemy);
-            Debug.Log("敵データを送りました");
-            _turnCount++;
-            
+            else if (_move == GameManagerMove.TresureBox)
+            {
+                CharacterBase[] tresurebox = new CharacterBase[1];
+                tresurebox[0] = Instantiate(_enemyData._tresureBox[RandomEnemySet(_enemyData._tresureBox.Count)]);
+                tresurebox[0].transform.position = _tresureBoxTransform.position;
+                StartCoroutine(AnimationExtension(_animationName, tresurebox));
+                Debug.Log("宝箱に行きました");
+            }
         }
-        else if (_move == GameManagerMove.TresureBox)
+        else
         {
-            Debug.Log("宝箱に行きました");
-            CharacterBase[] tresurebox = new CharacterBase[1];
-            tresurebox[0] = Instantiate(_enemyData._TresureBox[RandomEnemySet(_enemyData._TresureBox.Count)]);
-            tresurebox[0].transform.position = _tresureBoxTransform.position;
-
-            //BattleManager.Instance.SetData(tresurebox);
-            _turnCount++;
-        }
-        else if (_move == GameManagerMove.Boss)
-        {
-            _afterBoss = true;
             CharacterBase[] boss = new CharacterBase[1];
-            boss[0] = Instantiate(_enemyData.Boss[RandomEnemySet(_enemyData.Boss.Count)]);
-            boss[0].transform.position = _bossTransform.position;
-
-           // BattleManager.Instance.SetData(boss);
-            //ここでバトルマネージャーを呼び出す
+            boss[0] = Instantiate(_enemyData._tresureBox[RandomEnemySet(_enemyData._tresureBox.Count)]);
+            StartCoroutine(AnimationExtension(_animationName, boss));
+            Debug.Log("ボスに行きました");
         }
+       
+    }
+
+    IEnumerator AnimationExtension(string animationName, CharacterBase[] enemydata)
+    {
+        if (_animation.GetCurrentAnimatorStateInfo(0).IsName(animationName))
+        {
+            yield return null;
+        }
+        BattleManager.Instance.BattleStart(_player, enemydata, _cards.Cards);
     }
 
     void OnShop()
@@ -147,25 +165,19 @@ public class GameManager : MonoBehaviour
     void OnGameOver()
     {
         Debug.Log("死 death");
-        //ゲームオーバーのシーンに行くんだったらここに書く
+        SceneManager.LoadScene(_gameOverSceneName);
     }
 
     void OnGameEnd()
     {
+        SceneManager.LoadScene(_gameClearSceneName);
         //ラスボスを倒したあとの処理をここに書く
     }
 
     GameManagerMove RandomSetMap()
     {
-        if (!_boss)
-        {
             int random = Random.Range(0, 2);
             return (GameManagerMove)random;
-        }
-        else
-        {
-            return GameManagerMove.Boss;
-        }
     }
 
     int RandomEnemySet(int max)
@@ -176,6 +188,12 @@ public class GameManager : MonoBehaviour
     public void BattleEnd()
     {
         Debug.Log("バトルが終わりサーチモードになりました");
+        _turnCount++;
+        if (_turnCount > _waveTurnCount)
+        {
+            _phaseCount += 1;
+            _turnCount = 1;
+        }
         State = GameManagerState.Serch;
     }
 
