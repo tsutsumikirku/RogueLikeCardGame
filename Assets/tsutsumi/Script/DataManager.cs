@@ -23,7 +23,7 @@ public class DataManager : MonoBehaviour
     }
     public void Save()
     {
-        CharacterBase _playerdata = GameObject.Find("Player").GetComponent<CharacterBase>();
+        CharacterBase _playerdata = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
         _data.turnCount = GameManager.Instance._turnCount;
         _data.deck = _playerdata._deck;
         _data.hp = _playerdata._hp;
@@ -38,7 +38,7 @@ public class DataManager : MonoBehaviour
         {
             string json = File.ReadAllText(path);
             SaveData save = JsonUtility.FromJson<SaveData>(json);
-            CharacterBase _playerdata = GameObject.Find("Player").GetComponent<CharacterBase>();
+            CharacterBase _playerdata = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
             GameManager.Instance._turnCount = save.turnCount;
             _playerdata._deck = save.deck;
             _playerdata._hp = save.hp;
