@@ -5,16 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class ScenensManager : MonoBehaviour
 {
-    [Tooltip("ボタンにアタッチして読み込みたいシーンの名前を書く")]
-    [SerializeField]string _LoadScene = null;
-    [Tooltip("セーブデータを検索、読み込みつつシーン移動。未実装")]
-    [SerializeField] string _reStart = null;
-
-    public void LordScene()
+    public void LordScene(string _lordScene)
     {
-        SceneManager.LoadScene(_LoadScene);
+        SceneManager.LoadScene(_lordScene);
     }
-    public void ReStart()
+    public void ReStart(string _reStart)
     {
         //続きからボタン
         SceneManager.LoadScene(_reStart);
