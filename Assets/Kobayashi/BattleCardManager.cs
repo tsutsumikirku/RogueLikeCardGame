@@ -12,9 +12,10 @@ public class BattleCardManager : MonoBehaviour
     Transform _desk;
     [SerializeField] BattleCanvasChildData _childData;
     [SerializeField] Text _deckChildCount;
-    List<DragAndDrop> AllDragCard = new List<DragAndDrop>();
+    List<DragAndDrop> _allDragCard = new List<DragAndDrop>();
     public Dictionary<CardBase, CardPos> _playerCards = new Dictionary<CardBase, CardPos>();
     Dictionary<CardPos, Transform> _cardParent = new Dictionary<CardPos, Transform>();
+    int _playerDeckCount;
     private void Awake()
     {
         instance = this;
@@ -22,6 +23,26 @@ public class BattleCardManager : MonoBehaviour
     private void LateUpdate()
     {
         if (_deckChildCount) _deckChildCount.text = _deck.GetComponentsInChildren<DragAndDrop>().Length.ToString();
+        if (BattleManager.Instance._player._deck.Count != _playerDeckCount && GameManager.Instance.State == GameManagerState.Move) 
+        {
+            if (BattleManager.Instance._player._deck.Count < _playerDeckCount)
+            {
+                var list = new List<string>();
+                foreach(var card in _playerCards.Keys)
+                {
+
+                }
+                foreach(var card in BattleManager.Instance._player._deck)
+                {
+                    
+                }
+            }
+            else
+            {
+
+            }
+            _playerDeckCount = BattleManager.Instance._player._deck.Count;
+        }
     }
     public CardBase[] CardCreatSeting(List<CardBase> cards)
     {
@@ -31,6 +52,7 @@ public class BattleCardManager : MonoBehaviour
         _cardParent.Add(CardPos.Deck, _deck.transform);
         _cardParent.Add(CardPos.TrashZone, _trashZone.transform);
         _cardParent.Add(CardPos.Desk, _desk.transform);
+        _playerDeckCount = BattleManager.Instance._player._deck.Count;
         foreach (CardBase obj in cards)
         {
             Debug.Log(obj);
@@ -41,7 +63,7 @@ public class BattleCardManager : MonoBehaviour
             _playerCards.Add(card, CardPos.Deck);
             if (card.TryGetComponent(out DragAndDrop drag))
             {
-                AllDragCard.Add(drag);
+                _allDragCard.Add(drag);
                 drag._isuse = false;
             }
             else Debug.LogError($"ドラッグアンドドロップを持たないカードがあります。{card}");
@@ -50,7 +72,7 @@ public class BattleCardManager : MonoBehaviour
     }
     public void AllCardDragMode(bool mode)
     {
-        AllDragCard.ForEach(card => card._isuse = mode);
+        _allDragCard.ForEach(card => card._isuse = mode);
     }
     public List<CardBase> TrashZoneReset()
     {
@@ -74,7 +96,7 @@ public class BattleCardManager : MonoBehaviour
     }
     public void AddCard(CardBase card, CardPos pos)
     {
-        //_playerCards.Add(card, pos);
+        _playerCards.Add(card, pos);
     }
     public void DestroyCard(CardBase card)
     {

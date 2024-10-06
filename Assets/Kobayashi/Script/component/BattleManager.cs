@@ -13,6 +13,7 @@ public class BattleManager : MonoBehaviour
     public static BattleManager Instance;
     [SerializeField] int _firstDraw;
     [SerializeField] BattleCanvasChildData _battleCanvasPrefabChildData;
+    BattleCanvasChildData _canvas;
     [SerializeField] GameObject _resultPanel;
     [SerializeField] GameObject _stateEndButton;
     [SerializeField] Vector2 _stateEndButtonAnchor;
@@ -39,8 +40,8 @@ public class BattleManager : MonoBehaviour
     //デバッグ用     初期値のテストに使っているためマージの時消して
     [SerializeField] CharacterBase[] _characterBasesTest;
     [SerializeField] CardBaseArray _CardDataScriptablObj;
-    [SerializeField] bool Testmode;
-    [SerializeField] int enemyCount;
+    [SerializeField] bool _testmode;
+    [SerializeField] int _enemyCount;
 
     Trun CurrentTurn
     {
@@ -111,14 +112,14 @@ public class BattleManager : MonoBehaviour
     }
     private void Start()
     {
-        if (Testmode)
+        if (_testmode)
         {
             BattleStart(GameObject.FindWithTag("Player").GetComponent<CharacterBase>(), _characterBasesTest, _CardDataScriptablObj.Cards);
         }
     }
     private void Update()
     {
-        enemyCount=_enemyDictionary.Count;
+        _enemyCount=_enemyDictionary.Count;
     }
     /// <summary>
     /// バトル開始時に呼ぶ関数
@@ -129,8 +130,8 @@ public class BattleManager : MonoBehaviour
     public void BattleStart(CharacterBase player, CharacterBase[] enemyArray, CardBase[] prizeCards)
     {
         //battleUIのcloneと初期設定
-        var canvas = Instantiate(_battleCanvasPrefabChildData);
-        SetData(canvas);
+        _canvas = Instantiate(_battleCanvasPrefabChildData);
+        SetData(_canvas);
         //playerのカードベース取得
         _player = player.gameObject.GetComponent<CharacterBase>();
         gameObject.SetActive(true);//一応
@@ -371,7 +372,8 @@ public class BattleManager : MonoBehaviour
             entry.callback.AddListener((data) =>
             {
                 OnClick(cards[i]);
-                GameManager.Instance.BattleEnd();
+                if(!_testmode)GameManager.Instance.BattleEnd();
+                Destroy(_canvas.gameObject);
             });
 
             // Entry を EventTrigger に追加
@@ -389,9 +391,9 @@ public class BattleManager : MonoBehaviour
     }
     void BattleEnd()
     {
-        Destroy(_battleCanvasPrefabChildData.gameObject);
+        Destroy(_canvas.gameObject);
         gameObject.SetActive(false);
-        GameManager.Instance.BattleEnd();
+        if(!_testmode)GameManager.Instance.BattleEnd();
     }
     public void AddNewEnemy(CharacterBase enemy)
     {

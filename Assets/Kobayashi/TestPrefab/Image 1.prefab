@@ -92,8 +92,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData:
     _cardName: "\u30C6\u30B9\u30C8"
-    _information: "\u8D64\u30D0\u30D5\u7DD1\u30D0\u30D5"
+    _infometion: 
     _price: 1
+  _infometion: 
   _animationName: 
   _choiseTarget:
     rid: 2627666242836103170
