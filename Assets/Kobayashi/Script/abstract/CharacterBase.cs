@@ -22,8 +22,7 @@ public abstract class CharacterBase : MonoBehaviour
     public Buff _characterNowBuff;
     private CharacterBase _attackEnemy;
     CharaBaseState _state;
-    //アタック終了後のアイドル時に呼び出されるアクション
-    public Action _idleMethod; 
+    Action _idleMethod;
 
     private void Start()
     {
@@ -40,8 +39,9 @@ public abstract class CharacterBase : MonoBehaviour
                 break;
         }
     }
-    public void Attack()
+    public void Attack(Action idleMethod)
     {
+        _idleMethod = idleMethod;
         if (_isPlayer && _buff[Buff.OllEnemyAttack] < 1)
         {
             State = CharaBaseState.Select;
