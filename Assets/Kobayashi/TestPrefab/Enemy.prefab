@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8902616820136055389}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49,6 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _attackPattern: 0
   _attackCount: 1
+  _isPlayer: 0
+  _playerAnimationName: 
   _deck:
   - {fileID: -6795246202984372122, guid: 4f9e624822c44e645b5aecbda8223dc7, type: 3}
   - {fileID: -6795246202984372122, guid: 264094150a6b3394bbeeb516a8f6cbf2, type: 3}
@@ -56,8 +58,7 @@ MonoBehaviour:
   _hp: 4.68
   _attackpower: 1
   _characterBuff: 2
-  data: {fileID: 0}
-  num: 0
+  _characterNowBuff: 0
 --- !u!222 &6611721373700173615
 CanvasRenderer:
   m_ObjectHideFlags: 0

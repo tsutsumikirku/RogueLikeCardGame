@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class DeckCheck : MonoBehaviour
@@ -21,6 +18,7 @@ public class DeckCheck : MonoBehaviour
     int count = 0;
     Canvas _canvas;
     GameObject _button;
+    public UnityEvent _buttonEvent;
 
     private void Start()
     {
@@ -60,7 +58,11 @@ public class DeckCheck : MonoBehaviour
         }
         _button = Instantiate(_buttonPrefab, _buttonOfset.position, Quaternion.identity);
         _button.transform.SetParent(_canvas.transform);
-        _button.GetComponent<Button>().onClick.AddListener(DeckClean);
+        _button.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            DeckClean();
+            _buttonEvent.Invoke();
+        });
     }
 
     public void DeckClean()
