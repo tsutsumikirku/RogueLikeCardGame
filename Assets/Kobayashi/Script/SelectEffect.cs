@@ -8,6 +8,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public class SelectEffect : MonoBehaviour
 {
+    public static SelectEffect Instance;
     [SerializeField] float _changeColorBrightness;
     Color _changeColor;
     List<Image> _images = new List<Image>();
@@ -15,6 +16,13 @@ public class SelectEffect : MonoBehaviour
     List<Text> _text = new List<Text>();
     bool _colorChanged;
     Coroutine _coroutine;
+    private void Awake()
+    {
+        if(Instance == null)
+            Instance = this;
+        else 
+            Destroy(gameObject);
+    }
     public void SelectModeStart()
     {
         _renderer = FindObjectsOfType<SpriteRenderer>().ToList();

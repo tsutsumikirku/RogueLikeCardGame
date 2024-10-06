@@ -8,7 +8,7 @@ public class EnemyAttack : IUseEffect
 
     public void Effect(CharacterBase useCharacter, CharacterBase target)
     {
-        useCharacter.Attack(target);
+        useCharacter.Attack();
     }
 
     public T GetEffectClass<T>() where T : IUseEffect
