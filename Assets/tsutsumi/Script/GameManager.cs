@@ -16,11 +16,11 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    //[SerializeField, Tooltip("探索画面がスタートしたときにやること")] UnityEvent _serchStart;
-    //[SerializeField, Tooltip("移動のときにやること")] UnityEvent _moveStart;
-    //[SerializeField, Tooltip("ショップ画面に行くときにやること")] UnityEvent _shopStart;
-    //[SerializeField, Tooltip("デッキ画面に行くときにやること")] UnityEvent _deckStart;
-    //[SerializeField, Tooltip("操作説明画面に行くときにやること")] UnityEvent _userManualStart;
+    [SerializeField, Tooltip("探索画面がスタートしたときにやること")] UnityEvent _serchStart;
+    [SerializeField, Tooltip("移動のときにやること")] UnityEvent _moveStart;
+    [SerializeField, Tooltip("ショップ画面に行くときにやること")] UnityEvent _shopStart;
+    [SerializeField, Tooltip("デッキ画面に行くときにやること")] UnityEvent _deckStart;
+    [SerializeField, Tooltip("操作説明画面に行くときにやること")] UnityEvent _userManualStart;
     [SerializeField, Tooltip("敵キャラクターの位置を敵の最大値の想定された形で配置してください")] Transform[] _enemyTransform;
     [SerializeField, Tooltip("宝箱の位置を指定してください")] Transform _tresureBoxTransform;
     [SerializeField, Tooltip("ボスの位置を指定してください")] Transform _bossTransform;
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] string _gameOverSceneName;
     [SerializeField] string _gameClearSceneName;
     [SerializeField] Text _text;
-    [SerializeField]Animator _animation;
+    [SerializeField] Animator _animation;
     CharacterBase _player;
     public int _turnCount = 1;
     public int _phaseCount = 1;
@@ -96,21 +96,20 @@ public class GameManager : MonoBehaviour
 
     void OnSerch()
     {
-        //battle終了後、待機状態になった時に呼ばれる
-        Store.Instance.SetPrizeCard(_cards);
+        _serchStart.Invoke();
         if (_afterBoss)
         {
             State = GameManagerState.GameEnd;
         }
     }
 
-    void OnMove()//バトル開始のものを書く
+    void OnMove()
     {
         if (!_player)
         {
             _player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
         }
-
+        _moveStart.Invoke();
         GameManagerMove _move = RandomSetMap();
         if(_phaseCount - 1 < _enemyData._enemies.Count)
         {
@@ -122,6 +121,7 @@ public class GameManager : MonoBehaviour
                 for (int i = 0; i < random; i++)
                 {
                     enemy[i] = Instantiate(_enemyData._enemies[_phaseCount - 1]._character[Random.Range(0, _enemyData._enemies[_phaseCount - 1]._character.Length)]);
+                    enemy[i].transform.position = _enemyTransform[i].position;
                 }
                 //StartCoroutine(AnimationExtension(_animationName, enemy));
                 BattleManager.Instance.BattleStart(_player, enemy, _cards.Cards);
@@ -160,26 +160,28 @@ public class GameManager : MonoBehaviour
 
     void OnShop()
     {
-        Store.Instance.StoreStart();
+        _shopStart.Invoke();
     }
 
     void OnDeck()
     {
+        _deckStart.Invoke();
     }
 
     void OnUserManual()
     {
+        _userManualStart.Invoke();
     }
 
     void OnGameOver()
     {
         Debug.Log("死 death");
-        SceneManager.LoadScene(_gameOverSceneName);
+        ResultScript.LoadResultScene(_gameOverSceneName, false);
     }
 
     void OnGameEnd()
     {
-        SceneManager.LoadScene(_gameClearSceneName);
+        ResultScript.LoadResultScene(_gameClearSceneName, true);
         //ラスボスを倒したあとの処理をここに書く
     }
 
