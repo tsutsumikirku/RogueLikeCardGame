@@ -10,8 +10,6 @@ public abstract class CharacterBase : MonoBehaviour
     [HideInInspector] public AttackPattern _attackPattern = AttackPattern.Single;
     [HideInInspector] public int _attackCount = 1;
     [SerializeField, Tooltip("プレイヤーの場合true、敵の場合はfalse")] bool _isPlayer;
-    [SerializeField] string _playerAnimationName;
-    [SerializeField] SelectEffect _selectEffect;
     public List<CardBase> _deck;
     public string _name;
     public float _hp;
@@ -23,8 +21,7 @@ public abstract class CharacterBase : MonoBehaviour
     public Buff _characterNowBuff;
     private CharacterBase _attackEnemy;
     CharaBaseState _state;
-    //アタック終了後のアイドル時に呼び出されるアクション
-    public Action _idleMethod; 
+    Action _idleMethod;
 
     private void Start()
     {
@@ -41,8 +38,9 @@ public abstract class CharacterBase : MonoBehaviour
                 break;
         }
     }
-    public void Attack()
+    public void Attack(Action idleMethod)
     {
+        _idleMethod = idleMethod;
         if (_isPlayer && _buff[Buff.OllEnemyAttack] < 1)
         {
             State = CharaBaseState.Select;
@@ -92,6 +90,7 @@ public abstract class CharacterBase : MonoBehaviour
     void OnIdle()
     {
         _idleMethod();
+        _attackEnemy = null;
         _buff[Buff.NowRed] = 0;
         _buff[Buff.NowGreen] = 0;
         _buff[Buff.NowBlue] = 0;
@@ -100,13 +99,13 @@ public abstract class CharacterBase : MonoBehaviour
     }
     void OnSelect()
     {
-        _selectEffect.SelectModeStart();
+        SelectEffect.Instance.SelectModeStart();
     }
     void OnAttack()
     {
         if (_isPlayer)
         {
-            _selectEffect.SelectModeEnd();
+            SelectEffect.Instance.SelectModeEnd();
             if (_buff[Buff.OllEnemyAttack] >= 1)
             {
                 EnemyBase[] atkEnemy = GameObject.FindObjectsOfType<EnemyBase>();
@@ -120,6 +119,10 @@ public abstract class CharacterBase : MonoBehaviour
                     {
                         atkEnemy[i]._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[atkEnemy[i]._characterBuff]) * (_buff[atkEnemy[i]._characterNowBuff] + 1);
                     }
+                    if (atkEnemy[i]._hp <= 0)
+                    {
+                        Destroy(atkEnemy[i]);
+                    }
                 }
             }
             else
@@ -132,13 +135,21 @@ public abstract class CharacterBase : MonoBehaviour
                 {
                     _attackEnemy._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[_attackEnemy._characterBuff]) * (_buff[_attackEnemy._characterNowBuff] + 1);
                 }
+                if(_attackEnemy._hp <= 0)
+                {
+                    Destroy(_attackEnemy);
+                }
             }
             State = CharaBaseState.Idle;
         }
         else
         {
-            CharacterBase player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
-            player._hp -= _attackpower * (1 - _buff[Buff.Debuff]);
+            _attackEnemy = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
+            _attackEnemy._hp -= _attackpower * (1 - _buff[Buff.Debuff]);
+            if(_attackEnemy._hp <= 0)
+            {
+                Destroy(_attackEnemy);
+            }
             State = CharaBaseState.Idle;
         }
         
@@ -168,11 +179,6 @@ public abstract class CharacterBase : MonoBehaviour
     public void SelectButton()
     {
         State = CharaBaseState.Attack;
-    }
-    IEnumerator AnimationExtension(string animationName)
-    {
-        
-        yield return null;
     }
 }
 public enum AttackPattern
