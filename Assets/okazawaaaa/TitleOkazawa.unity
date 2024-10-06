@@ -171,9 +171,14 @@ MonoBehaviour:
   _bossTransform: {fileID: 0}
   _waveTurnCount: 0
   _enemyData: {fileID: 0}
-  _battleManager: {fileID: 0}
-  _bossTurn: 0
-  _turnCount: 0
+  _cards: {fileID: 0}
+  _animationName: 
+  _gameOverSceneName: 
+  _gameClearSceneName: 
+  _text: {fileID: 0}
+  _animation: {fileID: 0}
+  _turnCount: 1
+  _phaseCount: 1
 --- !u!4 &294137778
 Transform:
   m_ObjectHideFlags: 0
@@ -181,6 +186,56 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 294137776}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.35264075, y: -0.582314, z: -0.022311017}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &355895933
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 355895935}
+  - component: {fileID: 355895934}
+  m_Layer: 0
+  m_Name: DataMana
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &355895934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355895933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d838b783b3cb9a45a68ed71df0bac8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data:
+    turnCount: 0
+    phaseCount: 0
+    deck: []
+    hp: 0
+  _bustedEnemy: 0
+--- !u!4 &355895935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355895933}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.35264075, y: -0.582314, z: -0.022311017}
@@ -201,8 +256,6 @@ GameObject:
   - component: {fileID: 428791983}
   - component: {fileID: 428791982}
   - component: {fileID: 428791981}
-  - component: {fileID: 428791984}
-  - component: {fileID: 428791985}
   m_Layer: 5
   m_Name: StartBotton
   m_TagString: Untagged
@@ -274,16 +327,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 428791984}
+      - m_Target: {fileID: 823253656}
         m_TargetAssemblyTypeName: ScenensManager, Assembly-CSharp
         m_MethodName: LordScene
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: GameOkazawa
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &428791982
@@ -324,37 +377,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 428791979}
   m_CullTransparentMesh: 1
---- !u!114 &428791984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 428791979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dadef7a1f01bf43489455aff3b1708df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _LoadScene: GameOkazawa
-  _reStart: 
---- !u!114 &428791985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 428791979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d838b783b3cb9a45a68ed71df0bac8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _data:
-    turnCount: 0
-    deck: []
-    hp: 0
-  _bustedEnemy: 0
 --- !u!1 &599282676
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,7 +536,6 @@ GameObject:
   - component: {fileID: 810634174}
   - component: {fileID: 810634173}
   - component: {fileID: 810634172}
-  - component: {fileID: 810634176}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -606,41 +627,50 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &810634176
+--- !u!1 &823253655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 823253657}
+  - component: {fileID: 823253656}
+  m_Layer: 0
+  m_Name: SceneMana
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &823253656
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810634171}
+  m_GameObject: {fileID: 823253655}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81c0eba920e02bd45869674550af3358, type: 3}
+  m_Script: {fileID: 11500000, guid: dadef7a1f01bf43489455aff3b1708df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _serchStart:
-    m_PersistentCalls:
-      m_Calls: []
-  _moveStart:
-    m_PersistentCalls:
-      m_Calls: []
-  _shopStart:
-    m_PersistentCalls:
-      m_Calls: []
-  _deckStart:
-    m_PersistentCalls:
-      m_Calls: []
-  _userManualStart:
-    m_PersistentCalls:
-      m_Calls: []
-  _enemyTransform: []
-  _tresureBoxTransform: {fileID: 0}
-  _bossTransform: {fileID: 0}
-  _waveTurnCount: 0
-  _enemyData: {fileID: 0}
-  _battleManager: {fileID: 0}
-  _bossTurn: 0
-  _turnCount: 0
+--- !u!4 &823253657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 823253655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.35264075, y: -0.582314, z: -0.022311017}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1172741895
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,8 +683,6 @@ GameObject:
   - component: {fileID: 1172741899}
   - component: {fileID: 1172741898}
   - component: {fileID: 1172741897}
-  - component: {fileID: 1172741900}
-  - component: {fileID: 1172741901}
   m_Layer: 5
   m_Name: ReStartBotton
   m_TagString: Untagged
@@ -726,7 +754,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1172741901}
+      - m_Target: {fileID: 355895934}
         m_TargetAssemblyTypeName: DataManager, Assembly-CSharp
         m_MethodName: Load
         m_Mode: 1
@@ -738,16 +766,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1172741900}
+      - m_Target: {fileID: 823253656}
         m_TargetAssemblyTypeName: ScenensManager, Assembly-CSharp
         m_MethodName: ReStart
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: SaveOkazawa
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1172741898
@@ -788,37 +816,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1172741895}
   m_CullTransparentMesh: 1
---- !u!114 &1172741900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172741895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dadef7a1f01bf43489455aff3b1708df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _LoadScene: 
-  _reStart: SaveOkazawa
---- !u!114 &1172741901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1172741895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d838b783b3cb9a45a68ed71df0bac8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _data:
-    turnCount: 0
-    deck: []
-    hp: 0
-  _bustedEnemy: 0
 --- !u!1 &1448761496
 GameObject:
   m_ObjectHideFlags: 0
@@ -911,7 +908,7 @@ GameObject:
   - component: {fileID: 1905307898}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1104,3 +1101,5 @@ SceneRoots:
   - {fileID: 697951286}
   - {fileID: 294137778}
   - {fileID: 1905307900}
+  - {fileID: 823253657}
+  - {fileID: 355895935}
