@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class ResultSprict : MonoBehaviour
+public class ResultScript : MonoBehaviour
 {
     public static bool _isVictory;
     [SerializeField] string _resultSceneName;
