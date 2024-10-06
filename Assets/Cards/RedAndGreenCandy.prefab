@@ -98,7 +98,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
       propertyPath: cardData._cardName
-      value: "\u8D64+\u7DD1\u306E\u98F4"
+      value: "\u30C1\u30A7\u30EA\u30FC\u30AD\u30E3\u30F3\u30C7\u30A3\u30FC"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
+      propertyPath: cardData._infometion
+      value: "\u8D64\u3068\u7DD1\u306E\u98F4\u7389\u3001\u4ECA\u56DE\u306E\u6226\u95D8\u4E2D\u8D64\u5C5E\u6027\u3068\u7DD1\u5C5E\u6027\u653B\u6483\u529B\u304C"
       objectReference: {fileID: 0}
     - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
       propertyPath: cardData._information
@@ -118,15 +122,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
       propertyPath: _cardEffect.Array.data[1]
-      value: 2627666349599752200
+      value: 1958524982994141192
+      objectReference: {fileID: 0}
+    - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
+      propertyPath: managedReferences[1958524982994141191]
+      value: Assembly-CSharp BuffCard
+      objectReference: {fileID: 0}
+    - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
+      propertyPath: managedReferences[1958524982994141192]
+      value: Assembly-CSharp BuffCard
       objectReference: {fileID: 0}
     - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
       propertyPath: managedReferences[2627666349599752201]
       value: Assembly-CSharp BuffCard
       objectReference: {fileID: 0}
     - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
+      propertyPath: managedReferences[1958524982994141191]._buff
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
+      propertyPath: managedReferences[1958524982994141192]._buff
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
       propertyPath: managedReferences[2627666349599752201]._buff
-      value: 1
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
+      propertyPath: managedReferences[1958524982994141191]._stats
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
+      propertyPath: managedReferences[1958524982994141192]._stats
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7766400195308646522, guid: 0387877edb7dd054cb632e41a319829e, type: 3}
       propertyPath: managedReferences[2627666349599752201]._stats
