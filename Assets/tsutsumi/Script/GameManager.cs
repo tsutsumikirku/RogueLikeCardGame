@@ -31,8 +31,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] string _gameOverSceneName;
     [SerializeField] string _gameClearSceneName;
     [SerializeField] Text _text;
-    [SerializeField]Animator _animation;
-    CharacterBase _player;
+    [SerializeField] Animator _animation;
+    [SerializeField]CharacterBase _player;
     public int _turnCount = 1;
     public int _phaseCount = 1;
     public static GameManager Instance;
@@ -44,13 +44,26 @@ public class GameManager : MonoBehaviour
         if (!Instance)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-        _animation = GetComponent<Animator>();
+    }
+    private void Start()
+    {
+        if (DataManager._instance._load)
+        {
+            _turnCount = DataManager._instance._data.turnCount;
+            _phaseCount = DataManager._instance._data.phaseCount;
+            _player._deck = DataManager._instance._data.deck;
+            _player._hp = DataManager._instance._data.hp;
+            DataManager._instance._load = false;
+        }
+    }
+    void OnDisable()
+    {
+        Instance = null;
     }
 
     public GameManagerState State
@@ -96,6 +109,7 @@ public class GameManager : MonoBehaviour
 
     void OnSerch()
     {
+        DataManager._instance.Save();
         _serchStart.Invoke();
         if (_afterBoss)
         {
@@ -121,6 +135,7 @@ public class GameManager : MonoBehaviour
                 for (int i = 0; i < random; i++)
                 {
                     enemy[i] = Instantiate(_enemyData._enemies[_phaseCount - 1]._character[Random.Range(0, _enemyData._enemies[_phaseCount - 1]._character.Length)]);
+                    enemy[i].transform.position = _enemyTransform[i].position;
                 }
                 //StartCoroutine(AnimationExtension(_animationName, enemy));
                 BattleManager.Instance.BattleStart(_player, enemy, _cards.Cards);
@@ -175,12 +190,12 @@ public class GameManager : MonoBehaviour
     void OnGameOver()
     {
         Debug.Log("Ž€ death");
-        SceneManager.LoadScene(_gameOverSceneName);
+        ResultScript.LoadResultScene(_gameOverSceneName, false);
     }
 
     void OnGameEnd()
     {
-        SceneManager.LoadScene(_gameClearSceneName);
+        ResultScript.LoadResultScene(_gameClearSceneName, true);
         //ƒ‰ƒXƒ{ƒX‚ð“|‚µ‚½‚ ‚Æ‚Ìˆ—‚ð‚±‚±‚É‘‚­
     }
 

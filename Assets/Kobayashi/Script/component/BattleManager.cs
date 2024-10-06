@@ -82,13 +82,13 @@ public class BattleManager : MonoBehaviour
                 CardUse();
                 //ボタンで次のstateに
                 break;
-            case Trun.PlayerAttackTargetSelection:
+            case Trun.PlayerAttackTargetSelection://このstateは現在使われておりません
                 Debug.Log("敵を選べ");
                 //ボタンで次のstateに
                 StartCoroutine(PlayerAttackTargetSelection());
                 break;
             case Trun.PlayerAttack:
-                StartCoroutine(PlayerAttack(_playerAttackTarget));
+                StartCoroutine(PlayerAttack());//_playerAttackTarget));
                 break;
             case Trun.EnemyAttack:
                 StartCoroutine(EnemyAttack());
@@ -119,7 +119,7 @@ public class BattleManager : MonoBehaviour
     }
     private void Update()
     {
-        _enemyCount=_enemyDictionary.Count;
+        _enemyCount = _enemyDictionary.Count;
     }
     /// <summary>
     /// バトル開始時に呼ぶ関数
@@ -160,8 +160,8 @@ public class BattleManager : MonoBehaviour
             _handCard = canvas._handCard;
             _cardManager = canvas._cardManager;
             _resultCanvas = canvas.transform;
-            _enemyAnchor =new List<RectTransform>(canvas._enemysAnchor);
-            _maxEnemy=canvas._enemysAnchor.Count;
+            _enemyAnchor = new List<RectTransform>(canvas._enemysAnchor);
+            _maxEnemy = canvas._enemysAnchor.Count;
         }
     }
     void StartEffect()
@@ -229,7 +229,7 @@ public class BattleManager : MonoBehaviour
                 count++;
                 actions[count]();
             }))));
-        actions.Add(() => NextTrun(Trun.PlayerAttackTargetSelection, .5f));
+        actions.Add(() => NextTrun(Trun.PlayerAttack, .5f));
         actions[count]();
     }
     IEnumerator CallBack(Action action, Action endAction, Func<bool> endIf)
@@ -247,7 +247,7 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(timar);
         EndAction();
     }
-    IEnumerator PlayerAttackTargetSelection()
+    IEnumerator PlayerAttackTargetSelection()//現在使っていない関数
     {
         _selectEffect.SelectModeStart();
         while (true)
@@ -267,25 +267,25 @@ public class BattleManager : MonoBehaviour
 
         NextTrun(Trun.PlayerAttack, 1);
     }
-    IEnumerator PlayerAttack(List<CharacterBase> enemys)
+    IEnumerator PlayerAttack()//List<CharacterBase> enemys)
     {
-        foreach (var enemy in enemys)
+        Debug.Log("playerの攻撃");
+        _player.Attack();
+        if (_player.TryGetComponent(out Animator animator))
         {
-            Debug.Log("playerの攻撃");
-            _player.Attack(enemy);
-            if (_player.TryGetComponent(out Animator animator))
-            {
-                yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
-            }
+            yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
+        }
+        foreach (var enemy in _enemyDictionary.Keys)
+        {
             if (enemy._hp <= 0)
             {
                 _enemyDictionary.Remove(enemy);
                 Debug.Log(enemy + "を倒した");
-                if (_enemyDictionary.Count == 0)
-                {
-                    Victory();
-                    yield break;
-                }
+            }
+            if (_enemyDictionary.Count == 0)
+            {
+                Victory();
+                yield break;
             }
         }
         _playerAttackTarget.Clear();
@@ -298,7 +298,7 @@ public class BattleManager : MonoBehaviour
         int count = 0;
         var endActions = false;
         //foreach内で配列の要素が増える可能性があるためコピーをとる
-        var enemyList=new List<CharacterBase>(_enemyDictionary.Keys);
+        var enemyList = new List<CharacterBase>(_enemyDictionary.Keys);
         Debug.Log("敵の攻撃");
         foreach (var enemy in enemyList)
         {
@@ -372,7 +372,7 @@ public class BattleManager : MonoBehaviour
             entry.callback.AddListener((data) =>
             {
                 OnClick(cards[i]);
-                if(!_testmode)GameManager.Instance.BattleEnd();
+                if (!_testmode) GameManager.Instance.BattleEnd();
                 Destroy(_canvas.gameObject);
             });
 
@@ -391,9 +391,10 @@ public class BattleManager : MonoBehaviour
     }
     void BattleEnd()
     {
+        _player.BuffReset();
         Destroy(_canvas.gameObject);
         gameObject.SetActive(false);
-        if(!_testmode)GameManager.Instance.BattleEnd();
+        if (!_testmode) GameManager.Instance.BattleEnd();
     }
     public void AddNewEnemy(CharacterBase enemy)
     {
@@ -402,7 +403,7 @@ public class BattleManager : MonoBehaviour
             Debug.Log("絵ねmy－を追加しました");
             Vector2 anchorPoint = Camera.main.ScreenToWorldPoint(_enemyAnchor[_enemyDictionary.Count].transform.position);
             Debug.Log(anchorPoint);
-            var enemyObj = Instantiate(enemy, anchorPoint,Quaternion.identity);
+            var enemyObj = Instantiate(enemy, anchorPoint, Quaternion.identity);
             _enemyDictionary.Add(enemyObj, new Queue<CardBase>(ShuffleList(enemyObj._deck.ToList())));
         }
         else Debug.Log("エネミーを追加していません");

@@ -128,7 +128,8 @@ PrefabInstance:
       propertyPath: managedReferences[2627666349599752200]._stats
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -3,7 +3,11 @@ guid: 8b2a15cd07a245d498bdb054a25f0c61
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _tablePrefab: {fileID: 6649118655322871240, guid: a18079fe5d13ecd4cbc7cae9c756a3b4, type: 3}
+  - _storeCanvasPrefab: {fileID: 8657618895082672667, guid: 0501e57268b4baa49ba9ac7865b3dc8c, type: 3}
+  - _storeCanvas: {instanceID: 0}
+  - _cardArray: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

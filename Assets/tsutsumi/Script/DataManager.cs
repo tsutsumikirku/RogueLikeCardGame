@@ -8,7 +8,7 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager _instance = null;
     public SaveData _data;
-    public int _bustedEnemy;
+    public  bool _load = false;
     private void Awake()
     {
         if (!_instance)
@@ -34,16 +34,13 @@ public class DataManager : MonoBehaviour
     }
     public void Load()
     {
+        _load = true;
         string path = Application.persistentDataPath + "/saveData.json";
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
             SaveData save = JsonUtility.FromJson<SaveData>(json);
             CharacterBase _playerdata = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
-            GameManager.Instance._turnCount = save.turnCount;
-            GameManager.Instance._phaseCount = save.phaseCount;
-            _playerdata._deck = save.deck;
-            _playerdata._hp = save.hp;
             return;
         }
             Debug.LogWarning("ƒZ[ƒu‚ª‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
