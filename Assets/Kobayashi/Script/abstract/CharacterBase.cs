@@ -24,7 +24,7 @@ public abstract class CharacterBase : MonoBehaviour
     private CharacterBase _attackEnemy;
     CharaBaseState _state;
     //アタック終了後のアイドル時に呼び出されるアクション
-    Action _idleMethod; 
+    public Action _idleMethod; 
 
     private void Start()
     {
