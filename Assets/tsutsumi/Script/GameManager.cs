@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] string _gameOverSceneName;
     [SerializeField] string _gameClearSceneName;
     [SerializeField] Text _text;
-    Animator _animation;
+    [SerializeField]Animator _animation;
     
     public int _turnCount = 1;
     int _phaseCount = 1;
@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
         if (FindObjectOfType<GameManager>() != null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -119,7 +120,7 @@ public class GameManager : MonoBehaviour
                     enemy[i] = Instantiate(_enemyData._enemies[_phaseCount - 1]._character[Random.Range(0, _enemyData._enemies[_phaseCount - 1]._character.Length)]);
                 }
                 //StartCoroutine(AnimationExtension(_animationName, enemy));
-                //BattleManager.Instance.BattleStart(_player, enemy, _cards.Cards);
+                BattleManager.Instance.BattleStart(_player, enemy, _cards.Cards);
                 Debug.Log("敵データを送りました");
 
             }
@@ -129,7 +130,7 @@ public class GameManager : MonoBehaviour
                 tresurebox[0] = Instantiate(_enemyData._tresureBox[RandomEnemySet(_enemyData._tresureBox.Count)]);
                 tresurebox[0].transform.position = _tresureBoxTransform.position;
                 //StartCoroutine(AnimationExtension(_animationName, tresurebox));
-                //BattleManager.Instance.BattleStart(_player, tresurebox, _cards.Cards);
+                BattleManager.Instance.BattleStart(_player, tresurebox, _cards.Cards);
                 Debug.Log("宝箱に行きました");
             }
         }
@@ -138,7 +139,7 @@ public class GameManager : MonoBehaviour
             CharacterBase[] boss = new CharacterBase[1];
             boss[0] = Instantiate(_enemyData._tresureBox[RandomEnemySet(_enemyData._tresureBox.Count)]);
             //StartCoroutine(AnimationExtension(_animationName, boss));
-            //BattleManager.Instance.BattleStart(_player, boss, _cards.Cards);
+            BattleManager.Instance.BattleStart(_player, boss, _cards.Cards);
             Debug.Log("ボスに行きました");
         }
        
