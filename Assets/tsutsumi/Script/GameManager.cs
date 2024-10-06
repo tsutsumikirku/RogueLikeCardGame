@@ -16,11 +16,11 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField, Tooltip("探索画面がスタートしたときにやること")] UnityEvent _serchStart;
-    [SerializeField, Tooltip("移動のときにやること")] UnityEvent _moveStart;
-    [SerializeField, Tooltip("ショップ画面に行くときにやること")] UnityEvent _shopStart;
-    [SerializeField, Tooltip("デッキ画面に行くときにやること")] UnityEvent _deckStart;
-    [SerializeField, Tooltip("操作説明画面に行くときにやること")] UnityEvent _userManualStart;
+    //[SerializeField, Tooltip("探索画面がスタートしたときにやること")] UnityEvent _serchStart;
+    //[SerializeField, Tooltip("移動のときにやること")] UnityEvent _moveStart;
+    //[SerializeField, Tooltip("ショップ画面に行くときにやること")] UnityEvent _shopStart;
+    //[SerializeField, Tooltip("デッキ画面に行くときにやること")] UnityEvent _deckStart;
+    //[SerializeField, Tooltip("操作説明画面に行くときにやること")] UnityEvent _userManualStart;
     [SerializeField, Tooltip("敵キャラクターの位置を敵の最大値の想定された形で配置してください")] Transform[] _enemyTransform;
     [SerializeField, Tooltip("宝箱の位置を指定してください")] Transform _tresureBoxTransform;
     [SerializeField, Tooltip("ボスの位置を指定してください")] Transform _bossTransform;
@@ -96,20 +96,21 @@ public class GameManager : MonoBehaviour
 
     void OnSerch()
     {
-        _serchStart.Invoke();
+        //battle終了後、待機状態になった時に呼ばれる
+        Store.Instance.SetPrizeCard(_cards);
         if (_afterBoss)
         {
             State = GameManagerState.GameEnd;
         }
     }
 
-    void OnMove()
+    void OnMove()//バトル開始のものを書く
     {
         if (!_player)
         {
             _player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
         }
-        _moveStart.Invoke();
+
         GameManagerMove _move = RandomSetMap();
         if(_phaseCount - 1 < _enemyData._enemies.Count)
         {
@@ -159,17 +160,15 @@ public class GameManager : MonoBehaviour
 
     void OnShop()
     {
-        _shopStart.Invoke();
+        Store.Instance.StoreStart();
     }
 
     void OnDeck()
     {
-        _deckStart.Invoke();
     }
 
     void OnUserManual()
     {
-        _userManualStart.Invoke();
     }
 
     void OnGameOver()

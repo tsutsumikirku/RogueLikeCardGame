@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DeckCheck : MonoBehaviour
 {
@@ -10,12 +12,15 @@ public class DeckCheck : MonoBehaviour
     [SerializeField] Transform _deckState;
     [SerializeField] float _yOffSet;
     [SerializeField] int _deckArrangeLength;
+    [SerializeField] GameObject _buttonPrefab;
+    [SerializeField] RectTransform _buttonOfset;
     [SerializeField] CharacterBase _player;
     [SerializeField] bool _test = false;
     [SerializeField] List<CardBase> _decki;
     List<GameObject> _gameobj = new List<GameObject>();
     int count = 0;
     Canvas _canvas;
+    GameObject _button;
 
     private void Start()
     {
@@ -53,6 +58,9 @@ public class DeckCheck : MonoBehaviour
                 count += 1;
             }
         }
+        _button = Instantiate(_buttonPrefab, _buttonOfset.position, Quaternion.identity);
+        _button.transform.SetParent(_canvas.transform);
+        _button.GetComponent<Button>().onClick.AddListener(DeckClean);
     }
 
     public void DeckClean()
@@ -62,5 +70,6 @@ public class DeckCheck : MonoBehaviour
             Destroy(obj);
         }
         _gameobj.Clear();
+        Destroy(_button);
     }
 }
