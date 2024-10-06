@@ -12,6 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 639f94a7d8c50d54d9a778ef2934badf, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: 
-  Enemies: []
-  _TresureBox: []
-  Boss: []
+  _enemies:
+  - _character:
+    - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
+  - _character:
+    - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
+    - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
+  - _character:
+    - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
+    - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
+    - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
+  _tresureBox: []
+  _boss: []
