@@ -9,6 +9,8 @@ public abstract class CharacterBase : MonoBehaviour
     [HideInInspector] public AttackPattern _attackPattern = AttackPattern.Single;
     [HideInInspector] public int _attackCount = 1;
     [SerializeField, Tooltip("プレイヤーの場合true、敵の場合はfalse")] bool _isPlayer;
+    [SerializeField] string _playerAnimationName;
+    [SerializeField] SelectEffect _selectEffect;
     public List<CardBase> _deck;
     public string _name;
     public float _hp;
@@ -16,10 +18,26 @@ public abstract class CharacterBase : MonoBehaviour
     public Dictionary<Buff, float> _buff = new Dictionary<Buff, float>() { {Buff.Red,0},{Buff.Green,0},{ Buff.Blue, 0 },
                                             {Buff.NowRed, 0},{Buff.NowGreen,0},{Buff.NowBlue,0},{Buff.OllEnemyAttack,0},{Buff.OllElementAttack,0},
                                             {Buff.Debuff,0}};
-    public Buff _characterBuff;//キャラクターの属性値メインプレイヤーの属性はNoneの想定です
+    public Buff _characterBuff;//キャラクターの属性値メインプレイヤーの属性はNoneの想定です 
+    public Buff _characterNowBuff;
     private CharacterBase _attackEnemy;
     CharaBaseState _state;
 
+    private void Start()
+    {
+        switch (_characterBuff)
+        {
+            case Buff.Red:
+            _characterNowBuff = Buff.NowRed;
+                break;
+            case Buff.Green:
+            _characterNowBuff = Buff.NowGreen;
+                break;
+            case Buff.Blue:
+            _characterNowBuff = Buff.NowBlue;
+                break;
+        }
+    }
     public void Attack(CharacterBase enemy)
     {
         if (_isPlayer && _buff[Buff.OllEnemyAttack] < 1)
@@ -33,7 +51,7 @@ public abstract class CharacterBase : MonoBehaviour
     }
     public void AddBuffDictionary(Buff key, float value)
     {
-
+        _buff[key] += value;
     }
     public void BuffReset()
     {
@@ -78,19 +96,38 @@ public abstract class CharacterBase : MonoBehaviour
     }
     void OnSelect()
     {
-        
+        _selectEffect.SelectModeStart();
     }
     void OnAttack()
     {
+        _selectEffect.SelectModeEnd();
         if (_buff[Buff.OllEnemyAttack] >= 1)
         {
             EnemyBase[] atkEnemy = GameObject.FindObjectsOfType<EnemyBase>();
             for(int i = 0; i < atkEnemy.Length; i++)
             {
-                
+                if (_buff[Buff.OllElementAttack] >= 1)
+                {
+                    atkEnemy[i]._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[Buff.Red] + _buff[Buff.Green] + _buff[Buff.Blue]) * (_buff[Buff.NowRed] + _buff[Buff.NowGreen] + _buff[Buff.NowBlue] + 1);
+                }
+                else
+                {
+                    atkEnemy[i]._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[atkEnemy[i]._characterBuff]) * (_buff[atkEnemy[i]._characterNowBuff] + 1);
+                }
             }
         }
-        
+        else
+        {
+            if (_buff[Buff.OllElementAttack] >= 1)
+            {
+                _attackEnemy._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[Buff.Red] + _buff[Buff.Green] + _buff[Buff.Blue]) * (_buff[Buff.NowRed] + _buff[Buff.NowGreen] + _buff[Buff.NowBlue] + 1);
+            }
+            else
+            {
+                _attackEnemy._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[_attackEnemy._characterBuff]) * (_buff[_attackEnemy._characterNowBuff] + 1);
+            }
+        }
+        State = CharaBaseState.Idle;
     }
     public void LateUpdate()
     {
@@ -101,12 +138,13 @@ public abstract class CharacterBase : MonoBehaviour
     }
     void RayCast()
     {
-        Camera camera = GameObject.Find("MainCamera").GetComponent<Camera>();
+        Camera camera = Camera.main;
         Vector2 mousePosition = camera.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero, 10f);
-        if (hit.collider != null && hit.collider.tag == "enemy")
+        RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+        if (hit.collider != null && hit.collider.tag == "Enemy")
         {
             _attackEnemy = hit.collider.GetComponent<CharacterBase>();
+            State = CharaBaseState.Attack;
         }
         else
         {
@@ -117,7 +155,7 @@ public abstract class CharacterBase : MonoBehaviour
     {
         State = CharaBaseState.Attack;
     }
-    IEnumerator AnimationExtension()
+    IEnumerator AnimationExtension(string animationName)
     {
         
         yield return null;
