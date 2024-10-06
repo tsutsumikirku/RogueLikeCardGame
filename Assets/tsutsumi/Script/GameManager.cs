@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     bool _afterBoss = false;
     private void Awake()
     {
-        if (FindObjectOfType<GameManager>() != null)
+        if (!Instance)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
