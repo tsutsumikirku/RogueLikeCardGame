@@ -49,6 +49,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    private void Start()
+    {
         if (DataManager._instance._load)
         {
             _turnCount = DataManager._instance._data.turnCount;
