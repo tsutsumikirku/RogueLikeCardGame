@@ -14,7 +14,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] int _firstDraw;
     [SerializeField] BattleCanvasChildData _battleCanvasPrefabChildData;
     BattleCanvasChildData _canvas;
-    [SerializeField] GameObject _resultPanel;
+    [SerializeField] GameObject _resultTable;
     [SerializeField] GameObject _stateEndButton;
     [SerializeField] Vector2 _stateEndButtonAnchor;
     [SerializeField] public SelectEffect _selectEffect;
@@ -270,27 +270,29 @@ public class BattleManager : MonoBehaviour
     IEnumerator PlayerAttack()//List<CharacterBase> enemys)
     {
         Debug.Log("playerの攻撃");
-        _player.Attack();
+        _player.Attack(() =>
+        {
+            foreach (var enemy in new List<CharacterBase>(_enemyDictionary.Keys))
+            {
+                if (enemy._hp <= 0)
+                {
+                    _enemyDictionary.Remove(enemy);
+                    Debug.Log(enemy + "を倒した");
+                }
+                if (_enemyDictionary.Count == 0)
+                {
+                    Victory();
+                    break;
+                }
+            }
+            if (_enemyDictionary.Count != 0) NextTrun(Trun.EnemyAttack, 0);
+            _playerAttackTarget.Clear();
+        });
         if (_player.TryGetComponent(out Animator animator))
         {
             yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
         }
-        foreach (var enemy in _enemyDictionary.Keys)
-        {
-            if (enemy._hp <= 0)
-            {
-                _enemyDictionary.Remove(enemy);
-                Debug.Log(enemy + "を倒した");
-            }
-            if (_enemyDictionary.Count == 0)
-            {
-                Victory();
-                yield break;
-            }
-        }
-        _playerAttackTarget.Clear();
-        if (_doubleAttack) NextTrun(Trun.EndTrun, 1);
-        NextTrun(Trun.EnemyAttack, 0);
+        //if (_doubleAttack) NextTrun(Trun.EndTrun, 1);
     }
     IEnumerator EnemyAttack()
     {
@@ -343,6 +345,7 @@ public class BattleManager : MonoBehaviour
     void Defeat()
     {
         Debug.Log("defeat");
+        ResultScript.LoadResultScene(false);
         Invoke(nameof(BattleEnd), 1);
     }
     void Result(int count)//
@@ -350,11 +353,12 @@ public class BattleManager : MonoBehaviour
         _player.BuffReset();
         Debug.Log("risult");
         var cards = ShuffleList(_praiseCardTable.ToList());//, count);
-        var result = Instantiate(_resultPanel, _resultCanvas.transform);
+        Debug.Log($"{_resultTable} {_resultCanvas.transform}");
+        var result = Instantiate(_resultTable, _resultCanvas.transform);
         for (int i = 0; i < count; i++)
         {
             Debug.Log("カード追加");
-            var obj = Instantiate(cards[i], result.transform.GetChild(0));
+            var obj = Instantiate(cards[i], result.transform);
             // EventTrigger コンポーネントを取得または追加
             EventTrigger trigger = obj.GetComponent<EventTrigger>();
             if (trigger == null)
@@ -382,11 +386,12 @@ public class BattleManager : MonoBehaviour
     }
     void OnClick(CardBase obj)//resultでの報酬選択用のメソッド
     {
-        Debug.Log("clickされた " + obj.name);
         //アニメーション発火、プレイヤーのカードリストに登録、result画面を閉じる予定
-        if (_getReward)
+        if (!_getReward)
         {
+        Debug.Log("clickされた " + obj.name);
             _player._deck.Add(obj);
+            _getReward = true;
         }
     }
     void BattleEnd()

@@ -22,6 +22,7 @@ public class SelectEffect : MonoBehaviour
             Instance = this;
         else 
             Destroy(gameObject);
+        Debug.Log(Instance.gameObject);
     }
     public void SelectModeStart()
     {

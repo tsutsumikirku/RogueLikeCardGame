@@ -22,5 +22,6 @@ MonoBehaviour:
     - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
     - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
     - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
-  _tresureBox: []
+  _tresureBox:
+  - {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
   _boss: []
