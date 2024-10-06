@@ -12,6 +12,7 @@ using Random = UnityEngine.Random;
 using UnityEngine.SceneManagement;
 using UnityEditor.Build.Content;
 using UnityEditor.SearchService;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,10 +31,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] string _animationName;
     [SerializeField] string _gameOverSceneName;
     [SerializeField] string _gameClearSceneName;
+    [SerializeField] Text _text;
     Animator _animation;
     
-    public int _turnCount;
-    int _phaseCount;
+    public int _turnCount = 1;
+    int _phaseCount = 1;
     public static GameManager Instance;
     GameManagerState _state;
     bool _boss = false;
@@ -48,6 +50,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        _animation = GetComponent<Animator>();
     }
 
     public GameManagerState State
@@ -104,7 +107,7 @@ public class GameManager : MonoBehaviour
     {
         _moveStart.Invoke();
         GameManagerMove _move = RandomSetMap();
-        if(_phaseCount < _enemyData._enemies.Count)
+        if(_phaseCount - 1 < _enemyData._enemies.Count)
         {
             if (_move == GameManagerMove.Battle)
             {
@@ -113,9 +116,10 @@ public class GameManager : MonoBehaviour
                 CharacterBase[] enemy = new CharacterBase[random];
                 for (int i = 0; i < random; i++)
                 {
-                    enemy[i] = Instantiate(_enemyData._enemies[_phaseCount]._character[Random.Range(0, _enemyData._enemies[_phaseCount]._character.Length)]);
+                    enemy[i] = Instantiate(_enemyData._enemies[_phaseCount - 1]._character[Random.Range(0, _enemyData._enemies[_phaseCount - 1]._character.Length)]);
                 }
-                StartCoroutine(AnimationExtension(_animationName, enemy));
+                //StartCoroutine(AnimationExtension(_animationName, enemy));
+                //BattleManager.Instance.BattleStart(_player, enemy, _cards.Cards);
                 Debug.Log("敵データを送りました");
 
             }
@@ -124,7 +128,8 @@ public class GameManager : MonoBehaviour
                 CharacterBase[] tresurebox = new CharacterBase[1];
                 tresurebox[0] = Instantiate(_enemyData._tresureBox[RandomEnemySet(_enemyData._tresureBox.Count)]);
                 tresurebox[0].transform.position = _tresureBoxTransform.position;
-                StartCoroutine(AnimationExtension(_animationName, tresurebox));
+                //StartCoroutine(AnimationExtension(_animationName, tresurebox));
+                //BattleManager.Instance.BattleStart(_player, tresurebox, _cards.Cards);
                 Debug.Log("宝箱に行きました");
             }
         }
@@ -132,20 +137,21 @@ public class GameManager : MonoBehaviour
         {
             CharacterBase[] boss = new CharacterBase[1];
             boss[0] = Instantiate(_enemyData._tresureBox[RandomEnemySet(_enemyData._tresureBox.Count)]);
-            StartCoroutine(AnimationExtension(_animationName, boss));
+            //StartCoroutine(AnimationExtension(_animationName, boss));
+            //BattleManager.Instance.BattleStart(_player, boss, _cards.Cards);
             Debug.Log("ボスに行きました");
         }
        
     }
 
-    IEnumerator AnimationExtension(string animationName, CharacterBase[] enemydata)
-    {
-        if (_animation.GetCurrentAnimatorStateInfo(0).IsName(animationName))
-        {
-            yield return null;
-        }
-        BattleManager.Instance.BattleStart(_player, enemydata, _cards.Cards);
-    }
+    //IEnumerator AnimationExtension(string animationName, CharacterBase[] enemydata)
+    //{
+    //    if (_animation.GetCurrentAnimatorStateInfo(0).IsName(animationName))
+    //    {
+    //        yield return null;
+    //    }
+    //    BattleManager.Instance.BattleStart(_player, enemydata, _cards.Cards);
+    //}
 
     void OnShop()
     {
@@ -195,6 +201,11 @@ public class GameManager : MonoBehaviour
             _turnCount = 1;
         }
         State = GameManagerState.Serch;
+        _text.text = _turnCount.ToString();
+    }
+    public void ShopEnd()
+    {
+       // if (_state != GameManagerMove.) ;
     }
 
     //ここから下ボタンのための関数許して
