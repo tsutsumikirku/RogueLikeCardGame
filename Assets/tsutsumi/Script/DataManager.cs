@@ -25,6 +25,7 @@ public class DataManager : MonoBehaviour
     {
         CharacterBase _playerdata = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
         _data.turnCount = GameManager.Instance._turnCount;
+        _data.phaseCount = GameManager.Instance._phaseCount;
         _data.deck = _playerdata._deck;
         _data.hp = _playerdata._hp;
         string json = JsonUtility.ToJson(_data);
@@ -40,6 +41,7 @@ public class DataManager : MonoBehaviour
             SaveData save = JsonUtility.FromJson<SaveData>(json);
             CharacterBase _playerdata = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
             GameManager.Instance._turnCount = save.turnCount;
+            GameManager.Instance._phaseCount = save.phaseCount;
             _playerdata._deck = save.deck;
             _playerdata._hp = save.hp;
             return;
@@ -53,6 +55,7 @@ public class DataManager : MonoBehaviour
 public class SaveData
 {
     public int turnCount;
+    public int phaseCount;
     public List<CardBase> deck;
     public float hp;
 }
