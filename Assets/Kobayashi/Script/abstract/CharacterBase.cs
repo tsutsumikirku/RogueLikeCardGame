@@ -11,7 +11,6 @@ public abstract class CharacterBase : MonoBehaviour
     [HideInInspector] public int _attackCount = 1;
     [SerializeField, Tooltip("プレイヤーの場合true、敵の場合はfalse")] bool _isPlayer;
     [SerializeField] string _playerAnimationName;
-    [SerializeField] SelectEffect _selectEffect;
     public List<CardBase> _deck;
     public string _name;
     public float _hp;
@@ -100,13 +99,13 @@ public abstract class CharacterBase : MonoBehaviour
     }
     void OnSelect()
     {
-        _selectEffect.SelectModeStart();
+        SelectEffect.Instance.SelectModeStart();
     }
     void OnAttack()
     {
         if (_isPlayer)
         {
-            _selectEffect.SelectModeEnd();
+            SelectEffect.Instance.SelectModeEnd();
             if (_buff[Buff.OllEnemyAttack] >= 1)
             {
                 EnemyBase[] atkEnemy = GameObject.FindObjectsOfType<EnemyBase>();
