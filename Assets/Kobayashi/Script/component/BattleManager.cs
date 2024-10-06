@@ -327,7 +327,7 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(() => endActions);
         if (_player._hp <= 0)
         {
-            Defeat();
+            Invoke(nameof(Defeat),1);
             yield break;
         }
         NextTrun(Trun.EndTrun, 0);
