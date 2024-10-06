@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] string _gameClearSceneName;
     [SerializeField] Text _text;
     [SerializeField] Animator _animation;
-    CharacterBase _player;
+    [SerializeField]CharacterBase _player;
     public int _turnCount = 1;
     public int _phaseCount = 1;
     public static GameManager Instance;
@@ -44,13 +44,23 @@ public class GameManager : MonoBehaviour
         if (!Instance)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-        _animation = GetComponent<Animator>();
+        if (DataManager._instance._load)
+        {
+            _turnCount = DataManager._instance._data.turnCount;
+            _phaseCount = DataManager._instance._data.phaseCount;
+            _player._deck = DataManager._instance._data.deck;
+            _player._hp = DataManager._instance._data.hp;
+            DataManager._instance._load = false;
+        }
+    }
+    void OnDisable()
+    {
+        Instance = null;
     }
 
     public GameManagerState State
@@ -96,6 +106,7 @@ public class GameManager : MonoBehaviour
 
     void OnSerch()
     {
+        DataManager._instance.Save();
         _serchStart.Invoke();
         if (_afterBoss)
         {
