@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
@@ -17,6 +18,7 @@ public class Store : MonoBehaviour
     [SerializeField] public CardBaseArray _cardArray; //報酬のtable
     [SerializeField] List<CardBase> _prizeCards = new List<CardBase>();//報酬の量//デバック用にシリアライズしてます。
     bool _buyCards;
+    public UnityEvent _buttonEvent;
     //カードがDestroyされたときの挙動用
     //List<Transform> _buyCardsTransform = new List<Transform>();
     //List<Transform> _buyTablesTransform = new List<Transform>();
@@ -47,7 +49,7 @@ public class Store : MonoBehaviour
     public void SetPrizeCard(CardBaseArray cardBaseArray)
     {
         _prizeCards.Clear();
-        List<CardBase> cards=_cardArray.Cards.ToList();
+        List<CardBase> cards= cardBaseArray.Cards.ToList();
         var cardList = ShuffleList(cards);
         Debug.Log($"{cardList.Count} {_prizeCards}");
         for (var i = 0; i < _prizeCardCount; i++)
@@ -147,7 +149,7 @@ public class Store : MonoBehaviour
     //}
     public void StoreEnd()
     {
-        //GameManager.Instance.BattleEnd();
+        _buttonEvent.Invoke();
     }
     public void CreatPlayerDeckCard(Transform parent)
     {
