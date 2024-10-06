@@ -140,7 +140,8 @@ PrefabInstance:
       propertyPath: managedReferences[2395685307190870017]._enemy
       value: 
       objectReference: {fileID: 478507393000164950, guid: 8da5b953a0dc148439af79dfc8c44a83, type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

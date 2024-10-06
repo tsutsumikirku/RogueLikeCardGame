@@ -391,6 +391,7 @@ public class BattleManager : MonoBehaviour
     }
     void BattleEnd()
     {
+        _player.BuffReset();
         Destroy(_canvas.gameObject);
         gameObject.SetActive(false);
         if(!_testmode)GameManager.Instance.BattleEnd();
