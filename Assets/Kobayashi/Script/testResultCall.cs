@@ -6,6 +6,6 @@ public class testResultCall : MonoBehaviour
 {
     public void CallResult(bool isV)
     {
-        ResultSprict.LoadResultScene(isV);
+        ResultScript.LoadResultScene(isV);
     }
 }
