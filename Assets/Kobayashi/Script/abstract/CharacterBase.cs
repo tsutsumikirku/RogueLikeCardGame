@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ public abstract class CharacterBase : MonoBehaviour
     public Buff _characterNowBuff;
     private CharacterBase _attackEnemy;
     CharaBaseState _state;
+    //アタック終了後のアイドル時に呼び出されるアクション
+    Action _idleMethod; 
 
     private void Start()
     {
@@ -38,7 +41,7 @@ public abstract class CharacterBase : MonoBehaviour
                 break;
         }
     }
-    public void Attack(CharacterBase enemy)
+    public void Attack()
     {
         if (_isPlayer && _buff[Buff.OllEnemyAttack] < 1)
         {
@@ -88,6 +91,7 @@ public abstract class CharacterBase : MonoBehaviour
     }
     void OnIdle()
     {
+        _idleMethod();
         _buff[Buff.NowRed] = 0;
         _buff[Buff.NowGreen] = 0;
         _buff[Buff.NowBlue] = 0;
@@ -100,34 +104,44 @@ public abstract class CharacterBase : MonoBehaviour
     }
     void OnAttack()
     {
-        _selectEffect.SelectModeEnd();
-        if (_buff[Buff.OllEnemyAttack] >= 1)
+        if (_isPlayer)
         {
-            EnemyBase[] atkEnemy = GameObject.FindObjectsOfType<EnemyBase>();
-            for(int i = 0; i < atkEnemy.Length; i++)
+            _selectEffect.SelectModeEnd();
+            if (_buff[Buff.OllEnemyAttack] >= 1)
             {
-                if (_buff[Buff.OllElementAttack] >= 1)
+                EnemyBase[] atkEnemy = GameObject.FindObjectsOfType<EnemyBase>();
+                for (int i = 0; i < atkEnemy.Length; i++)
                 {
-                    atkEnemy[i]._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[Buff.Red] + _buff[Buff.Green] + _buff[Buff.Blue]) * (_buff[Buff.NowRed] + _buff[Buff.NowGreen] + _buff[Buff.NowBlue] + 1);
+                    if (_buff[Buff.OllElementAttack] >= 1)
+                    {
+                        atkEnemy[i]._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[Buff.Red] + _buff[Buff.Green] + _buff[Buff.Blue]) * (_buff[Buff.NowRed] + _buff[Buff.NowGreen] + _buff[Buff.NowBlue] + 1);
+                    }
+                    else
+                    {
+                        atkEnemy[i]._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[atkEnemy[i]._characterBuff]) * (_buff[atkEnemy[i]._characterNowBuff] + 1);
+                    }
                 }
-                else
-                {
-                    atkEnemy[i]._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[atkEnemy[i]._characterBuff]) * (_buff[atkEnemy[i]._characterNowBuff] + 1);
-                }
-            }
-        }
-        else
-        {
-            if (_buff[Buff.OllElementAttack] >= 1)
-            {
-                _attackEnemy._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[Buff.Red] + _buff[Buff.Green] + _buff[Buff.Blue]) * (_buff[Buff.NowRed] + _buff[Buff.NowGreen] + _buff[Buff.NowBlue] + 1);
             }
             else
             {
-                _attackEnemy._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[_attackEnemy._characterBuff]) * (_buff[_attackEnemy._characterNowBuff] + 1);
+                if (_buff[Buff.OllElementAttack] >= 1)
+                {
+                    _attackEnemy._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[Buff.Red] + _buff[Buff.Green] + _buff[Buff.Blue]) * (_buff[Buff.NowRed] + _buff[Buff.NowGreen] + _buff[Buff.NowBlue] + 1);
+                }
+                else
+                {
+                    _attackEnemy._hp -= (1 - _buff[Buff.Debuff]) * (_attackpower + _buff[_attackEnemy._characterBuff]) * (_buff[_attackEnemy._characterNowBuff] + 1);
+                }
             }
+            State = CharaBaseState.Idle;
         }
-        State = CharaBaseState.Idle;
+        else
+        {
+            CharacterBase player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
+            player._hp -= _attackpower * (1 - _buff[Buff.Debuff]);
+            State = CharaBaseState.Idle;
+        }
+        
     }
     public void LateUpdate()
     {
