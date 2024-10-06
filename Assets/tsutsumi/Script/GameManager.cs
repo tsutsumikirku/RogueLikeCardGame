@@ -26,16 +26,15 @@ public class GameManager : MonoBehaviour
     [SerializeField, Tooltip("ボスの位置を指定してください")] Transform _bossTransform;
     [SerializeField, Tooltip("一回のウェーブのターン数を指定してください")] int _waveTurnCount;
     [SerializeField] EnemyData _enemyData;
-    [SerializeField, Tooltip("プレイヤーを設定してください")] CharacterBase _player;
     [SerializeField] CardBaseArray _cards;
     [SerializeField] string _animationName;
     [SerializeField] string _gameOverSceneName;
     [SerializeField] string _gameClearSceneName;
     [SerializeField] Text _text;
     [SerializeField]Animator _animation;
-    
+    CharacterBase _player;
     public int _turnCount = 1;
-    int _phaseCount = 1;
+    public int _phaseCount = 1;
     public static GameManager Instance;
     GameManagerState _state;
     bool _boss = false;
@@ -106,6 +105,10 @@ public class GameManager : MonoBehaviour
 
     void OnMove()
     {
+        if (!_player)
+        {
+            _player = GameObject.FindWithTag("Player").GetComponent<CharacterBase>();
+        }
         _moveStart.Invoke();
         GameManagerMove _move = RandomSetMap();
         if(_phaseCount - 1 < _enemyData._enemies.Count)
