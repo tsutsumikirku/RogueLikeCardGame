@@ -151,8 +151,8 @@ MonoBehaviour:
   - {fileID: 3181652288523974033, guid: 9d197dec51335db42b26cb60d1a9cf2b, type: 3}
   - {fileID: 8981320704843589863, guid: 531114bd481fa2640966aa988e28eb92, type: 3}
   _name: 
-  _hp: 6.24
-  _attackpower: 3
+  _hp: -0.06
+  _attackpower: 1.53
   _characterBuff: 0
   _characterNowBuff: 0
 --- !u!1 &143876352
@@ -625,42 +625,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1158724869}
-        m_TargetAssemblyTypeName: GameManagerButtonScript, Assembly-CSharp
-        m_MethodName: CallMove
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1158724869}
-        m_TargetAssemblyTypeName: GameManagerButtonScript, Assembly-CSharp
-        m_MethodName: CallPlayerDack
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1158724869}
-        m_TargetAssemblyTypeName: GameManagerButtonScript, Assembly-CSharp
-        m_MethodName: CallStore
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
   _moveStart:
     m_PersistentCalls:
       m_Calls: []
@@ -694,18 +658,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1158724869}
-        m_TargetAssemblyTypeName: GameManagerButtonScript, Assembly-CSharp
-        m_MethodName: CallSearch
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _userManualStart:
     m_PersistentCalls:
       m_Calls: []
@@ -713,9 +665,9 @@ MonoBehaviour:
   - {fileID: 297725256}
   - {fileID: 229023459}
   - {fileID: 842318382}
-  _tresureBoxTransform: {fileID: 297725256}
-  _bossTransform: {fileID: 297725256}
-  _waveTurnCount: 3
+  _tresureBoxTransform: {fileID: 657557478}
+  _bossTransform: {fileID: 0}
+  _waveTurnCount: 0
   _enemyData: {fileID: 11400000, guid: 40e83290a74d2154a894f96069070495, type: 2}
   _cards: {fileID: 11400000, guid: 76918f05e886f0146ab141aaf20a4f86, type: 2}
   _animationName: 
@@ -723,10 +675,9 @@ MonoBehaviour:
   _gameClearSceneName: 
   _text: {fileID: 1398519788}
   _animation: {fileID: 0}
-  _player: {fileID: 14993031}
+  _player: {fileID: 0}
   _turnCount: 1
   _phaseCount: 1
-  _displayTurnCount: 1
 --- !u!4 &671675089
 Transform:
   m_ObjectHideFlags: 0
@@ -1093,10 +1044,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4884951919638648756, guid: 110a28e2ce35b6d4488fc2876fb85e16, type: 3}
-      propertyPath: m_SortingOrder
-      value: -3
-      objectReference: {fileID: 0}
     - target: {fileID: 7978641401640467985, guid: 110a28e2ce35b6d4488fc2876fb85e16, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.102557346
@@ -1136,14 +1083,6 @@ PrefabInstance:
     - target: {fileID: 7978641401640467985, guid: 110a28e2ce35b6d4488fc2876fb85e16, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8248811363088259971, guid: 110a28e2ce35b6d4488fc2876fb85e16, type: 3}
-      propertyPath: m_SortingOrder
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8567426619489266406, guid: 110a28e2ce35b6d4488fc2876fb85e16, type: 3}
-      propertyPath: m_SortingOrder
-      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 9058648441721438435, guid: 110a28e2ce35b6d4488fc2876fb85e16, type: 3}
       propertyPath: m_Name
@@ -1552,7 +1491,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u30C7\u30C3\u30AD"
+  m_Text: "\u30B7\u30E7\u30C3\u30D7"
 --- !u!222 &1589385240
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1813,6 +1752,7 @@ MonoBehaviour:
   _battleCanvasPrefabChildData: {fileID: 5391075530905748040, guid: bdb3ab122c1e02140b4617bf5d17f84a, type: 3}
   _resultTable: {fileID: 6649118655322871240, guid: a18079fe5d13ecd4cbc7cae9c756a3b4, type: 3}
   _stateEndButton: {fileID: 2414021848331959321, guid: 25e70c1dccf82554880a0617f29905c0, type: 3}
+  _stateEndButtonAnchor: {x: 103.12, y: 93.39}
   _selectEffect: {fileID: 1919869810}
   _player: {fileID: 0}
   _doubleAttack: 0

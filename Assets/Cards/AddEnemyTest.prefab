@@ -106,11 +106,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: cardData._cardName
-      value: "\u98DB\u3073\u51FA\u3059\u7D75\u672C"
+      value: "\u30A8\u30CD\u30DF\u30FC\u653B\u6483"
       objectReference: {fileID: 0}
     - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: cardData._infometion
-      value: "\u30B7\u30E7\u30C3\u30D7\u3092\u547C\u3073\u51FA\u3059\u3002"
+      value: "\u30A8\u30CD\u30DF\u30FC\u304C\u653B\u6483\u3059\u308B\u306E\u306B\u4F7F\u3046"
       objectReference: {fileID: 0}
     - target: {fileID: 4730314540224684173, guid: a99649deceed5a74092aaea61e57952e, type: 3}
       propertyPath: _cardEffect.Array.size
