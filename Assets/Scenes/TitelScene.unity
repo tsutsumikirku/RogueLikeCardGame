@@ -177,6 +177,7 @@ MonoBehaviour:
   _gameClearSceneName: 
   _text: {fileID: 0}
   _animation: {fileID: 0}
+  _player: {fileID: 0}
   _turnCount: 0
   _phaseCount: 1
 --- !u!4 &226306983
@@ -508,7 +509,7 @@ MonoBehaviour:
     phaseCount: 0
     deck: []
     hp: 0
-  _bustedEnemy: 0
+  _load: 0
 --- !u!4 &471837511
 Transform:
   m_ObjectHideFlags: 0
@@ -1015,5 +1016,5 @@ SceneRoots:
   - {fileID: 2110804614}
   - {fileID: 723912566}
   - {fileID: 471837511}
-  - {fileID: 226306983}
   - {fileID: 1417876541}
+  - {fileID: 226306983}

@@ -15,7 +15,5 @@ public class BattleCanvasChildData : MonoBehaviour
     public Text _battleText;
     [Tooltip("今はリストの最大値がエネミーの最大値です")]
     public List<RectTransform> _enemysAnchor;
-    private void Awake()
-    {
-    }
+    public RectTransform _buttonAnchar;
 }

@@ -9,6 +9,8 @@ TagManager:
   - SelectDesk
   - TrashZone
   - Deck
+  - HideObj
+  - Enemy
   layers:
   - Default
   - TransparentFX
