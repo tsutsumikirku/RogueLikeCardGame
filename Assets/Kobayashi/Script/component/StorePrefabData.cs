@@ -12,6 +12,7 @@ public class StorePrefabData : MonoBehaviour
     public Transform _SellTableParent;
     public void StoreEnd()
     {
+        GameManager.Instance.SurchButton();
         Store.Instance.StoreEnd();
         Destroy(gameObject);
     }

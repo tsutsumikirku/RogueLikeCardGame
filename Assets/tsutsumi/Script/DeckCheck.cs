@@ -61,6 +61,7 @@ public class DeckCheck : MonoBehaviour
         _button.GetComponent<Button>().onClick.AddListener(() =>
         {
             DeckClean();
+            GameManager.Instance.SurchButton();
             _buttonEvent.Invoke();
         });
     }
