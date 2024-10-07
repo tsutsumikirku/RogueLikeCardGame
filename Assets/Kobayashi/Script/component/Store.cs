@@ -49,11 +49,13 @@ public class Store : MonoBehaviour
     public void SetPrizeCard(CardBaseArray cardBaseArray)
     {
         _prizeCards.Clear();
-        List<CardBase> cards= cardBaseArray.Cards.ToList();
+        List<CardBase> cards = new List<CardBase>(cardBaseArray.Cards);
         var cardList = ShuffleList(cards);
         Debug.Log($"{cardList.Count} {_prizeCards}");
         for (var i = 0; i < _prizeCardCount; i++)
         {
+            if(cards.Count-1<=i)
+                break;
             Debug.Log(cardList[i]);
             _prizeCards.Add(cardList[i]);
         }
