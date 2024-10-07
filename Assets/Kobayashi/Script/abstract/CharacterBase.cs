@@ -108,7 +108,7 @@ public abstract class CharacterBase : MonoBehaviour
             SelectEffect.Instance.SelectModeEnd();
             if (_buff[Buff.OllEnemyAttack] >= 1)
             {
-                EnemyBase[] atkEnemy = GameObject.FindObjectsOfType<EnemyBase>();
+                CharacterBase[] atkEnemy = Array.ConvertAll(GameObject.FindGameObjectsWithTag("Enemy"),x => x.GetComponent<CharacterBase>());
                 for (int i = 0; i < atkEnemy.Length; i++)
                 {
                     if (_buff[Buff.OllElementAttack] >= 1)

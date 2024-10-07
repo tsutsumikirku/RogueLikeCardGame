@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]CharacterBase _player;
     public int _turnCount = 1;
     public int _phaseCount = 1;
+    public int _displayTurnCount = 1;
     public static GameManager Instance;
     GameManagerState _state;
     bool _boss = false;
@@ -111,10 +112,6 @@ public class GameManager : MonoBehaviour
     {
         DataManager._instance.Save();
         _serchStart.Invoke();
-        if (_afterBoss)
-        {
-            State = GameManagerState.GameEnd;
-        }
     }
 
     void OnMove()
@@ -140,7 +137,6 @@ public class GameManager : MonoBehaviour
                 //StartCoroutine(AnimationExtension(_animationName, enemy));
                 BattleManager.Instance.BattleStart(_player, enemy, _cards.Cards);
                 Debug.Log("敵データを送りました");
-
             }
             else if (_move == GameManagerMove.TresureBox)
             {
@@ -201,8 +197,8 @@ public class GameManager : MonoBehaviour
 
     GameManagerMove RandomSetMap()
     {
-            int random = Random.Range(0, 2);
-            return (GameManagerMove)random;
+        int random = Random.Range(0, 2);
+        return (GameManagerMove)random;
     }
 
     int RandomEnemySet(int max)
@@ -214,13 +210,15 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("バトルが終わりサーチモードになりました");
         _turnCount++;
+        _displayTurnCount++;
         if (_turnCount > _waveTurnCount)
         {
             _phaseCount += 1;
             _turnCount = 1;
         }
-        State = GameManagerState.Serch;
         _text.text = _turnCount.ToString();
+        State = GameManagerState.Serch;
+        Store.Instance.SetPrizeCard(_cards);
     }
     public void ShopEnd()
     {
@@ -228,6 +226,10 @@ public class GameManager : MonoBehaviour
     }
 
     //ここから下ボタンのための関数許して
+    public void SurchButton()
+    {
+        State = GameManagerState.Serch;
+    }
     public void MoveButton()
     {
         State = GameManagerState.Move;
