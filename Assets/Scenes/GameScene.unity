@@ -365,9 +365,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1158724869}
-        m_TargetAssemblyTypeName: GameManagerButtonScript, Assembly-CSharp
-        m_MethodName: CallMove
+      - m_Target: {fileID: 671675088}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: MoveButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -625,42 +625,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1158724869}
-        m_TargetAssemblyTypeName: GameManagerButtonScript, Assembly-CSharp
-        m_MethodName: CallMove
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1158724869}
-        m_TargetAssemblyTypeName: GameManagerButtonScript, Assembly-CSharp
-        m_MethodName: CallPlayerDack
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 1158724869}
-        m_TargetAssemblyTypeName: GameManagerButtonScript, Assembly-CSharp
-        m_MethodName: CallStore
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
   _moveStart:
     m_PersistentCalls:
       m_Calls: []
@@ -694,18 +658,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1158724869}
-        m_TargetAssemblyTypeName: GameManagerButtonScript, Assembly-CSharp
-        m_MethodName: CallSearch
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   _userManualStart:
     m_PersistentCalls:
       m_Calls: []
@@ -717,7 +669,7 @@ MonoBehaviour:
   _bossTransform: {fileID: 297725256}
   _waveTurnCount: 3
   _enemyData: {fileID: 11400000, guid: 40e83290a74d2154a894f96069070495, type: 2}
-  _cards: {fileID: 11400000, guid: 76918f05e886f0146ab141aaf20a4f86, type: 2}
+  _cards: {fileID: 11400000, guid: f75a10d81daf13d4f9b20c18ad90a300, type: 2}
   _animationName: 
   _gameOverSceneName: 
   _gameClearSceneName: 
@@ -1028,7 +980,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1158724868}
-  - component: {fileID: 1158724869}
   - component: {fileID: 1158724870}
   m_Layer: 5
   m_Name: ButtonTable
@@ -1059,18 +1010,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1158724869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1158724867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f79f98571cae40245a79796e5b5f2f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1158724870
 MonoBehaviour:
   m_ObjectHideFlags: 0
