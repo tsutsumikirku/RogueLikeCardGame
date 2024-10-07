@@ -51,12 +51,10 @@ public class Store : MonoBehaviour
         _prizeCards.Clear();
         List<CardBase> cards = new List<CardBase>(cardBaseArray.Cards);
         var cardList = ShuffleList(cards);
-        Debug.Log($"{cardList.Count} {_prizeCards}");
         for (var i = 0; i < _prizeCardCount; i++)
         {
             if(cards.Count-1<=i)
                 break;
-            Debug.Log(cardList[i]);
             _prizeCards.Add(cardList[i]);
         }
     }
@@ -96,6 +94,7 @@ public class Store : MonoBehaviour
             //else _sellTablesTransform.Add(table.transform);
             for (int j = 0; j < _maxChildElement && createCardCount < count; j++)
             {
+                if(cards.Count-1 <= createCardCount)return;
                 Debug.Log(cards[createCardCount]);
                 var obj = cards[createCardCount];
                 var card = Instantiate(cards[createCardCount].gameObject, table.transform);

@@ -347,17 +347,15 @@ public class BattleManager : MonoBehaviour
         ResultScript.LoadResultScene(false);
         Invoke(nameof(BattleEnd), 1);
     }
-    void Result(int count)//
+    void Result(int prizeCardCount)//
     {
         _player.BuffReset();
-        Debug.Log("risult");
         var cards = ShuffleList(_praiseCardTable.ToList());//, count);
-        Debug.Log($"{_resultTable} {_resultCanvas.transform}");
         var result = Instantiate(_resultTable, _resultCanvas.transform);
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < prizeCardCount; i++)
         {
-            Debug.Log("カード追加");
             var obj = Instantiate(cards[i], result.transform);
+            var originalCard=cards[i];
             // EventTrigger コンポーネントを取得または追加
             EventTrigger trigger = obj.GetComponent<EventTrigger>();
             if (trigger == null)
@@ -374,7 +372,7 @@ public class BattleManager : MonoBehaviour
             // イベント時に実行するコールバックを追加
             entry.callback.AddListener((data) =>
             {
-                OnClick(cards[i]);
+                OnClick(originalCard);
                 if (!_testmode) GameManager.Instance.BattleEnd();
                 Destroy(_canvas.gameObject);
             });
@@ -414,7 +412,7 @@ public class BattleManager : MonoBehaviour
     }
     public List<T> ShuffleList<T>(List<T> DeckData)
     {
-        List<T> cardsList = DeckData;//playerのカードリスト(コピー)
+        List<T> cardsList = new List<T>(DeckData);//playerのカードリスト(コピー)
         for (int i = 0; i < DeckData.Count; i++)
         {
             var j = Random.Range(0, DeckData.Count);
@@ -459,6 +457,7 @@ public class BattleManager : MonoBehaviour
     }
     void NextTrun(Trun trunName, float waiteTimer)
     {
+        Debug.Log("aiueo");
         StartCoroutine(NextTrunCoroutine(trunName, waiteTimer));
     }
     IEnumerator NextTrunCoroutine(Trun trunName, float waiteTimer)
