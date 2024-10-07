@@ -16,7 +16,6 @@ public class BattleManager : MonoBehaviour
     BattleCanvasChildData _canvas;
     [SerializeField] GameObject _resultTable;
     [SerializeField] GameObject _stateEndButton;
-    [SerializeField] Vector2 _stateEndButtonAnchor;
     [SerializeField] public SelectEffect _selectEffect;
     [HideInInspector] public CharacterBase _player;
     Queue<CardBase> _playerDeck = new Queue<CardBase>();
@@ -88,7 +87,7 @@ public class BattleManager : MonoBehaviour
                 StartCoroutine(PlayerAttackTargetSelection());
                 break;
             case Trun.PlayerAttack:
-                StartCoroutine(PlayerAttack());//_playerAttackTarget));
+                PlayerAttack();//_playerAttackTarget));
                 break;
             case Trun.EnemyAttack:
                 StartCoroutine(EnemyAttack());
@@ -209,7 +208,7 @@ public class BattleManager : MonoBehaviour
     }
     void CreatTrunChangeButton(Action nextTrunState)
     {
-        GameObject obj = Instantiate(_stateEndButton, _stateEndButtonAnchor, Quaternion.identity, _resultCanvas);
+        GameObject obj = Instantiate(_stateEndButton, _canvas._buttonAnchar.position, Quaternion.identity, _resultCanvas);
         obj.TryGetComponent(out Button button);
         if (button == null)
         {
@@ -267,7 +266,7 @@ public class BattleManager : MonoBehaviour
 
         NextTrun(Trun.PlayerAttack, 1);
     }
-    IEnumerator PlayerAttack()//List<CharacterBase> enemys)
+    void PlayerAttack()//List<CharacterBase> enemys)
     {
         Debug.Log("player‚ÌUŒ‚");
         _player.Attack(() =>
@@ -288,10 +287,6 @@ public class BattleManager : MonoBehaviour
             if (_enemyDictionary.Count != 0) NextTrun(Trun.EnemyAttack, 0);
             _playerAttackTarget.Clear();
         });
-        if (_player.TryGetComponent(out Animator animator))
-        {
-            yield return new WaitUntil(() => animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1);
-        }
         //if (_doubleAttack) NextTrun(Trun.EndTrun, 1);
     }
     IEnumerator EnemyAttack()
