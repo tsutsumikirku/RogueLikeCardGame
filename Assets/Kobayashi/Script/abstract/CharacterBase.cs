@@ -121,7 +121,7 @@ public abstract class CharacterBase : MonoBehaviour
                     }
                     if (atkEnemy[i]._hp <= 0)
                     {
-                        Destroy(atkEnemy[i]);
+                        Destroy(atkEnemy[i].gameObject);
                     }
                 }
             }
@@ -137,7 +137,7 @@ public abstract class CharacterBase : MonoBehaviour
                 }
                 if(_attackEnemy._hp <= 0)
                 {
-                    Destroy(_attackEnemy);
+                    Destroy(_attackEnemy.gameObject);
                 }
             }
             State = CharaBaseState.Idle;
@@ -148,7 +148,7 @@ public abstract class CharacterBase : MonoBehaviour
             _attackEnemy._hp -= _attackpower * (1 - _buff[Buff.Debuff]);
             if(_attackEnemy._hp <= 0)
             {
-                Destroy(_attackEnemy);
+                Destroy(_attackEnemy.gameObject);
             }
             State = CharaBaseState.Idle;
         }
