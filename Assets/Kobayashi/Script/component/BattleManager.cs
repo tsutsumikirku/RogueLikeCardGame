@@ -103,11 +103,15 @@ public class BattleManager : MonoBehaviour
     }
     private void Awake()
     {
-        if (FindObjectOfType<BattleManager>() != null)
+        if (Instance == null)
         {
             Instance = this;
         }
         else Destroy(gameObject);
+    }
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
     }
     private void Start()
     {
@@ -322,7 +326,7 @@ public class BattleManager : MonoBehaviour
         yield return new WaitUntil(() => endActions);
         if (_player._hp <= 0)
         {
-            Invoke(nameof(Defeat),1);
+            Invoke(nameof(Defeat), 1);
             yield break;
         }
         NextTrun(Trun.EndTrun, 0);
@@ -384,7 +388,7 @@ public class BattleManager : MonoBehaviour
         //アニメーション発火、プレイヤーのカードリストに登録、result画面を閉じる予定
         if (!_getReward)
         {
-        Debug.Log("clickされた " + obj.name);
+            Debug.Log("clickされた " + obj.name);
             _player._deck.Add(obj);
             _getReward = true;
         }

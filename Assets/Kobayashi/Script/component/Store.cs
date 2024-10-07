@@ -194,4 +194,8 @@ public class Store : MonoBehaviour
         }
         return cardsList;
     }
+    private void OnDestroy()
+    {
+        if(Instance==this) Instance = null;
+    }
 }
