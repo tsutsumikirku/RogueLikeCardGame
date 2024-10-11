@@ -313,7 +313,6 @@ public class BattleManager : MonoBehaviour
             actions.Add(() => StartCoroutine(useCard.CardUse(enemy, () =>
             {
                 count++;
-                Debug.Log(useCard.name);
                 if (actions.Count > count) actions[count]();
                 else
                 {
@@ -457,12 +456,10 @@ public class BattleManager : MonoBehaviour
     }
     void NextTrun(Trun trunName, float waiteTimer)
     {
-        Debug.Log("aiueo");
         StartCoroutine(NextTrunCoroutine(trunName, waiteTimer));
     }
     IEnumerator NextTrunCoroutine(Trun trunName, float waiteTimer)
     {
-        Debug.Log(_timeLine);
         bool endCroutine = false;
         switch (trunName)
         {
@@ -474,12 +471,12 @@ public class BattleManager : MonoBehaviour
             case Trun.PlayerAttack:
                 StartCoroutine(CallBack(() => ChangeTrunEffect("–¡•û‚Ì‚ÌUŒ‚", null),
                     () => endCroutine = true,
-                    () => _timeLine.Director.duration <= _timeLine.Director.time || _timeLine.Director.time == 0));
+                    (float)_timeLine.Director.duration));
                 break;
             case Trun.EnemyAttack:
                 StartCoroutine(CallBack(() => ChangeTrunEffect("“G‚ÌUŒ‚", null),
                     () => endCroutine = true,
-                    () => _timeLine.Director.duration <= _timeLine.Director.time || _timeLine.Director.time == 0));
+                    (float)_timeLine.Director.duration));
                 break;
             case Trun.EndTrun:
                 StartCoroutine(CallBack(() => ChangeTrunEffect("Ÿ‚Ìƒ^[ƒ“", null),
